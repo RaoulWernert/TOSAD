@@ -1,5 +1,7 @@
 package nl.hu.tosad;
 
+import org.junit.Test;
+
 import static junit.framework.TestCase.assertTrue;
 
 /**
@@ -7,7 +9,7 @@ import static junit.framework.TestCase.assertTrue;
  */
 
 public class AppTest {
-    @org.junit.Test
+    @Test
     public void main() throws Exception {
         assertTrue( true );
     }

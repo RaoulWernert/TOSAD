@@ -6,8 +6,8 @@ package nl.hu.tosad.rules;
 public class AttributeOtherRule extends AttributeRule{
     private String statement;
 
-    public AttributeOtherRule(String name, String table, String category, String attribute, String statement) {
-        super(name, table, category, attribute);
+    public AttributeOtherRule(String name, String table, String attribute, String statement) {
+        super(name, table, attribute);
         this.statement = statement;
     }
 

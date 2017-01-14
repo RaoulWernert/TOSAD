@@ -6,12 +6,10 @@ package nl.hu.tosad.rules;
 public abstract class BusinessRule {
     private String name;
     private String table;
-    private String category;
 
-    BusinessRule(String name, String table, String category) {
+    BusinessRule(String name, String table) {
         this.name = name;
         this.table = table;
-        this.category = category;
     }
 
     public String getName() {
@@ -20,9 +18,5 @@ public abstract class BusinessRule {
 
     public String getTable(){
         return table;
-    }
-
-    public String getCategory() {
-        return category;
     }
 }

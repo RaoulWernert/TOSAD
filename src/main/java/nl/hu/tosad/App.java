@@ -14,7 +14,7 @@ public class App
         RuleFactory factory = new RuleFactory();
         //haal br op
         String type = "ARNG";
-        BusinessRuleData data = new BusinessRuleData("", "", "", "", "", "", "", "", "");
+        BusinessRuleData data = new BusinessRuleData("", "", "", "", "", "", "", "", "", "", "");
         factory.createRule(data);
     }
 }

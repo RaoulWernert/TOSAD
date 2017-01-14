@@ -6,8 +6,8 @@ package nl.hu.tosad.rules;
 public class AttributeRule extends BusinessRule{
     private String attribute;
 
-    AttributeRule(String name, String table, String category, String attribute) {
-        super(name, table, category);
+    AttributeRule(String name, String table, String attribute) {
+        super(name, table);
         this.attribute = attribute;
     }
 
