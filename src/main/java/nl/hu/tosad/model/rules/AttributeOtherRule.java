@@ -1,4 +1,4 @@
-package nl.hu.tosad.rules;
+package nl.hu.tosad.model.rules;
 
 /**
  * Created by Raoul on 11/17/2016.
@@ -13,5 +13,10 @@ public class AttributeOtherRule extends AttributeRule{
 
     public String getStatement() {
         return statement;
+    }
+
+    @Override
+    public String accept(ISQLGenerator generator) {
+        return generator.generateSQL(this);
     }
 }

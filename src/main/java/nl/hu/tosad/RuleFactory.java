@@ -4,7 +4,7 @@ import nl.hu.tosad.model.BusinessRuleData;
 import nl.hu.tosad.model.ComparisonOperator;
 import nl.hu.tosad.model.LogicalOperator;
 import nl.hu.tosad.model.RuleType;
-import nl.hu.tosad.rules.*;
+import nl.hu.tosad.model.rules.*;
 
 /**
  * Created by Raoul on 11/17/2016.
@@ -14,8 +14,8 @@ public class RuleFactory {
 
     }
 
-    public AttributeRule createRule(BusinessRuleData data) {
-        RuleType ruleType = getRuleType(data.code);
+    public BusinessRule createRule(BusinessRuleData data) {
+        RuleType ruleType = getRuleType(data.ruletype_code);
 
         if(ruleType == null) {
             return null;
@@ -27,9 +27,9 @@ public class RuleFactory {
             case AttributeCompareRule:
                 return new AttributeCompareRule(data.name, data.table, data.attribute, getComparisonOperator(data.cOperator), data.value);
             case AttributeListRule:
-                return new AttributeListRule(data.name, data.table, data.attribute, getComparisonOperator(data.cOperator), getLogicalOperator(data.lOperator), data.values.split("\\r\\n"));
+                return new AttributeListRule(data.name, data.table, data.attribute, getComparisonOperator(data.cOperator), getLogicalOperator(data.lOperator), data.value.split("\\r\\n"));
             case AttributeOtherRule:
-                return new AttributeOtherRule(data.name, data.table, data.attribute, data.statement);
+                return new AttributeOtherRule(data.name, data.table, data.attribute, data.code);
             default:
                 return null; //TODO Error message
         }

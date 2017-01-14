@@ -1,4 +1,4 @@
-package nl.hu.tosad.rules;
+package nl.hu.tosad.model.rules;
 
 import nl.hu.tosad.model.ComparisonOperator;
 import nl.hu.tosad.model.LogicalOperator;
@@ -33,5 +33,10 @@ public class AttributeListRule extends AttributeRule {
 
     public List<String> getValues() {
         return Collections.unmodifiableList(values);
+    }
+
+    @Override
+    public String accept(ISQLGenerator generator) {
+        return generator.generateSQL(this);
     }
 }

@@ -1,6 +1,6 @@
 package nl.hu.tosad;
 
-import nl.hu.tosad.model.BusinessRuleData;
+import nl.hu.tosad.controller.Controller;
 
 /**
  * Hello world!
@@ -8,13 +8,13 @@ import nl.hu.tosad.model.BusinessRuleData;
  */
 public class App 
 {
+    private static Controller controller = new Controller();
+
     public static void main( String[] args )
     {
-        System.out.println( "Hello World!" );
-        RuleFactory factory = new RuleFactory();
-        //haal br op
-        String type = "ARNG";
-        BusinessRuleData data = new BusinessRuleData("", "", "", "", "", "", "", "", "", "", "");
-        factory.createRule(data);
+        controller.generate(1);
+        controller.generate(2);
+        controller.generate(3);
+        controller.generate(4);
     }
 }

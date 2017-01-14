@@ -1,4 +1,4 @@
-package nl.hu.tosad.rules;
+package nl.hu.tosad.model.rules;
 
 /**
  * Created by Raoul on 11/17/2016.
@@ -19,5 +19,10 @@ public class AttributeRangeRule extends AttributeRule{
 
     public String getMax() {
         return max;
+    }
+
+    @Override
+    public String accept(ISQLGenerator generator) {
+        return generator.generateSQL(this);
     }
 }

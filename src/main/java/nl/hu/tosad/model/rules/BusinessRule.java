@@ -1,4 +1,4 @@
-package nl.hu.tosad.rules;
+package nl.hu.tosad.model.rules;
 
 /**
  * Created by Raoul on 11/17/2016.
@@ -12,11 +12,13 @@ public abstract class BusinessRule {
         this.table = table;
     }
 
+    public String getTable(){
+        return table;
+    }
+
     public String getName() {
         return name;
     }
 
-    public String getTable(){
-        return table;
-    }
+    public abstract String accept(ISQLGenerator generator);
 }

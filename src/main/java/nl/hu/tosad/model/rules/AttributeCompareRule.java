@@ -1,4 +1,4 @@
-package nl.hu.tosad.rules;
+package nl.hu.tosad.model.rules;
 
 import nl.hu.tosad.model.ComparisonOperator;
 
@@ -21,5 +21,10 @@ public class AttributeCompareRule extends AttributeRule{
 
     public String getValue() {
         return value;
+    }
+
+    @Override
+    public String accept(ISQLGenerator generator) {
+        return generator.generateSQL(this);
     }
 }
