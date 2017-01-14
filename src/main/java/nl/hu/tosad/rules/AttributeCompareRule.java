@@ -9,14 +9,14 @@ public class AttributeCompareRule extends AttributeRule{
     private Operator operator;
     private String value;
 
-    public AttributeCompareRule(String tab, String atr, Operator op, String val) {
-        super(tab, atr);
-        operator = op;
-        value = val;
+    public AttributeCompareRule(String name, String table, String category, String attribute, Operator operator, String value) {
+        super(name, table, category, attribute);
+        this.operator = operator;
+        this.value = value;
     }
 
-    public Operator.Type getOperator() {
-        return operator.getType();
+    public Operator getOperator() {
+        return operator;
     }
 
     public String getValue() {

@@ -2,6 +2,8 @@ package nl.hu.tosad.rules;
 
 import nl.hu.tosad.model.Operator;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -12,13 +14,14 @@ public class AttributeListRule extends AttributeRule {
     private Operator operator;
     private List<String> values;
 
-    public AttributeListRule(String tab, String atr, Operator ope) {
-        super(tab, atr);
-        operator = ope;
+    public AttributeListRule(String name, String table, String category, String attribute, Operator operator, String... values) {
+        super(name, table, category, attribute);
+        this.operator = operator;
+        this.values = new ArrayList<>(Arrays.asList(values));
     }
 
-    public Operator.Type getOperator() {
-        return operator.getType();
+    public Operator getOperator() {
+        return operator;
     }
 
     public List<String> getValues() {

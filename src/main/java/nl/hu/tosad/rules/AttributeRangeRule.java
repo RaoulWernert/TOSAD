@@ -7,10 +7,10 @@ public class AttributeRangeRule extends AttributeRule{
     private String min;
     private String max;
 
-    public AttributeRangeRule(String tab, String atr, String mi, String ma){
-        super(tab, atr);
-        min = mi;
-        max = ma;
+    public AttributeRangeRule(String name, String table, String category, String attribute, String min, String max){
+        super(name, table, category, attribute);
+        this.min = min;
+        this.max = max;
     }
 
     public String getMin() {
