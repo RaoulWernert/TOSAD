@@ -16,6 +16,7 @@ public class BusinessRuleData {
     public String code;
     public String ruletype_code;
     public String targetdb;
+    public String implementation;
 
     public BusinessRuleData(int id,
                             String ruleName, String table, String attribute,
@@ -25,7 +26,8 @@ public class BusinessRuleData {
                             String value,
                             String sqlCode,
                             String ruletype_code,
-                            String target) {
+                            String target,
+                            String implementation) {
 
         this.id = id;
         this.name = ruleName;
@@ -39,5 +41,6 @@ public class BusinessRuleData {
         this.code = sqlCode;
         this.ruletype_code = ruletype_code;
         this.targetdb = target;
+        this.implementation = implementation;
     }
 }

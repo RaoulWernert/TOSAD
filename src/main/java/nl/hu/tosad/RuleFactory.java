@@ -1,9 +1,6 @@
 package nl.hu.tosad;
 
-import nl.hu.tosad.model.BusinessRuleData;
-import nl.hu.tosad.model.ComparisonOperator;
-import nl.hu.tosad.model.LogicalOperator;
-import nl.hu.tosad.model.RuleType;
+import nl.hu.tosad.model.*;
 import nl.hu.tosad.model.rules.*;
 
 /**
@@ -23,13 +20,13 @@ public class RuleFactory {
 
         switch (ruleType){
             case AttributeRangeRule:
-                return new AttributeRangeRule(data.name, data.table, data.attribute, data.min, data.max);
+                return new AttributeRangeRule(data.name, data.table, getImplementation(data.implementation), data.attribute, data.min, data.max);
             case AttributeCompareRule:
-                return new AttributeCompareRule(data.name, data.table, data.attribute, getComparisonOperator(data.cOperator), data.value);
+                return new AttributeCompareRule(data.name, data.table, getImplementation(data.implementation), data.attribute, getComparisonOperator(data.cOperator), data.value);
             case AttributeListRule:
-                return new AttributeListRule(data.name, data.table, data.attribute, getComparisonOperator(data.cOperator), getLogicalOperator(data.lOperator), data.value.split("\\r\\n"));
+                return new AttributeListRule(data.name, data.table, getImplementation(data.implementation), data.attribute, getComparisonOperator(data.cOperator), getLogicalOperator(data.lOperator), data.value.split("\\r\\n"));
             case AttributeOtherRule:
-                return new AttributeOtherRule(data.name, data.table, data.attribute, data.code);
+                return new AttributeOtherRule(data.name, data.table, getImplementation(data.implementation), data.attribute, data.code);
             default:
                 return null; //TODO Error message
         }
@@ -57,5 +54,13 @@ public class RuleFactory {
                 return lOper;
         }
         return null;
+    }
+
+    private Implementation getImplementation(String code) {
+        try {
+            return Implementation.valueOf(code);
+        } catch (IllegalArgumentException e) {
+            return null;
+        }
     }
 }

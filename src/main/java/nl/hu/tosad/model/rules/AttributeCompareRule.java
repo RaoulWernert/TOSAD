@@ -1,6 +1,7 @@
 package nl.hu.tosad.model.rules;
 
 import nl.hu.tosad.model.ComparisonOperator;
+import nl.hu.tosad.model.Implementation;
 
 /**
  * Created by Raoul on 11/17/2016.
@@ -9,8 +10,8 @@ public class AttributeCompareRule extends AttributeRule{
     private ComparisonOperator comparisonOperator;
     private String value;
 
-    public AttributeCompareRule(String name, String table, String attribute, ComparisonOperator cOperator, String value) {
-        super(name, table, attribute);
+    public AttributeCompareRule(String name, String table, Implementation implementation, String attribute, ComparisonOperator cOperator, String value) {
+        super(name, table, implementation, attribute);
         this.comparisonOperator = cOperator;
         this.value = value;
     }

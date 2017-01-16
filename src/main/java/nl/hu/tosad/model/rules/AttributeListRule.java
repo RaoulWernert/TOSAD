@@ -1,6 +1,7 @@
 package nl.hu.tosad.model.rules;
 
 import nl.hu.tosad.model.ComparisonOperator;
+import nl.hu.tosad.model.Implementation;
 import nl.hu.tosad.model.LogicalOperator;
 
 import java.util.ArrayList;
@@ -16,8 +17,8 @@ public class AttributeListRule extends AttributeRule {
     private LogicalOperator logicalOperator;
     private List<String> values;
 
-    public AttributeListRule(String name, String table, String attribute, ComparisonOperator cOperator, LogicalOperator lOperator, String... values) {
-        super(name, table, attribute);
+    public AttributeListRule(String name, String table, Implementation implementation, String attribute, ComparisonOperator cOperator, LogicalOperator lOperator, String... values) {
+        super(name, table, implementation, attribute);
         this.comparisonOperator = cOperator;
         this.logicalOperator = lOperator;
         this.values = new ArrayList<>(Arrays.asList(values));

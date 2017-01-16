@@ -18,10 +18,10 @@ public class Controller {
         factory = new RuleFactory();
         oracleController = new OracleController();
         businessRuleData = new ArrayList<>(Arrays.asList(
-                new BusinessRuleData(1, "ARNG1", "MEDEWERKERS", "SALARIS", "100", "1000", "", "", "", "", "ARNG", "SQL"),
-                new BusinessRuleData(2, "ACMP1", "MEDEWERKERS", "SALARIS", "", "", ">", "", "10", "", "ACMP", "SQL"),
-                new BusinessRuleData(3, "ALIS1", "MEDEWERKERS", "NAAM", "", "", "IN", "", "JANTJE\r\nKLAAS", "", "ALIS", "SQL"),
-                new BusinessRuleData(4, "AOTH1", "MEDEWERKERS", "NAAM", "", "", "", "", "", "substr(naam,1,1) between ('1' and '9')", "AOTH", "SQL")));
+                new BusinessRuleData(1, "ARNG1", "MEDEWERKERS", "SALARIS", "100", "1000", "", "", "", "", "ARNG", "SQL", "CONDITION"),
+                new BusinessRuleData(2, "ACMP1", "MEDEWERKERS", "SALARIS", "", "", ">", "", "10", "", "ACMP", "SQL", "CONDITION"),
+                new BusinessRuleData(3, "ALIS1", "MEDEWERKERS", "NAAM", "", "", "IN", "", "JANTJE\r\nKLAAS", "", "ALIS", "SQL", "CONDITION"),
+                new BusinessRuleData(4, "AOTH1", "MEDEWERKERS", "NAAM", "", "", "", "", "", "substr(naam,1,1) between ('1' and '9')", "AOTH", "SQL", "CONDITION")));
     }
 
     public boolean generate(int ruleid) {
