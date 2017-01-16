@@ -19,7 +19,7 @@ public class BusinessRuleService {
     }
 
     private RuleFactory factory;
-    private OracleController oracleController;
+    private IController oracleController;
     private List<BusinessRuleData> businessRuleData;
 
     private BusinessRuleService() {
