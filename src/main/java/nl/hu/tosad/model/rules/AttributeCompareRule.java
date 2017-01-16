@@ -25,7 +25,7 @@ public class AttributeCompareRule extends AttributeRule{
     }
 
     @Override
-    public String accept(ISQLGenerator generator) {
+    public String accept(IGenerator generator) {
         return generator.generateSQL(this);
     }
 }

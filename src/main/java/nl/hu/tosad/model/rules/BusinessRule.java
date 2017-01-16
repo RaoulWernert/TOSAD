@@ -28,5 +28,5 @@ public abstract class BusinessRule {
         return implementation;
     }
 
-    public abstract String accept(ISQLGenerator generator);
+    public abstract String accept(IGenerator generator);
 }

@@ -2,7 +2,7 @@ package nl.hu.tosad.generator;
 
 import nl.hu.tosad.model.rules.*;
 
-public class OracleSQLGenerator implements ISQLGenerator {
+public class OracleGenerator implements IGenerator {
     private final String CONSTRAINT = "ALTER TABLE %s ADD CONSTRAINT %s CHECK (%s)";
 
     @Override
