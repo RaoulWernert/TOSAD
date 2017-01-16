@@ -8,13 +8,21 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class Controller {
+public class BusinessRuleService {
+    private static BusinessRuleService instance;
+
+    public static BusinessRuleService getInstance() {
+        if(instance == null)
+            instance = new BusinessRuleService();
+
+        return instance;
+    }
+
     private RuleFactory factory;
     private OracleController oracleController;
-
     private List<BusinessRuleData> businessRuleData;
 
-    public Controller() {
+    private BusinessRuleService() {
         factory = new RuleFactory();
         oracleController = new OracleController();
         businessRuleData = new ArrayList<>(Arrays.asList(

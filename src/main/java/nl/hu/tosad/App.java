@@ -1,6 +1,6 @@
 package nl.hu.tosad;
 
-import nl.hu.tosad.controller.Controller;
+import nl.hu.tosad.controller.BusinessRuleService;
 
 /**
  * Hello world!
@@ -8,13 +8,13 @@ import nl.hu.tosad.controller.Controller;
  */
 public class App 
 {
-    private static Controller controller = new Controller();
+    private static BusinessRuleService businessRuleService = BusinessRuleService.getInstance();
 
     public static void main( String[] args )
     {
-        controller.generate(1);
-        controller.generate(2);
-        controller.generate(3);
-        controller.generate(4);
+        businessRuleService.generate(1);
+        businessRuleService.generate(2);
+        businessRuleService.generate(3);
+        businessRuleService.generate(4);
     }
 }
