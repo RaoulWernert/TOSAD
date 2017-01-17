@@ -9,7 +9,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class RepoDAO {
-    private List<BusinessRuleData> businessRuleData;
+    private List<BusinessRuleData> businessRuleData; // TODO: Wordt later vervangen door database calls.
     private RuleFactory factory;
 
     public RepoDAO() {
