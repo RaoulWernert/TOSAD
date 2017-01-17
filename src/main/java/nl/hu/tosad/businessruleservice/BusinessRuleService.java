@@ -2,13 +2,7 @@ package nl.hu.tosad.businessruleservice;
 
 import nl.hu.tosad.businessruleservice.controller.IController;
 import nl.hu.tosad.businessruleservice.controller.OracleController;
-import nl.hu.tosad.businessruleservice.model.BusinessRuleData;
-import nl.hu.tosad.businessruleservice.model.rules.BusinessRule;
-import nl.hu.tosad.businessruleservice.model.rules.RuleFactory;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import nl.hu.tosad.businessruleservice.generator.RepoDAO;
 
 public class BusinessRuleService {
     private static BusinessRuleService instance;
@@ -20,22 +14,15 @@ public class BusinessRuleService {
         return instance;
     }
 
-    private RuleFactory factory;
     private IController oracleController;
-    private List<BusinessRuleData> businessRuleData;
+    private RepoDAO repoDAO;
 
     private BusinessRuleService() {
-        factory = new RuleFactory();
         oracleController = new OracleController();
-        businessRuleData = new ArrayList<>(Arrays.asList(
-                new BusinessRuleData(1, "ARNG1", "MEDEWERKERS", "SALARIS", "100", "1000", "", "", "", "", "ARNG", "SQL", "CONDITION"),
-                new BusinessRuleData(2, "ACMP1", "MEDEWERKERS", "SALARIS", "", "", ">", "", "10", "", "ACMP", "SQL", "CONDITION"),
-                new BusinessRuleData(3, "ALIS1", "MEDEWERKERS", "NAAM", "", "", "IN", "", "JANTJE\r\nKLAAS", "", "ALIS", "SQL", "CONDITION"),
-                new BusinessRuleData(4, "AOTH1", "MEDEWERKERS", "NAAM", "", "", "", "", "", "substr(naam,1,1) between ('1' and '9')", "AOTH", "SQL", "CONDITION")));
+        repoDAO = new RepoDAO();
     }
 
     public boolean generate(int ruleid) {
-        BusinessRule br = factory.createRule(businessRuleData.get(ruleid - 1));
-        return oracleController.generate(br);
+        return oracleController.generate(repoDAO.getBusinessRule(ruleid));
     }
 }
