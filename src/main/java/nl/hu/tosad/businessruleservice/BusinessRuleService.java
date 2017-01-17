@@ -2,7 +2,7 @@ package nl.hu.tosad.businessruleservice;
 
 import nl.hu.tosad.businessruleservice.controller.IController;
 import nl.hu.tosad.businessruleservice.controller.OracleController;
-import nl.hu.tosad.businessruleservice.generator.RepoDAO;
+import nl.hu.tosad.persistance.RepoDAO;
 
 public class BusinessRuleService {
     private static BusinessRuleService instance;

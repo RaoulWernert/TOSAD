@@ -1,4 +1,4 @@
-package nl.hu.tosad.businessruleservice.generator;
+package nl.hu.tosad.persistance;
 
 import nl.hu.tosad.businessruleservice.model.BusinessRuleData;
 import nl.hu.tosad.businessruleservice.model.rules.BusinessRule;
