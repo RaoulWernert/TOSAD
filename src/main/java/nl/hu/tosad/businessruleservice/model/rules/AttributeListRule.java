@@ -1,8 +1,4 @@
-package nl.hu.tosad.model.rules;
-
-import nl.hu.tosad.model.ComparisonOperator;
-import nl.hu.tosad.model.Implementation;
-import nl.hu.tosad.model.LogicalOperator;
+package nl.hu.tosad.businessruleservice.model.rules;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -17,7 +13,7 @@ public class AttributeListRule extends AttributeRule {
     private LogicalOperator logicalOperator;
     private List<String> values;
 
-    public AttributeListRule(String name, String table, Implementation implementation, String attribute, ComparisonOperator cOperator, LogicalOperator lOperator, String... values) {
+    AttributeListRule(String name, String table, Implementation implementation, String attribute, ComparisonOperator cOperator, LogicalOperator lOperator, String... values) {
         super(name, table, implementation, attribute);
         this.comparisonOperator = cOperator;
         this.logicalOperator = lOperator;
@@ -38,6 +34,6 @@ public class AttributeListRule extends AttributeRule {
 
     @Override
     public String accept(IGenerator generator) {
-        return generator.generateSQL(this);
+        return generator.generateDDL(this);
     }
 }

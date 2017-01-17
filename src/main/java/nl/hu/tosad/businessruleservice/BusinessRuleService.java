@@ -1,8 +1,10 @@
-package nl.hu.tosad.controller;
+package nl.hu.tosad.businessruleservice;
 
-import nl.hu.tosad.RuleFactory;
-import nl.hu.tosad.model.BusinessRuleData;
-import nl.hu.tosad.model.rules.BusinessRule;
+import nl.hu.tosad.businessruleservice.controller.IController;
+import nl.hu.tosad.businessruleservice.controller.OracleController;
+import nl.hu.tosad.businessruleservice.model.BusinessRuleData;
+import nl.hu.tosad.businessruleservice.model.rules.BusinessRule;
+import nl.hu.tosad.businessruleservice.model.rules.RuleFactory;
 
 import java.util.ArrayList;
 import java.util.Arrays;

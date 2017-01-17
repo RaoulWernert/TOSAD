@@ -1,4 +1,4 @@
-package nl.hu.tosad.model;
+package nl.hu.tosad.businessruleservice.model;
 
 /**
  * Created by Raoul on 11/17/2016.

@@ -1,24 +1,24 @@
-package nl.hu.tosad.generator;
+package nl.hu.tosad.businessruleservice.generator;
 
-import nl.hu.tosad.model.rules.*;
+import nl.hu.tosad.businessruleservice.model.rules.*;
 
 public class OracleGenerator implements IGenerator {
     private final String CONSTRAINT = "ALTER TABLE %s ADD CONSTRAINT %s CHECK (%s)";
 
     @Override
-    public String generateSQL(AttributeRangeRule rule) {
+    public String generateDDL(AttributeRangeRule rule) {
         String constraint = String.format("%s BETWEEN %s AND %s", rule.getAttribute(), rule.getMin(), rule.getMax());
         return String.format(CONSTRAINT, rule.getTable(), rule.getName(), constraint);
     }
 
     @Override
-    public String generateSQL(AttributeCompareRule rule) {
+    public String generateDDL(AttributeCompareRule rule) {
         String constraint = String.format("%s %s %s", rule.getAttribute(), rule.getComparisonOperator().getCode(), rule.getValue());
         return String.format(CONSTRAINT, rule.getTable(), rule.getName(), constraint);
     }
 
     @Override
-    public String generateSQL(AttributeListRule rule) {
+    public String generateDDL(AttributeListRule rule) {
         String constraint = "STATUS IN (";
         for (String str : rule.getValues()) {
             constraint += "'" + str + "',";
@@ -29,7 +29,7 @@ public class OracleGenerator implements IGenerator {
     }
 
     @Override
-    public String generateSQL(AttributeOtherRule rule) {
+    public String generateDDL(AttributeOtherRule rule) {
         return String.format(CONSTRAINT, rule.getTable(), rule.getName(), rule.getStatement());
     }
 }

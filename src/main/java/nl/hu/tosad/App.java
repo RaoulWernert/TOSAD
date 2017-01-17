@@ -1,6 +1,6 @@
 package nl.hu.tosad;
 
-import nl.hu.tosad.controller.BusinessRuleService;
+import nl.hu.tosad.businessruleservice.BusinessRuleService;
 
 /**
  * Hello world!

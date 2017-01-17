@@ -1,4 +1,4 @@
-package nl.hu.tosad.model;
+package nl.hu.tosad.businessruleservice.model.rules;
 
 public enum Implementation {
     CONDITION,

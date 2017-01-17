@@ -1,6 +1,4 @@
-package nl.hu.tosad.model.rules;
-
-import nl.hu.tosad.model.Implementation;
+package nl.hu.tosad.businessruleservice.model.rules;
 
 /**
  * Created by Raoul on 11/17/2016.
@@ -8,7 +6,7 @@ import nl.hu.tosad.model.Implementation;
 public class AttributeOtherRule extends AttributeRule{
     private String statement;
 
-    public AttributeOtherRule(String name, String table, Implementation implementation, String attribute, String statement) {
+    AttributeOtherRule(String name, String table, Implementation implementation, String attribute, String statement) {
         super(name, table, implementation, attribute);
         this.statement = statement;
     }
@@ -19,6 +17,6 @@ public class AttributeOtherRule extends AttributeRule{
 
     @Override
     public String accept(IGenerator generator) {
-        return generator.generateSQL(this);
+        return generator.generateDDL(this);
     }
 }

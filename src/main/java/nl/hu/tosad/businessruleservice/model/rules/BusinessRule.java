@@ -1,6 +1,4 @@
-package nl.hu.tosad.model.rules;
-
-import nl.hu.tosad.model.Implementation;
+package nl.hu.tosad.businessruleservice.model.rules;
 
 /**
  * Created by Raoul on 11/17/2016.
