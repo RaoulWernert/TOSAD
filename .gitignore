@@ -24,8 +24,8 @@ hs_err_pid*
 .DS_Store
 
 # Maven
-log/
-target/
+/log/
+/target/
 
-out/
-bin/
+/out/
+/bin/
