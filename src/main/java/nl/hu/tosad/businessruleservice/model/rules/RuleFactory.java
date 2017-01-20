@@ -27,7 +27,7 @@ public class RuleFactory {
             case AttributeOtherRule:
                 return new AttributeOtherRule(data.name, data.table, getImplementation(data.implementation), data.attribute, data.code);
             default:
-                return null; //TODO Error message
+                return null;
         }
     }
 

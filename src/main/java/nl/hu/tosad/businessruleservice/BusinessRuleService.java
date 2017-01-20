@@ -3,7 +3,7 @@ package nl.hu.tosad.businessruleservice;
 import nl.hu.tosad.businessruleservice.controller.IController;
 import nl.hu.tosad.businessruleservice.controller.OracleController;
 import nl.hu.tosad.businessruleservice.model.rules.BusinessRule;
-import nl.hu.tosad.businessruleservice.persistance.RepoDAO;
+import nl.hu.tosad.businessruleservice.persistance.repo.BusinessRuleDAO;
 
 public class BusinessRuleService {
     private static BusinessRuleService instance;
@@ -16,15 +16,19 @@ public class BusinessRuleService {
     }
 
     private IController oracleController;
-    private RepoDAO repoDAO;
+    private BusinessRuleDAO businessRuleDAO;
 
     private BusinessRuleService() {
         oracleController = new OracleController();
-        repoDAO = new RepoDAO();
+        businessRuleDAO = new BusinessRuleDAO();
     }
 
     public synchronized boolean generate(int ruleid) {
-        BusinessRule rule = repoDAO.getBusinessRule(ruleid);
-        return oracleController.generate(rule);
+        BusinessRule rule = businessRuleDAO.findById(ruleid);
+
+        if(rule == null)
+            return false;
+
+        return oracleController.generate(businessRuleDAO.findById(ruleid));
     }
 }

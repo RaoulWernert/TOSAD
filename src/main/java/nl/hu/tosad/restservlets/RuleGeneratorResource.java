@@ -14,7 +14,6 @@ public class RuleGeneratorResource {
     @Path("generate")
     @Produces("text/plain")
     public String generate(@FormParam("ruleid") int ruleid) {
-        BusinessRuleService.getInstance().generate(ruleid);
-        return "";
+        return String.valueOf(BusinessRuleService.getInstance().generate(ruleid));
     }
 }
