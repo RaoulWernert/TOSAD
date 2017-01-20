@@ -2,12 +2,13 @@ package nl.hu.tosad.businessruleservice;
 
 import nl.hu.tosad.businessruleservice.controller.IController;
 import nl.hu.tosad.businessruleservice.controller.OracleController;
+import nl.hu.tosad.businessruleservice.model.rules.BusinessRule;
 import nl.hu.tosad.businessruleservice.persistance.RepoDAO;
 
 public class BusinessRuleService {
     private static BusinessRuleService instance;
 
-    public static BusinessRuleService getInstance() {
+    public synchronized static BusinessRuleService getInstance() {
         if(instance == null)
             instance = new BusinessRuleService();
 
@@ -23,6 +24,7 @@ public class BusinessRuleService {
     }
 
     public boolean generate(int ruleid) {
-        return oracleController.generate(repoDAO.getBusinessRule(ruleid));
+        BusinessRule rule = repoDAO.getBusinessRule(ruleid);
+        return oracleController.generate(rule);
     }
 }
