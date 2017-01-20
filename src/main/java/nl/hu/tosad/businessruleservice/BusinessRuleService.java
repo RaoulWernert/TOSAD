@@ -23,7 +23,7 @@ public class BusinessRuleService {
         repoDAO = new RepoDAO();
     }
 
-    public boolean generate(int ruleid) {
+    public synchronized boolean generate(int ruleid) {
         BusinessRule rule = repoDAO.getBusinessRule(ruleid);
         return oracleController.generate(rule);
     }
