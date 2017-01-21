@@ -6,8 +6,8 @@ import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-abstract class BaseDAO {
-    Connection getConnection() {
+public abstract class BaseDAO {
+    public Connection getConnection() {
         try {
             Connection conn = ((DataSource) new InitialContext().lookup("java:comp/env/jdbc/RepoDB")).getConnection();
             conn.setAutoCommit(false);
