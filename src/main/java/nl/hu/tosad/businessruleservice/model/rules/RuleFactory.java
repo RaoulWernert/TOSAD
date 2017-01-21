@@ -19,13 +19,13 @@ public class RuleFactory {
 
         switch (ruleType){
             case AttributeRangeRule:
-                return new AttributeRangeRule(data.name, data.table, getImplementation(data.implementation), data.attribute, data.min, data.max);
+                return new AttributeRangeRule(data);
             case AttributeCompareRule:
-                return new AttributeCompareRule(data.name, data.table, getImplementation(data.implementation), data.attribute, getComparisonOperator(data.cOperator), data.value);
+                return new AttributeCompareRule(data);
             case AttributeListRule:
-                return new AttributeListRule(data.name, data.table, getImplementation(data.implementation), data.attribute, getComparisonOperator(data.cOperator), getLogicalOperator(data.lOperator), data.value.split("\\r\\n"));
+                return new AttributeListRule(data);
             case AttributeOtherRule:
-                return new AttributeOtherRule(data.name, data.table, getImplementation(data.implementation), data.attribute, data.code);
+                return new AttributeOtherRule(data);
             default:
                 return null;
         }
@@ -37,29 +37,5 @@ public class RuleFactory {
                 return ruleType;
         }
         return null;
-    }
-
-    private ComparisonOperator getComparisonOperator(String code) {
-        for (ComparisonOperator cOper : ComparisonOperator.values()) {
-            if(cOper.getCode().equals(code))
-                return cOper;
-        }
-        return null;
-    }
-
-    private LogicalOperator getLogicalOperator(String code) {
-        for (LogicalOperator lOper : LogicalOperator.values()) {
-            if(lOper.getCode().equals(code))
-                return lOper;
-        }
-        return null;
-    }
-
-    private Implementation getImplementation(String code) {
-        try {
-            return Implementation.valueOf(code);
-        } catch (IllegalArgumentException e) {
-            return null;
-        }
     }
 }

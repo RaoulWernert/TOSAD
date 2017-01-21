@@ -2,7 +2,7 @@ package nl.hu.tosad.businessruleservice.generator;
 
 import nl.hu.tosad.businessruleservice.model.rules.*;
 
-public class OracleGenerator implements IGenerator {
+public class OracleGenerator extends BaseGenerator implements IGenerator {
     private final String CONSTRAINT = "ALTER TABLE %s ADD CONSTRAINT %s CHECK (%s)";
 
     @Override
@@ -19,12 +19,7 @@ public class OracleGenerator implements IGenerator {
 
     @Override
     public String generateDDL(AttributeListRule rule) {
-        String constraint = "STATUS IN (";
-        for (String str : rule.getValues()) {
-            constraint += "'" + str + "',";
-        }
-        constraint = constraint.substring(0, constraint.length() - 1) + ")";
-
+        String constraint = String.format("STATUS IN (%s)", getValuesFromList(rule.getValues()));
         return String.format(CONSTRAINT, rule.getTable(), rule.getName(), constraint);
     }
 

@@ -1,5 +1,7 @@
 package nl.hu.tosad.businessruleservice.model.rules;
 
+import nl.hu.tosad.businessruleservice.model.BusinessRuleData;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -13,11 +15,11 @@ public class AttributeListRule extends AttributeRule {
     private LogicalOperator logicalOperator;
     private List<String> values;
 
-    AttributeListRule(String name, String table, Implementation implementation, String attribute, ComparisonOperator cOperator, LogicalOperator lOperator, String... values) {
-        super(name, table, implementation, attribute);
-        this.comparisonOperator = cOperator;
-        this.logicalOperator = lOperator;
-        this.values = new ArrayList<>(Arrays.asList(values));
+    public AttributeListRule(BusinessRuleData data) {
+        super(data);
+        comparisonOperator = ComparisonOperator.valueOf(data.cOperator);
+        logicalOperator = LogicalOperator.valueOf(data.lOperator);
+        values = new ArrayList<>(Arrays.asList(data.value.split("\\r\\n")));
     }
 
     public ComparisonOperator getComparisonOperator() {

@@ -1,5 +1,7 @@
 package nl.hu.tosad.businessruleservice.model.rules;
 
+import nl.hu.tosad.businessruleservice.model.BusinessRuleData;
+
 /**
  * Created by Raoul on 11/17/2016.
  */
@@ -7,10 +9,10 @@ public class AttributeRangeRule extends AttributeRule{
     private String min;
     private String max;
 
-    AttributeRangeRule(String name, String table, Implementation implementation, String attribute, String min, String max){
-        super(name, table, implementation, attribute);
-        this.min = min;
-        this.max = max;
+    public AttributeRangeRule(BusinessRuleData data) {
+        super(data);
+        min = data.min;
+        max = data.max;
     }
 
     public String getMin() {

@@ -1,5 +1,7 @@
 package nl.hu.tosad.businessruleservice.model.rules;
 
+import nl.hu.tosad.businessruleservice.model.BusinessRuleData;
+
 /**
  * Created by Raoul on 11/17/2016.
  */
@@ -7,10 +9,10 @@ public class AttributeCompareRule extends AttributeRule{
     private ComparisonOperator comparisonOperator;
     private String value;
 
-    AttributeCompareRule(String name, String table, Implementation implementation, String attribute, ComparisonOperator cOperator, String value) {
-        super(name, table, implementation, attribute);
-        this.comparisonOperator = cOperator;
-        this.value = value;
+    public AttributeCompareRule(BusinessRuleData data) {
+        super(data);
+        comparisonOperator = ComparisonOperator.valueOf(data.cOperator);
+        value = data.value;
     }
 
     public ComparisonOperator getComparisonOperator() {

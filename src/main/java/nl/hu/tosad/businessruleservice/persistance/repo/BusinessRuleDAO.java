@@ -14,8 +14,8 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class BusinessRuleDAO extends BaseDAO {
-    private static final String TABLE_NAME = "BUSINESSRULES";
-    private static final String SELECT = "SELECT * FROM " + TABLE_NAME;
+    private final String TABLE_NAME = "BUSINESSRULES";
+    private final String SELECT = "SELECT * FROM " + TABLE_NAME;
 
     private RuleFactory factory;
 
