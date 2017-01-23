@@ -17,6 +17,7 @@ public class BusinessRuleData {
     public String ruletype_code;
     public String targetdb;
     public String implementation;
+    public TargetDatabase target;
 
     public BusinessRuleData(int id,
                             String ruleName, String table, String attribute,

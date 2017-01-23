@@ -1,5 +1,6 @@
 package nl.hu.tosad.businessruleservice.persistance.repo;
 
+import nl.hu.tosad.businessruleservice.exceptions.BusinessRuleServiceException;
 import nl.hu.tosad.businessruleservice.model.BusinessRuleData;
 import nl.hu.tosad.businessruleservice.model.rules.BusinessRule;
 import nl.hu.tosad.businessruleservice.model.rules.RuleFactory;
@@ -10,27 +11,18 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
 
 public class BusinessRuleDAO extends BaseDAO {
     private final String TABLE_NAME = "BUSINESSRULES";
     private final String SELECT = "SELECT * FROM " + TABLE_NAME;
+    private final String UPDATE = "UPDATE " + TABLE_NAME + " SET NAME = ? WHERE ID = ?";
 
     private RuleFactory factory;
+    private TargetsDAO targetsDAO;
 
     public BusinessRuleDAO() {
         factory = new RuleFactory();
-    }
-
-    public List<BusinessRule> findAll() {
-        try (Connection conn = super.getConnection()) {
-            PreparedStatement statement = conn.prepareStatement(SELECT);
-            ResultSet rs = statement.executeQuery();
-            return selectBusinessRule(rs);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+        targetsDAO = new TargetsDAO();
     }
 
     public BusinessRule findById(int id) {
@@ -39,16 +31,19 @@ public class BusinessRuleDAO extends BaseDAO {
             statement.setInt(1, id);
             ResultSet rs = statement.executeQuery();
             List<BusinessRule> bs = selectBusinessRule(rs);
-            return bs.size() > 0 ? bs.get(0) : null;
-        } catch(SQLException e) {
-            throw new RuntimeException(e);
+            if (bs.size() < 1) {
+                return null;
+            }
+            return bs.get(0);
+        } catch (SQLException e) {
+            throw new BusinessRuleServiceException(e);
         }
     }
 
     private List<BusinessRule> selectBusinessRule(ResultSet rs) throws SQLException {
-        List<BusinessRuleData> bsdata = new ArrayList<>();
+        List<BusinessRule> rules = new ArrayList<>();
         while (rs.next()) {
-            bsdata.add(new BusinessRuleData(
+            BusinessRuleData data = new BusinessRuleData(
                     rs.getInt("ID"),
                     rs.getString("NAME"),
                     rs.getString("TARGETTABLE"),
@@ -62,12 +57,22 @@ public class BusinessRuleDAO extends BaseDAO {
                     rs.getString("RULETYPES_CODE"),
                     rs.getString("TARGETDATABASE"),
                     rs.getString("IMPLEMENTATION")
-            ));
+            );
+            data.target = targetsDAO.findById(rs.getInt("TARGETDATABASE"));
+            BusinessRule rule = factory.createRule(data);
+            if(rule != null){
+                rules.add(rule);
+            }
         }
         rs.close();
-        return bsdata.stream()
-                .map(factory::createRule)
-                .filter(Objects::nonNull)
-                .collect(Collectors.toCollection(ArrayList::new));
+        return rules;
+    }
+
+    public void updateName(BusinessRule rule) {
+//        try (Connection conn = super.getConnection()) {
+////            PreparedStatement
+//        } catch (SQLException e) {
+//            throw new BusinessRuleServiceException(e)
+//        }
     }
 }
