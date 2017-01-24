@@ -28,7 +28,6 @@ public class OracleTargetDAO {
     public void implement(String query, TargetDatabase target) {
         try (Connection connection = getConnection(target)) {
             connection.createStatement().execute(query);
-            connection.close();
         } catch (SQLException e) {
             throw new BusinessRuleServiceException(e);
         }
@@ -43,7 +42,6 @@ public class OracleTargetDAO {
             while (result.next()) {
                 tables.add(result.getString("TABLE_NAME"));
             }
-            connection.close();
             return Collections.unmodifiableList(tables);
         } catch (SQLException e) {
             throw new BusinessRuleServiceException(e);
@@ -59,7 +57,6 @@ public class OracleTargetDAO {
             while (result.next()) {
                 columns.add(result.getString("COLUMN_NAME"));
             }
-            connection.close();
             return Collections.unmodifiableList(columns);
         } catch (SQLException e) {
             throw new BusinessRuleServiceException(e);
