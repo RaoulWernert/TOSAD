@@ -4,6 +4,7 @@ import nl.hu.tosad.businessruleservice.BusinessRuleService;
 import nl.hu.tosad.businessruleservice.exceptions.BusinessRuleServiceException;
 
 import javax.ws.rs.*;
+import java.sql.SQLException;
 import java.util.List;
 
 @Path("/ruleservice")
@@ -16,6 +17,15 @@ public class RuleGeneratorResource {
         try {
             return "SUCCESS " + BusinessRuleService.getInstance().generate(ruleid);
         } catch (BusinessRuleServiceException e) {
+            Throwable cause = e.getCause();
+
+            if(cause != null && cause instanceof SQLException) {
+                SQLException sqle = (SQLException) cause;
+                if(sqle.getErrorCode() == 2293) {
+                    return "Data in table does not conform to given constraint.";
+                }
+            }
+
             return e.getMessage();
         }
     }

@@ -34,7 +34,21 @@ public class BusinessRuleDAO extends BaseDAO {
             if (bs.size() < 1) {
                 return null;
             }
+            statement.close();
             return bs.get(0);
+        } catch (SQLException e) {
+            throw new BusinessRuleServiceException(e);
+        }
+    }
+
+    public void updateName(BusinessRule rule) {
+        try (Connection conn = super.getConnection()) {
+            PreparedStatement statement = conn.prepareStatement(UPDATE);
+            statement.setString(1, rule.getName());
+            statement.setInt(2, rule.getId());
+            statement.executeUpdate();
+            conn.commit();
+            statement.close();
         } catch (SQLException e) {
             throw new BusinessRuleServiceException(e);
         }
@@ -66,13 +80,5 @@ public class BusinessRuleDAO extends BaseDAO {
         }
         rs.close();
         return rules;
-    }
-
-    public void updateName(BusinessRule rule) {
-//        try (Connection conn = super.getConnection()) {
-////            PreparedStatement
-//        } catch (SQLException e) {
-//            throw new BusinessRuleServiceException(e)
-//        }
     }
 }

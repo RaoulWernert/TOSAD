@@ -16,7 +16,8 @@ public class OracleTargetDAO {
     private final String GETCOLUMNS = "select column_name from cols where lower(table_name) = lower(?)";
 
     private Connection getConnection(TargetDatabase target) {
-        try (Connection conn = DriverManager.getConnection(target.getUrl(), target.getUsername(), target.getPassword())) {
+        try {
+            Connection conn = DriverManager.getConnection(target.getUrl(), target.getUsername(), target.getPassword());
             conn.setAutoCommit(false);
             return conn;
         } catch (SQLException e) {
@@ -25,8 +26,7 @@ public class OracleTargetDAO {
     }
 
     public void implement(String query, TargetDatabase target) {
-        try {
-            Connection connection = getConnection(target);
+        try (Connection connection = getConnection(target)) {
             connection.createStatement().execute(query);
             connection.close();
         } catch (SQLException e) {
@@ -35,8 +35,7 @@ public class OracleTargetDAO {
     }
 
     public List<String> getTables(TargetDatabase target) {
-        try {
-            Connection connection = getConnection(target);
+        try (Connection connection = getConnection(target)) {
             PreparedStatement statement = connection.prepareStatement(GETTABLES);
             statement.setString(1, target.getUsername());
             ResultSet result = statement.executeQuery();
@@ -52,8 +51,7 @@ public class OracleTargetDAO {
     }
 
     public List<String> getColumns(TargetDatabase target, String tablename) {
-        try {
-            Connection connection = getConnection(target);
+        try (Connection connection = getConnection(target)) {
             PreparedStatement statement = connection.prepareStatement(GETCOLUMNS);
             statement.setString(1, tablename);
             ResultSet result = statement.executeQuery();

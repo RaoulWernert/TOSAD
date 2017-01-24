@@ -26,6 +26,7 @@ public class TargetsDAO extends BaseDAO {
             if (bs.size() < 1) {
                 return null;
             }
+            statement.close();
             return bs.get(0);
         } catch(SQLException e) {
             throw new BusinessRuleServiceException(e);
