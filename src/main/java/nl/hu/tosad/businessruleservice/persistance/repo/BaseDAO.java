@@ -15,7 +15,6 @@ abstract class BaseDAO {
             conn.setAutoCommit(false);
             return conn;
         } catch (NamingException | SQLException e) {
-            e.printStackTrace();
             throw new BusinessRuleServiceException("Could not connect to repo database.");
         }
     }
