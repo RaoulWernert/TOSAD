@@ -33,9 +33,6 @@ public class BusinessRuleDAO extends BaseDAO {
             statement.setInt(1, id);
             ResultSet rs = statement.executeQuery();
             List<BusinessRule> bs = selectBusinessRule(rs);
-
-//            statement.
-
             if (bs.size() < 1) {
                 return null;
             }
