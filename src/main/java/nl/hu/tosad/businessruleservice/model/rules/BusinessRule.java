@@ -1,6 +1,7 @@
 package nl.hu.tosad.businessruleservice.model.rules;
 
 import nl.hu.tosad.businessruleservice.model.BusinessRuleData;
+import nl.hu.tosad.businessruleservice.model.RuleType;
 import nl.hu.tosad.businessruleservice.model.TargetDatabase;
 
 /**
@@ -12,12 +13,14 @@ public abstract class BusinessRule {
     private String table;
     private Implementation implementation;
     private TargetDatabase target;
+    private RuleType ruleType;
 
     public BusinessRule(BusinessRuleData data) {
         table = data.table;
         implementation = Implementation.valueOf(data.implementation);
         target = data.target;
         id = data.id;
+        ruleType = data.ruleType;
 
         String impl = implementation == Implementation.CONSTRAINT ? "CNS" : "TRG";
         name = String.format("BRG_%s_%s_%s_%s", target.getName(), impl, data.ruletype_code, id);
@@ -39,9 +42,13 @@ public abstract class BusinessRule {
         return implementation;
     }
 
-    public abstract String accept(IGenerator generator);
-
     public TargetDatabase getTarget() {
         return target;
     }
+
+    public RuleType getRuleType() {
+        return ruleType;
+    }
+
+    public abstract String accept(IGenerator generator);
 }

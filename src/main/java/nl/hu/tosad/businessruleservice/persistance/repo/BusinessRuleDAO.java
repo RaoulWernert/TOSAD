@@ -19,10 +19,12 @@ public class BusinessRuleDAO extends BaseDAO {
 
     private RuleFactory factory;
     private TargetsDAO targetsDAO;
+    private RuleTypeDAO ruleTypeDAO;
 
     public BusinessRuleDAO() {
         factory = new RuleFactory();
         targetsDAO = new TargetsDAO();
+        ruleTypeDAO = new RuleTypeDAO();
     }
 
     public BusinessRule findById(int id) {
@@ -31,6 +33,9 @@ public class BusinessRuleDAO extends BaseDAO {
             statement.setInt(1, id);
             ResultSet rs = statement.executeQuery();
             List<BusinessRule> bs = selectBusinessRule(rs);
+
+//            statement.
+
             if (bs.size() < 1) {
                 return null;
             }
@@ -73,6 +78,7 @@ public class BusinessRuleDAO extends BaseDAO {
                     rs.getString("IMPLEMENTATION")
             );
             data.target = targetsDAO.findById(rs.getInt("TARGETDATABASE"));
+            data.ruleType = ruleTypeDAO.findById(rs.getString("RULETYPES_CODE"));
             BusinessRule rule = factory.createRule(data);
             if(rule != null){
                 rules.add(rule);

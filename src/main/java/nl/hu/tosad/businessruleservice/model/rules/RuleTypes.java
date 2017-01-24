@@ -3,7 +3,7 @@ package nl.hu.tosad.businessruleservice.model.rules;
 /**
  * Created by Raoul on 11/17/2016.
  */
-public enum RuleType {
+public enum RuleTypes {
     AttributeRangeRule("ARNG"),
     AttributeCompareRule("ACMP"),
     AttributeListRule("ALIS"),
@@ -11,7 +11,7 @@ public enum RuleType {
 
     private String code;
 
-    RuleType(String t) {
+    RuleTypes(String t) {
         code = t;
     }
 

@@ -11,13 +11,13 @@ public class RuleFactory {
     }
 
     public BusinessRule createRule(BusinessRuleData data) {
-        RuleType ruleType = getRuleType(data.ruletype_code);
+        RuleTypes ruleTypes = getRuleType(data.ruletype_code);
 
-        if(ruleType == null) {
+        if(ruleTypes == null) {
             return null;
         }
 
-        switch (ruleType){
+        switch (ruleTypes){
             case AttributeRangeRule:
                 return new AttributeRangeRule(data);
             case AttributeCompareRule:
@@ -31,10 +31,10 @@ public class RuleFactory {
         }
     }
 
-    private RuleType getRuleType(String code) {
-        for (RuleType ruleType : RuleType.values()) {
-            if(ruleType.getCode().equals(code))
-                return ruleType;
+    private RuleTypes getRuleType(String code) {
+        for (RuleTypes ruleTypes : RuleTypes.values()) {
+            if(ruleTypes.getCode().equals(code))
+                return ruleTypes;
         }
         return null;
     }
