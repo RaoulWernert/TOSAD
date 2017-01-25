@@ -72,7 +72,9 @@ public class BusinessRuleDAO extends BaseDAO {
                     rs.getString("CODE"),
                     rs.getString("RULETYPES_CODE"),
                     rs.getString("TARGETDATABASE"),
-                    rs.getString("IMPLEMENTATION")
+                    rs.getString("IMPLEMENTATION"),
+                    rs.getString("TARGETTABLE2"),
+                    rs.getString("ATTRIBUTE2")
             );
             data.target = targetsDAO.findById(rs.getInt("TARGETDATABASE"));
             data.ruleType = ruleTypeDAO.findById(rs.getString("RULETYPES_CODE"));
