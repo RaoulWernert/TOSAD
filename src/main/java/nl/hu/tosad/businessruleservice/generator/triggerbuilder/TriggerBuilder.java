@@ -10,7 +10,7 @@ public class TriggerBuilder {
             "DECLARE\n" +
             "    l_passed boolean := true\n" +
             "BEGIN\n" +
-            "    null; --code\n" +
+            "    null;\n" +
             "    IF NOT l_passed THEN\n" +
             "        raise_application_error(-20800, %s)\n" +
             "    END IF;\n" +
