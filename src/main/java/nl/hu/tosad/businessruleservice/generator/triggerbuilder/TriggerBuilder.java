@@ -109,7 +109,7 @@ public class TriggerBuilder implements OnRuleType, AddEvent, AddColumnOrStatemen
                     "        EXCEPTION\n" +
                     "          WHEN NO_DATA_FOUND THEN\n" +
                     "          l_passed := FALSE;\n" +
-                    "        END;";
+                    "        END";
             this.condition = String.format(condition, comparisonOperator.getCode(), logicalOperator.getCode(), "%s");
         } else {
             this.condition = String.format(condition + " %s (%s)", logicalOperator.getCode(), "%s");
