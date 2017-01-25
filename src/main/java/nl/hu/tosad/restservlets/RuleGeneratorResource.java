@@ -14,6 +14,8 @@ public class RuleGeneratorResource {
     @Path("generate")
     @Produces("text/plain")
     public String generate(@FormParam("ruleid") int ruleid) {
+        System.out.println("generate: " + ruleid);
+
         try {
             return "SUCCESS " + BusinessRuleService.getInstance().generate(ruleid);
         } catch (BusinessRuleServiceException e) {
@@ -22,10 +24,13 @@ public class RuleGeneratorResource {
             if(cause != null && cause instanceof SQLException) {
                 SQLException sqle = (SQLException) cause;
                 if(sqle.getErrorCode() == 2293) {
-                    return "Data in table does not conform to given constraint.";
+                    String msg = "Data in table does not conform to given constraint.";
+                    System.out.println(msg);
+                    return msg;
                 }
             }
 
+            System.out.println(e.getMessage());
             return e.getMessage();
         }
     }
@@ -34,6 +39,7 @@ public class RuleGeneratorResource {
     @Path("tables")
     @Produces("text/plain")
     public String getTables(@QueryParam("targetid") int targetid) {
+        System.out.println("Get tables: " + targetid);
         return createList(BusinessRuleService.getInstance().getTables(targetid));
     }
 
@@ -41,6 +47,7 @@ public class RuleGeneratorResource {
     @Path("columns")
     @Produces("text/plain")
     public String getColumns(@QueryParam("targetid") int targetid, @QueryParam("tablename") String tablename) {
+        System.out.println("Get columns: " + tablename);
         return createList(BusinessRuleService.getInstance().getColumns(targetid, tablename));
     }
 
