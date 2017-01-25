@@ -101,7 +101,7 @@ public class TriggerBuilder implements OnRuleType, AddEvent, AddColumnOrStatemen
     public AddValues addOperators(LogicalOperator logicalOperator, ComparisonOperator comparisonOperator) {
         if(logicalOperator == LogicalOperator.Any || logicalOperator == LogicalOperator.All) {
             this.condition =
-                    "        DECLARE\n" +
+                    "    DECLARE\n" +
                     "          v_test varchar2(4000);\n" +
                     "        BEGIN\n" +
                     "          SELECT 'passed' INTO v_test FROM dual WHERE :NEW.ID %s %s (%s);\n" +
