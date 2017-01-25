@@ -46,7 +46,7 @@ public class ConstraintBuilder implements OnTable, OnColumn, AddAttributes, AddV
         if(logicalOperator == LogicalOperator.Any || logicalOperator == LogicalOperator.All) {
             this.constraint = String.format(constraint + " %s %s (%s)", comparisonOperator.getCode(), logicalOperator.getCode(), "%s");
         } else {
-            this.constraint = String.format(constraint + " %s (%s)", logicalOperator.getCode());
+            this.constraint = String.format(constraint + " %s (%s)", logicalOperator.getCode(), "%s");
         }
 
         return this;
