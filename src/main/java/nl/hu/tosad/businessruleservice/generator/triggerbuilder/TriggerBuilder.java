@@ -7,12 +7,17 @@ public class TriggerBuilder {
             "CREATE OR REPLACE TRIGGER %s\n" +
             "    BEFORE %s %s\n" +
             "    FOR EACH ROW \n" +
+            "DECLARE\n" +
+            "    l_passed boolean := true\n" +
             "BEGIN\n" +
-            "    null;\n" +
+            "    null; --code\n" +
+            "    IF NOT l_passed THEN\n" +
+            "        raise_application_error(-20800, %s)\n" +
+            "    END IF;\n" +
             "END %s;";
 
     public TriggerBuilder newTrigger(String name) {
-        trigger = String.format(trigger, name, "%s", "%s", name);
+        trigger = String.format(trigger, name, "%s", "%s", "%s", name);
         return this;
     }
 
@@ -29,7 +34,7 @@ public class TriggerBuilder {
             event += (!event.isEmpty() ? " OR " : "") + "DELETE";
         }
 
-        trigger = String.format(trigger, event, "%s");
+        trigger = String.format(trigger, event, "%s", "%s");
         return this;
     }
 
@@ -46,11 +51,11 @@ public class TriggerBuilder {
             event = String.format("OF %s ON %s", cols, table);
         }
 
-        trigger = String.format(trigger, event);
+        trigger = String.format(trigger, event, "%s");
         return this;
     }
 
     public String build() {
-        return trigger;
+        return String.format(trigger, "ERRORMSG PLACEHOLDER");
     }
 }
