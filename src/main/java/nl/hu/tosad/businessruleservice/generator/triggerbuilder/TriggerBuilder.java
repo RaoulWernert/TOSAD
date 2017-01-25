@@ -8,16 +8,17 @@ public class TriggerBuilder {
             "    BEFORE %s %s\n" +
             "    FOR EACH ROW \n" +
             "DECLARE\n" +
-            "    l_passed boolean := true\n" +
+            "    l_passed boolean := true;\n" +
             "BEGIN\n" +
-            "    null;\n" +
+            "    l_passed := %s;\n" +
             "    IF NOT l_passed THEN\n" +
-            "        raise_application_error(-20800, '%s')\n" +
+            "        raise_application_error(-20800, '%s');\n" +
             "    END IF;\n" +
             "END %s;";
+    private String condition = "";
 
     public TriggerBuilder newTrigger(String name) {
-        trigger = String.format(trigger, name, "%s", "%s", "%s", name);
+        trigger = String.format(trigger, name, "%s", "%s", "%s", "%s", name);
         return this;
     }
 
@@ -34,7 +35,7 @@ public class TriggerBuilder {
             event += (!event.isEmpty() ? " OR " : "") + "DELETE";
         }
 
-        trigger = String.format(trigger, event, "%s", "%s");
+        trigger = String.format(trigger, event, "%s", "%s", "%s");
         return this;
     }
 
@@ -51,11 +52,21 @@ public class TriggerBuilder {
             event = String.format("OF %s ON %s", cols, table);
         }
 
-        trigger = String.format(trigger, event, "%s");
+        trigger = String.format(trigger, event, "%s", "%s");
+        return this;
+    }
+
+    public TriggerBuilder onColumn(String column) {
+        this.condition = ":NEW." + column;
+        return this;
+    }
+
+    public TriggerBuilder addBetween(String min, String max) {
+        this.condition = String.format(condition + " BETWEEN '%s' AND '%s'", min, max);
         return this;
     }
 
     public String build() {
-        return String.format(trigger, "ERRORMSG PLACEHOLDER");
+        return String.format(trigger, condition, "ERRORMSG PLACEHOLDER");
     }
 }

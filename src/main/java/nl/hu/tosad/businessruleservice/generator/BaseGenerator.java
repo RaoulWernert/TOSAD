@@ -21,6 +21,8 @@ public class BaseGenerator implements IGenerator {
                 return new TriggerBuilder().newTrigger(rule.getName())
                         .onRuleType(rule.getRuleType())
                         .addEvent(rule.getTable(), rule.getAttribute())
+                        .onColumn(rule.getAttribute())
+                        .addBetween(rule.getMin(), rule.getMax())
                         .build();
             default:
                 return null;
