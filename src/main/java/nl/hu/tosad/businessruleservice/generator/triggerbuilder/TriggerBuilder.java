@@ -6,7 +6,7 @@ import nl.hu.tosad.businessruleservice.model.rules.LogicalOperator;
 
 import java.util.List;
 
-public class TriggerBuilder implements OnRuleType, AddEvent, OnColumn, AddAttributes, AddValue, AddValues, Build {
+public class TriggerBuilder implements OnRuleType, AddEvent, AddColumnOrStatement, AddAttributes, AddValue, AddValues, Build {
     public static OnRuleType newTrigger(String name) {
         return new TriggerBuilder(name);
     }
@@ -48,7 +48,7 @@ public class TriggerBuilder implements OnRuleType, AddEvent, OnColumn, AddAttrib
     }
 
     @Override
-    public OnColumn addEvent(String table, String... columns) {
+    public AddColumnOrStatement addEvent(String table, String... columns) {
         String event;
 
         if(columns == null || columns.length == 0) {
@@ -66,8 +66,14 @@ public class TriggerBuilder implements OnRuleType, AddEvent, OnColumn, AddAttrib
     }
 
     @Override
-    public AddAttributes onColumn(String column) {
+    public AddAttributes addColumn(String column) {
         this.condition = ":NEW." + column;
+        return this;
+    }
+
+    @Override
+    public Build addStatement(String statement) {
+        this.condition = statement;
         return this;
     }
 
@@ -104,7 +110,6 @@ public class TriggerBuilder implements OnRuleType, AddEvent, OnColumn, AddAttrib
         this.condition = String.format(condition, getValuesFromList(values));
         return this;
     }
-
 
     @Override
     public String build() {

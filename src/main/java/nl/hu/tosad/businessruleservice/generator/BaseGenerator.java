@@ -21,7 +21,7 @@ public class BaseGenerator implements IGenerator {
                 return TriggerBuilder.newTrigger(rule.getName())
                         .onRuleType(rule.getRuleType())
                         .addEvent(rule.getTable(), rule.getAttribute())
-                        .onColumn(rule.getAttribute())
+                        .addColumn(rule.getAttribute())
                         .addBetween(rule.getMin(), rule.getMax())
                         .build();
             default:
@@ -43,7 +43,7 @@ public class BaseGenerator implements IGenerator {
                 return TriggerBuilder.newTrigger(rule.getName())
                         .onRuleType(rule.getRuleType())
                         .addEvent(rule.getTable(), rule.getAttribute())
-                        .onColumn(rule.getAttribute())
+                        .addColumn(rule.getAttribute())
                         .addComparisonOperator(rule.getComparisonOperator())
                         .addValue(rule.getValue())
                         .build();
@@ -66,7 +66,7 @@ public class BaseGenerator implements IGenerator {
                 return TriggerBuilder.newTrigger(rule.getName())
                         .onRuleType(rule.getRuleType())
                         .addEvent(rule.getTable(), rule.getAttribute())
-                        .onColumn(rule.getAttribute())
+                        .addColumn(rule.getAttribute())
                         .addOperators(rule.getLogicalOperator(), rule.getComparisonOperator())
                         .addValues(rule.getValues())
                         .build();
@@ -85,7 +85,11 @@ public class BaseGenerator implements IGenerator {
                         .addStatement(rule.getStatement())
                         .build();
             case TRIGGER:
-                return "";
+                return TriggerBuilder.newTrigger(rule.getName())
+                        .onRuleType(rule.getRuleType())
+                        .addEvent(rule.getTable(), rule.getAttribute())
+                        .addStatement(rule.getStatement())
+                        .build();
             default:
                 return null;
         }
