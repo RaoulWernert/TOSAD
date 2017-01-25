@@ -18,12 +18,13 @@ public class TriggerBuilder implements OnRuleType, AddEvent, AddColumnOrStatemen
             "DECLARE\n" +
             "    l_passed boolean := true;\n" +
             "BEGIN\n" +
-            "    l_passed := %s;\n" +
+            "    %s;\n" +
             "    IF NOT l_passed THEN\n" +
             "        raise_application_error(-20800, '%s');\n" +
             "    END IF;\n" +
             "END %s;";
-    private String condition = "";
+    private String condition = "l_passed := ";
+    private String column;
 
     private TriggerBuilder(String name) {
         trigger = String.format(trigger, name, "%s", "%s", "%s", "%s", name);
@@ -67,13 +68,14 @@ public class TriggerBuilder implements OnRuleType, AddEvent, AddColumnOrStatemen
 
     @Override
     public AddAttributes addColumn(String column) {
-        this.condition = ":NEW." + column;
+        this.column = ":NEW." + column;
+        this.condition += this.column;
         return this;
     }
 
     @Override
     public Build addStatement(String statement) {
-        this.condition = statement;
+        this.condition += statement;
         return this;
     }
 
@@ -98,7 +100,17 @@ public class TriggerBuilder implements OnRuleType, AddEvent, AddColumnOrStatemen
     @Override
     public AddValues addOperators(LogicalOperator logicalOperator, ComparisonOperator comparisonOperator) {
         if(logicalOperator == LogicalOperator.Any || logicalOperator == LogicalOperator.All) {
-            this.condition = String.format(condition + " %s %s (%s)", comparisonOperator.getCode(), logicalOperator.getCode(), "%s");
+            this.condition =
+                    "        DECLARE\n" +
+                    "          v_test varchar2(4000);\n" +
+                    "        BEGIN\n" +
+                    "          SELECT 'passed' INTO v_test FROM dual WHERE :NEW.ID %s %s (%s);\n" +
+                    "          l_passed := TRUE;\n" +
+                    "        EXCEPTION\n" +
+                    "          WHEN NO_DATA_FOUND THEN\n" +
+                    "          l_passed := FALSE;\n" +
+                    "        END;";
+            this.condition = String.format(condition, comparisonOperator.getCode(), logicalOperator.getCode(), "%s");
         } else {
             this.condition = String.format(condition + " %s (%s)", logicalOperator.getCode(), "%s");
         }
