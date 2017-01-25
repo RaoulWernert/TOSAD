@@ -12,7 +12,7 @@ public class TriggerBuilder {
             "BEGIN\n" +
             "    null;\n" +
             "    IF NOT l_passed THEN\n" +
-            "        raise_application_error(-20800, %s)\n" +
+            "        raise_application_error(-20800, '%s')\n" +
             "    END IF;\n" +
             "END %s;";
 
