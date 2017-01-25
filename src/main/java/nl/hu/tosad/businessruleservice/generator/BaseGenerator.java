@@ -40,7 +40,13 @@ public class BaseGenerator implements IGenerator {
                         .addValue(rule.getValue())
                         .build();
             case TRIGGER:
-                return "";
+                return new TriggerBuilder().newTrigger(rule.getName())
+                        .onRuleType(rule.getRuleType())
+                        .addEvent(rule.getTable(), rule.getAttribute())
+                        .onColumn(rule.getAttribute())
+                        .addComparisonOperator(rule.getComparisonOperator())
+                        .addValue(rule.getValue())
+                        .build();
             default:
                 return null;
         }

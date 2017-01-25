@@ -8,5 +8,4 @@ public interface AddAttributes {
         AddValue addComparisonOperator(ComparisonOperator comparisonOperator);
         AddValues addOperators(LogicalOperator logicalOperator, ComparisonOperator comparisonOperator);
         Build addStatement(String statement);
-
 }

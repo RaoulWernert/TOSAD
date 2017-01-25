@@ -1,8 +1,9 @@
 package nl.hu.tosad.businessruleservice.generator.triggerbuilder;
 
 import nl.hu.tosad.businessruleservice.model.RuleType;
+import nl.hu.tosad.businessruleservice.model.rules.ComparisonOperator;
 
-public class TriggerBuilder {
+public class TriggerBuilder implements OnRuleType, AddEvent, OnColumn, AddAttributes, AddValue, Build {
     private String trigger =
             "CREATE OR REPLACE TRIGGER %s\n" +
             "    BEFORE %s %s\n" +
@@ -17,12 +18,13 @@ public class TriggerBuilder {
             "END %s;";
     private String condition = "";
 
-    public TriggerBuilder newTrigger(String name) {
+    public OnRuleType newTrigger(String name) {
         trigger = String.format(trigger, name, "%s", "%s", "%s", "%s", name);
         return this;
     }
 
-    public TriggerBuilder onRuleType(RuleType ruleType) {
+    @Override
+    public AddEvent onRuleType(RuleType ruleType) {
         String event = "";
 
         if(ruleType.isInsert()) {
@@ -39,7 +41,8 @@ public class TriggerBuilder {
         return this;
     }
 
-    public TriggerBuilder addEvent(String table, String... columns) {
+    @Override
+    public OnColumn addEvent(String table, String... columns) {
         String event;
 
         if(columns == null || columns.length == 0) {
@@ -56,16 +59,31 @@ public class TriggerBuilder {
         return this;
     }
 
-    public TriggerBuilder onColumn(String column) {
+    @Override
+    public AddAttributes onColumn(String column) {
         this.condition = ":NEW." + column;
         return this;
     }
 
-    public TriggerBuilder addBetween(String min, String max) {
+    @Override
+    public Build addBetween(String min, String max) {
         this.condition = String.format(condition + " BETWEEN '%s' AND '%s'", min, max);
         return this;
     }
 
+    @Override
+    public AddValue addComparisonOperator(ComparisonOperator comparisonOperator) {
+        this.condition = String.format(condition + " %s %s", comparisonOperator.getCode(), "%s");
+        return this;
+    }
+
+    @Override
+    public Build addValue(String value) {
+        this.condition = String.format(condition, value);
+        return this;
+    }
+
+    @Override
     public String build() {
         return String.format(trigger, condition, "ERRORMSG PLACEHOLDER");
     }
