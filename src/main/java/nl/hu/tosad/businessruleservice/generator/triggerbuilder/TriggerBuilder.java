@@ -9,10 +9,10 @@ public class TriggerBuilder {
             "    FOR EACH ROW \n" +
             "BEGIN\n" +
             "    null;\n" +
-            "END";
+            "END %s;";
 
     public TriggerBuilder newTrigger(String name) {
-        trigger = String.format(trigger, name, "%s", "%s");
+        trigger = String.format(trigger, name, "%s", "%s", name);
         return this;
     }
 
