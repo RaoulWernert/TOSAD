@@ -11,7 +11,7 @@ public class RuleFactory {
     }
 
     public BusinessRule createRule(BusinessRuleData data) {
-        RuleTypes ruleTypes = getRuleType(data.ruletype_code);
+        RuleTypes ruleTypes = getRuleType(data.getRuleType().getCode());
 
         if(ruleTypes == null) {
             return null;

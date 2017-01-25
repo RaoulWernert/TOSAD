@@ -5,13 +5,14 @@ import nl.hu.tosad.businessruleservice.model.BusinessRuleData;
 /**
  * Created by Raoul on 1/26/2017.
  */
-public abstract class TupleRule {
+public abstract class TupleRule extends BusinessRule {
     public String Column1;
     public String Column2;
 
     public TupleRule(BusinessRuleData data) {
-        Column1 = data.attribute;
-        Column2 = data.attribute2;
+        super(data);
+        Column1 = data.getTargetcolumn();
+        Column2 = data.getTargetcolumn2();
     }
     public String getColumn1() {
         return Column1;

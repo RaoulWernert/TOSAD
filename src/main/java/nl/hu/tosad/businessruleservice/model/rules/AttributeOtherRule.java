@@ -10,7 +10,7 @@ public class AttributeOtherRule extends AttributeRule{
 
     public AttributeOtherRule(BusinessRuleData data) {
         super(data);
-        statement = data.code;
+        statement = data.getStatement();
     }
 
     public String getStatement() {

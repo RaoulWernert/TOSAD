@@ -10,7 +10,7 @@ public abstract class AttributeRule extends BusinessRule{
 
     public AttributeRule(BusinessRuleData data) {
         super(data);
-        attribute = data.attribute;
+        attribute = data.getTargetcolumn();
     }
 
     public String getAttribute() {

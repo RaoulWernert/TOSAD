@@ -94,4 +94,14 @@ public class BaseGenerator implements IGenerator {
                 return null;
         }
     }
+
+    @Override
+    public String generateDDL(TupleCompareRule rule) {
+        return null;
+    }
+
+    @Override
+    public String generateDDL(TupleOtherRule rule) {
+        return null;
+    }
 }

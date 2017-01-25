@@ -10,6 +10,11 @@ public class TupleOtherRule extends TupleRule {
 
     public TupleOtherRule(BusinessRuleData data) {
         super(data);
-        statement = data.code;
+        statement = data.getStatement();
+    }
+
+    @Override
+    public String accept(IGenerator generator) {
+        return generator.generateDDL(this);
     }
 }

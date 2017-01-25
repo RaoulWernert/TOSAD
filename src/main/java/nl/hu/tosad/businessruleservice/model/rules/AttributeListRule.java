@@ -17,9 +17,9 @@ public class AttributeListRule extends AttributeRule {
 
     public AttributeListRule(BusinessRuleData data) {
         super(data);
-        comparisonOperator = ComparisonOperator.valueOf(data.cOperator);
-        logicalOperator = LogicalOperator.valueOf(data.lOperator);
-        values = new ArrayList<>(Arrays.asList(data.value.split("\\r\\n")));
+        comparisonOperator = ComparisonOperator.valueOf(data.getC_operator());
+        logicalOperator = LogicalOperator.valueOf(data.getL_operator());
+        values = new ArrayList<>(Arrays.asList(data.getValue().split("\\r\\n")));
     }
 
     public ComparisonOperator getComparisonOperator() {

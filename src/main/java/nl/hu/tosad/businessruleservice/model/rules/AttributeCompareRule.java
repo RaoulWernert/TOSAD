@@ -11,8 +11,8 @@ public class AttributeCompareRule extends AttributeRule{
 
     public AttributeCompareRule(BusinessRuleData data) {
         super(data);
-        comparisonOperator = ComparisonOperator.valueOf(data.cOperator);
-        value = data.value;
+        comparisonOperator = ComparisonOperator.valueOf(data.getC_operator());
+        value = data.getValue();
     }
 
     public ComparisonOperator getComparisonOperator() {

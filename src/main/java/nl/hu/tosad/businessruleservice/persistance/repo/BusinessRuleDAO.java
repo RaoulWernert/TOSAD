@@ -76,23 +76,22 @@ public class BusinessRuleDAO extends BaseDAO {
             BusinessRuleData data = new BusinessRuleData(
                     rs.getInt("ID"),
                     rs.getString("NAME"),
+                    targetsDAO.findById(rs.getInt("TARGET")),
+                    ruleTypeDAO.findById(rs.getString("RULETYPES_CODE")),
+                    rs.getInt("CREATOR"),
+                    rs.getString("IMPLEMENTATION"),
+                    rs.getInt("IMPLEMENTED") != 0,
                     rs.getString("TARGETTABLE"),
-                    rs.getString("ATTRIBUTE"),
+                    rs.getString("TARGETTABLE2"),
+                    rs.getString("TARGETCOLUMN"),
+                    rs.getString("TARGETCOLUMN2"),
                     rs.getString("MIN"),
                     rs.getString("MAX"),
-                    rs.getString("OPERATOR"),
-                    rs.getString("LOPERATOR"),
+                    rs.getString("C_OPERATOR"),
                     rs.getString("VALUE"),
-                    rs.getString("CODE"),
-                    rs.getString("RULETYPES_CODE"),
-                    rs.getString("TARGETDATABASE"),
-                    rs.getString("IMPLEMENTATION"),
-                    rs.getString("TARGETTABLE2"),
-                    rs.getString("ATTRIBUTE2"),
-                    rs.getInt("IMPLEMENTED") != 0
+                    rs.getString("L_OPERATOR"),
+                    rs.getString("STATEMENT")
             );
-            data.target = targetsDAO.findById(rs.getInt("TARGETDATABASE"));
-            data.ruleType = ruleTypeDAO.findById(rs.getString("RULETYPES_CODE"));
             BusinessRule rule = factory.createRule(data);
             if(rule != null){
                 rules.add(rule);

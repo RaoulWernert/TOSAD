@@ -10,6 +10,11 @@ public class TupleCompareRule extends TupleRule {
 
     public TupleCompareRule(BusinessRuleData data) {
         super(data);
-        operator = ComparisonOperator.valueOf(data.cOperator);
+        operator = ComparisonOperator.valueOf(data.getC_operator());
+    }
+
+    @Override
+    public String accept(IGenerator generator) {
+        return generator.generateDDL(this);
     }
 }

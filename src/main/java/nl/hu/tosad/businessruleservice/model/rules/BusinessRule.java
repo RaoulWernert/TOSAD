@@ -17,15 +17,15 @@ public abstract class BusinessRule {
     private boolean implemented;
 
     public BusinessRule(BusinessRuleData data) {
-        table = data.table;
-        implementation = Implementation.valueOf(data.implementation);
-        target = data.target;
-        id = data.id;
-        ruleType = data.ruleType;
-        implemented = data.implemented;
+        table = data.getTargettable();
+        implementation = Implementation.valueOf(data.getImplementation());
+        target = data.getTarget();
+        id = data.getId();
+        ruleType = data.getRuleType();
+        implemented = data.isImplemented();
 
         String impl = implementation == Implementation.CONSTRAINT ? "CNS" : "TRG";
-        name = String.format("BRG_%s_%s_%s_%s", target.getName(), impl, data.ruletype_code, id);
+        name = String.format("BRG_%s_%s_%s_%s", target.getName(), impl, data.getRuleType().getCode(), id);
     }
 
     public int getId() {

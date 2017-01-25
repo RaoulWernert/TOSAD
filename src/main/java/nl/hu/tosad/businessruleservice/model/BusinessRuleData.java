@@ -4,52 +4,125 @@ package nl.hu.tosad.businessruleservice.model;
  * Created by Raoul on 11/17/2016.
  */
 public class BusinessRuleData {
-    public int id;
-    public String name;
-    public String table;
-    public String attribute;
-    public String min;
-    public String max;
-    public String cOperator;
-    public String lOperator;
-    public String value;
-    public String code;
-    public String ruletype_code;
-    public String targetdb;
-    public String implementation;
-    public String table2;
-    public String attribute2;
-    public boolean implemented;
-    public TargetDatabase target;
-    public RuleType ruleType;
+    private int id;
+    private String ruleName;
+    private TargetDatabase target;
+    private RuleType ruleType;
+    private int creator;
+    private String implementation;
+    private boolean implemented;
+    private String targettable;
+    private String targettable2;
+    private String targetcolumn;
+    private String targetcolumn2;
+    private String min;
+    private String max;
+    private String c_operator;
+    private String value;
+    private String l_operator;
+    private String statement;
 
     public BusinessRuleData(int id,
-                            String ruleName, String table, String attribute,
-                            String min, String max,
-                            String cOperator,
-                            String lOperator,
-                            String value,
-                            String sqlCode,
-                            String ruletype_code,
-                            String target,
+                            String ruleName,
+                            TargetDatabase target,
+                            RuleType ruleType,
+                            int creator,
                             String implementation,
-                            String table2,
-                            String attribute2,
-                            boolean implemented) {
-
+                            boolean implemented,
+                            String targettable,
+                            String targettable2,
+                            String targetcolumn,
+                            String targetcolumn2,
+                            String min,
+                            String max,
+                            String c_operator,
+                            String value,
+                            String l_operator,
+                            String statement) {
         this.id = id;
-        this.name = ruleName;
-        this.table = table;
-        this.attribute = attribute;
-        this.min = min;
-        this.max = max;
-        this.cOperator = cOperator;
-        this.lOperator = lOperator;
-        this.value = value;
-        this.code = sqlCode;
-        this.ruletype_code = ruletype_code;
-        this.targetdb = target;
+        this.ruleName = ruleName;
+        this.target = target;
+        this.ruleType = ruleType;
+        this.creator = creator;
         this.implementation = implementation;
         this.implemented = implemented;
+        this.targettable = targettable;
+        this.targettable2 = targettable2;
+        this.targetcolumn = targetcolumn;
+        this.targetcolumn2 = targetcolumn2;
+        this.min = min;
+        this.max = max;
+        this.c_operator = c_operator;
+        this.value = value;
+        this.l_operator = l_operator;
+        this.statement = statement;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public String getRuleName() {
+        return ruleName;
+    }
+
+    public TargetDatabase getTarget() {
+        return target;
+    }
+
+    public RuleType getRuleType() {
+        return ruleType;
+    }
+
+    public int getCreator() {
+        return creator;
+    }
+
+    public String getImplementation() {
+        return implementation;
+    }
+
+    public boolean isImplemented() {
+        return implemented;
+    }
+
+    public String getTargettable() {
+        return targettable;
+    }
+
+    public String getTargettable2() {
+        return targettable2;
+    }
+
+    public String getTargetcolumn() {
+        return targetcolumn;
+    }
+
+    public String getTargetcolumn2() {
+        return targetcolumn2;
+    }
+
+    public String getMin() {
+        return min;
+    }
+
+    public String getMax() {
+        return max;
+    }
+
+    public String getC_operator() {
+        return c_operator;
+    }
+
+    public String getValue() {
+        return value;
+    }
+
+    public String getL_operator() {
+        return l_operator;
+    }
+
+    public String getStatement() {
+        return statement;
     }
 }

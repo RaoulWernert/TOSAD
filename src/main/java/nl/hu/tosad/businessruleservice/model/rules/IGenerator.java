@@ -5,4 +5,6 @@ public interface IGenerator {
     String generateDDL(AttributeCompareRule rule);
     String generateDDL(AttributeListRule rule);
     String generateDDL(AttributeOtherRule rule);
+    String generateDDL(TupleCompareRule rule);
+    String generateDDL(TupleOtherRule rule);
 }

@@ -11,8 +11,8 @@ public class AttributeRangeRule extends AttributeRule{
 
     public AttributeRangeRule(BusinessRuleData data) {
         super(data);
-        min = data.min;
-        max = data.max;
+        min = data.getMin();
+        max = data.getMax();
     }
 
     public String getMin() {
