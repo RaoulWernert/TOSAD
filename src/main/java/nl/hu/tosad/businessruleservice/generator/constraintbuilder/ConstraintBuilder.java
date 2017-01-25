@@ -9,12 +9,15 @@ import java.util.List;
  * Created by Raoul on 1/22/2017.
  */
 public class ConstraintBuilder implements OnTable, OnColumn, AddAttributes, AddValue, AddValues, Build {
+    public static OnTable newConstraint(String name) {
+        return new ConstraintBuilder(name);
+    }
+
     private String query;
     private String constraint;
 
-    public OnTable newConstraint(String name) {
+    private ConstraintBuilder(String name) {
         this.query = "ALTER TABLE %s ADD CONSTRAINT " + name + " CHECK (%s)";
-        return this;
     }
 
     @Override

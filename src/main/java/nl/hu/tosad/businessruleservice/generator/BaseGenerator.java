@@ -12,13 +12,13 @@ public class BaseGenerator implements IGenerator {
     public String generateDDL(AttributeRangeRule rule) {
         switch(rule.getImplementation()) {
             case CONSTRAINT:
-                return new ConstraintBuilder().newConstraint(rule.getName())
+                return ConstraintBuilder.newConstraint(rule.getName())
                         .onTable(rule.getTable())
                         .onColumn(rule.getAttribute())
                         .addBetween(rule.getMin(), rule.getMax())
                         .build();
             case TRIGGER:
-                return new TriggerBuilder().newTrigger(rule.getName())
+                return TriggerBuilder.newTrigger(rule.getName())
                         .onRuleType(rule.getRuleType())
                         .addEvent(rule.getTable(), rule.getAttribute())
                         .onColumn(rule.getAttribute())
@@ -33,14 +33,14 @@ public class BaseGenerator implements IGenerator {
     public String generateDDL(AttributeCompareRule rule) {
         switch(rule.getImplementation()) {
             case CONSTRAINT:
-                return new ConstraintBuilder().newConstraint(rule.getName())
+                return ConstraintBuilder.newConstraint(rule.getName())
                         .onTable(rule.getTable())
                         .onColumn(rule.getAttribute())
                         .addComparisonOperator(rule.getComparisonOperator())
                         .addValue(rule.getValue())
                         .build();
             case TRIGGER:
-                return new TriggerBuilder().newTrigger(rule.getName())
+                return TriggerBuilder.newTrigger(rule.getName())
                         .onRuleType(rule.getRuleType())
                         .addEvent(rule.getTable(), rule.getAttribute())
                         .onColumn(rule.getAttribute())
@@ -56,14 +56,20 @@ public class BaseGenerator implements IGenerator {
     public String generateDDL(AttributeListRule rule) {
         switch(rule.getImplementation()) {
             case CONSTRAINT:
-                return new ConstraintBuilder().newConstraint(rule.getName())
+                return ConstraintBuilder.newConstraint(rule.getName())
                         .onTable(rule.getTable())
                         .onColumn(rule.getAttribute())
                         .addOperators(rule.getLogicalOperator(), rule.getComparisonOperator())
                         .addValues(rule.getValues())
                         .build();
             case TRIGGER:
-                return "";
+                return TriggerBuilder.newTrigger(rule.getName())
+                        .onRuleType(rule.getRuleType())
+                        .addEvent(rule.getTable(), rule.getAttribute())
+                        .onColumn(rule.getAttribute())
+                        .addOperators(rule.getLogicalOperator(), rule.getComparisonOperator())
+                        .addValues(rule.getValues())
+                        .build();
             default:
                 return null;
         }
@@ -73,7 +79,7 @@ public class BaseGenerator implements IGenerator {
     public String generateDDL(AttributeOtherRule rule) {
         switch(rule.getImplementation()) {
             case CONSTRAINT:
-                return new ConstraintBuilder().newConstraint(rule.getName())
+                return ConstraintBuilder.newConstraint(rule.getName())
                         .onTable(rule.getTable())
                         .onColumn(rule.getAttribute())
                         .addStatement(rule.getStatement())

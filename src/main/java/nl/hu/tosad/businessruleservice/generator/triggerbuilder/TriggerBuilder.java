@@ -2,8 +2,15 @@ package nl.hu.tosad.businessruleservice.generator.triggerbuilder;
 
 import nl.hu.tosad.businessruleservice.model.RuleType;
 import nl.hu.tosad.businessruleservice.model.rules.ComparisonOperator;
+import nl.hu.tosad.businessruleservice.model.rules.LogicalOperator;
 
-public class TriggerBuilder implements OnRuleType, AddEvent, OnColumn, AddAttributes, AddValue, Build {
+import java.util.List;
+
+public class TriggerBuilder implements OnRuleType, AddEvent, OnColumn, AddAttributes, AddValue, AddValues, Build {
+    public static OnRuleType newTrigger(String name) {
+        return new TriggerBuilder(name);
+    }
+
     private String trigger =
             "CREATE OR REPLACE TRIGGER %s\n" +
             "    BEFORE %s %s\n" +
@@ -18,9 +25,8 @@ public class TriggerBuilder implements OnRuleType, AddEvent, OnColumn, AddAttrib
             "END %s;";
     private String condition = "";
 
-    public OnRuleType newTrigger(String name) {
+    private TriggerBuilder(String name) {
         trigger = String.format(trigger, name, "%s", "%s", "%s", "%s", name);
-        return this;
     }
 
     @Override
@@ -84,7 +90,32 @@ public class TriggerBuilder implements OnRuleType, AddEvent, OnColumn, AddAttrib
     }
 
     @Override
+    public AddValues addOperators(LogicalOperator logicalOperator, ComparisonOperator comparisonOperator) {
+        if(logicalOperator == LogicalOperator.Any || logicalOperator == LogicalOperator.All) {
+            this.condition = String.format(condition + " %s %s (%s)", comparisonOperator.getCode(), logicalOperator.getCode(), "%s");
+        } else {
+            this.condition = String.format(condition + " %s (%s)", logicalOperator.getCode(), "%s");
+        }
+        return this;
+    }
+
+    @Override
+    public Build addValues(List<String> values) {
+        this.condition = String.format(condition, getValuesFromList(values));
+        return this;
+    }
+
+
+    @Override
     public String build() {
         return String.format(trigger, condition, "ERRORMSG PLACEHOLDER");
+    }
+
+    String getValuesFromList(List<String> list){
+        String values = "";
+        for (String str : list) {
+            values += "'" + str + "',";
+        }
+        return values.substring(0, values.length() - 1);
     }
 }
