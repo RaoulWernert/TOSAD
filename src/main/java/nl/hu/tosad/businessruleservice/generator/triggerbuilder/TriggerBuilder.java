@@ -73,7 +73,7 @@ public class TriggerBuilder implements OnRuleType, AddEvent, OnColumn, AddAttrib
 
     @Override
     public AddValue addComparisonOperator(ComparisonOperator comparisonOperator) {
-        this.condition = String.format(condition + " %s %s", comparisonOperator.getCode(), "%s");
+        this.condition = String.format(condition + " %s '%s'", comparisonOperator.getCode(), "%s");
         return this;
     }
 

@@ -37,7 +37,7 @@ public class ConstraintBuilder implements OnTable, OnColumn, AddAttributes, AddV
 
     @Override
     public AddValue addComparisonOperator(ComparisonOperator comparisonOperator) {
-        this.constraint = String.format(constraint + " %s %s", comparisonOperator.getCode(), "%s");
+        this.constraint = String.format(constraint + " %s '%s'", comparisonOperator.getCode(), "%s");
         return this;
     }
 
