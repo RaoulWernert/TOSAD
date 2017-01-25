@@ -15,7 +15,8 @@ import java.util.List;
 public class BusinessRuleDAO extends BaseDAO {
     private final String TABLE_NAME = "BUSINESSRULES";
     private final String SELECT = "SELECT * FROM " + TABLE_NAME;
-    private final String UPDATE = "UPDATE " + TABLE_NAME + " SET NAME = ? WHERE ID = ?";
+    private final String UPDATENAME = "UPDATE " + TABLE_NAME + " SET NAME = ? WHERE ID = ?";
+    private final String UPDATEIMPLEMENTED = "UPDATE " + TABLE_NAME + " SET IMPLEMENTED = ? WHERE ID = ?";
 
     private RuleFactory factory;
     private TargetsDAO targetsDAO;
@@ -45,8 +46,21 @@ public class BusinessRuleDAO extends BaseDAO {
 
     public void updateName(BusinessRule rule) {
         try (Connection conn = super.getConnection()) {
-            PreparedStatement statement = conn.prepareStatement(UPDATE);
+            PreparedStatement statement = conn.prepareStatement(UPDATENAME);
             statement.setString(1, rule.getName());
+            statement.setInt(2, rule.getId());
+            statement.executeUpdate();
+            conn.commit();
+            statement.close();
+        } catch (SQLException e) {
+            throw new BusinessRuleServiceException(e);
+        }
+    }
+
+    public void setImplemented(BusinessRule rule) {
+        try (Connection conn = super.getConnection()) {
+            PreparedStatement statement = conn.prepareStatement(UPDATEIMPLEMENTED);
+            statement.setInt(1, 1);
             statement.setInt(2, rule.getId());
             statement.executeUpdate();
             conn.commit();
@@ -74,7 +88,8 @@ public class BusinessRuleDAO extends BaseDAO {
                     rs.getString("TARGETDATABASE"),
                     rs.getString("IMPLEMENTATION"),
                     rs.getString("TARGETTABLE2"),
-                    rs.getString("ATTRIBUTE2")
+                    rs.getString("ATTRIBUTE2"),
+                    rs.getInt("IMPLEMENTED") != 0
             );
             data.target = targetsDAO.findById(rs.getInt("TARGETDATABASE"));
             data.ruleType = ruleTypeDAO.findById(rs.getString("RULETYPES_CODE"));

@@ -19,6 +19,7 @@ public class BusinessRuleData {
     public String implementation;
     public String table2;
     public String attribute2;
+    public boolean implemented;
     public TargetDatabase target;
     public RuleType ruleType;
 
@@ -33,7 +34,8 @@ public class BusinessRuleData {
                             String target,
                             String implementation,
                             String table2,
-                            String attribute2) {
+                            String attribute2,
+                            boolean implemented) {
 
         this.id = id;
         this.name = ruleName;
@@ -48,5 +50,6 @@ public class BusinessRuleData {
         this.ruletype_code = ruletype_code;
         this.targetdb = target;
         this.implementation = implementation;
+        this.implemented = implemented;
     }
 }

@@ -36,14 +36,17 @@ public class BusinessRuleService {
     public synchronized String generate(int ruleid) {
         BusinessRule rule = businessRuleDAO.findById(ruleid);
         if (rule == null) {
-            throw new BusinessRuleServiceException("Rule ID not found.");
+            throw new BusinessRuleServiceException(String.format("Rule ID '%s' not found.", ruleid));
         }
-        businessRuleDAO.updateName(rule);
-
+        if (rule.isImplemented()) {
+            throw new BusinessRuleServiceException("Rule is already implemented.");
+        }
         String query = rule.accept(generator);
         IController controller = getController(rule.getTarget().getType());
 
         controller.implement(query, rule.getTarget());
+        businessRuleDAO.updateName(rule);
+        businessRuleDAO.setImplemented(rule);
         return query;
     }
 

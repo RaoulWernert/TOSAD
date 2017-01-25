@@ -14,6 +14,7 @@ public abstract class BusinessRule {
     private Implementation implementation;
     private TargetDatabase target;
     private RuleType ruleType;
+    private boolean implemented;
 
     public BusinessRule(BusinessRuleData data) {
         table = data.table;
@@ -21,6 +22,7 @@ public abstract class BusinessRule {
         target = data.target;
         id = data.id;
         ruleType = data.ruleType;
+        implemented = data.implemented;
 
         String impl = implementation == Implementation.CONSTRAINT ? "CNS" : "TRG";
         name = String.format("BRG_%s_%s_%s_%s", target.getName(), impl, data.ruletype_code, id);
@@ -48,6 +50,10 @@ public abstract class BusinessRule {
 
     public RuleType getRuleType() {
         return ruleType;
+    }
+
+    public boolean isImplemented() {
+        return implemented;
     }
 
     public abstract String accept(IGenerator generator);
