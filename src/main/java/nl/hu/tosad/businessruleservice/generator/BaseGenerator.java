@@ -1,6 +1,7 @@
 package nl.hu.tosad.businessruleservice.generator;
 
 import nl.hu.tosad.businessruleservice.generator.constraintbuilder.ConstraintBuilder;
+import nl.hu.tosad.businessruleservice.generator.triggerbuilder.TriggerBuilder;
 import nl.hu.tosad.businessruleservice.model.rules.*;
 
 /**
@@ -17,7 +18,10 @@ public class BaseGenerator implements IGenerator {
                         .addBetween(rule.getMin(), rule.getMax())
                         .build();
             case TRIGGER:
-                return "";
+                return new TriggerBuilder().newTrigger(rule.getName())
+                        .onRuleType(rule.getRuleType())
+                        .addEvent(rule.getTable(), rule.getAttribute())
+                        .build();
             default:
                 return null;
         }
