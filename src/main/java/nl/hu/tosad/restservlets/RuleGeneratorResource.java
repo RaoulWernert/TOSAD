@@ -17,7 +17,9 @@ public class RuleGeneratorResource {
         System.out.println("generate: " + ruleid);
 
         try {
-            return "SUCCESS " + BusinessRuleService.getInstance().generate(ruleid);
+            String successmsg = "SUCCESS " + BusinessRuleService.getInstance().generate(ruleid);
+            System.out.println(successmsg);
+            return successmsg;
         } catch (BusinessRuleServiceException e) {
             Throwable cause = e.getCause();
 
