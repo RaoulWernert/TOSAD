@@ -62,7 +62,7 @@ public class BusinessRuleData {
         return id;
     }
 
-    public String getRuleName() {
+    public String getName() {
         return ruleName;
     }
 
@@ -86,19 +86,19 @@ public class BusinessRuleData {
         return implemented;
     }
 
-    public String getTargettable() {
+    public String getTable() {
         return targettable;
     }
 
-    public String getTargettable2() {
+    public String getTable2() {
         return targettable2;
     }
 
-    public String getTargetcolumn() {
+    public String getColumn() {
         return targetcolumn;
     }
 
-    public String getTargetcolumn2() {
+    public String getColumn2() {
         return targetcolumn2;
     }
 

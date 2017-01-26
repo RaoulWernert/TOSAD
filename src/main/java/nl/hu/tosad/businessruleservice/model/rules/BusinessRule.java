@@ -17,7 +17,7 @@ public abstract class BusinessRule {
     private boolean implemented;
 
     public BusinessRule(BusinessRuleData data) {
-        table = data.getTargettable();
+        table = data.getTable();
         implementation = Implementation.valueOf(data.getImplementation());
         target = data.getTarget();
         id = data.getId();
