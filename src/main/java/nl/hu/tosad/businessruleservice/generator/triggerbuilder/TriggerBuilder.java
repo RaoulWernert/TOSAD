@@ -131,7 +131,9 @@ public class TriggerBuilder implements OnRuleType, AddEvent, AddColumnOrStatemen
     String getValuesFromList(List<String> list){
         String values = "";
         for (String str : list) {
-            values += "'" + str + "',";
+            if(str.length() > 0) {
+                values += "'" + str + "',";
+            }
         }
         return values.substring(0, values.length() - 1);
     }
