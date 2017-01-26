@@ -97,7 +97,7 @@ public class TriggerBuilder implements OnRuleType, AddEvent, AddColumnOrStatemen
 
     @Override
     public Build addSecondColumn(String column) {
-        this.condition = String.format(condition, column);
+        this.condition = String.format(condition, ":NEW." + column);
         return this;
     }
 
