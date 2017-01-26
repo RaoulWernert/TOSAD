@@ -14,11 +14,11 @@ public class RuleGeneratorResource {
     @Path("generate")
     @Produces("text/plain")
     public String generate(@FormParam("ruleid") int ruleid) {
-        System.out.println("generate: " + ruleid);
+
 
         try {
             String successmsg = "SUCCESS " + BusinessRuleService.getInstance().generate(ruleid);
-            System.out.println(successmsg);
+            System.out.println(String.format("Generate | req: %d | resp: %s", ruleid, successmsg));
             return successmsg;
         } catch (BusinessRuleServiceException e) {
             Throwable cause = e.getCause();
@@ -27,12 +27,12 @@ public class RuleGeneratorResource {
                 SQLException sqle = (SQLException) cause;
                 if(sqle.getErrorCode() == 2293) {
                     String msg = "Data in table does not conform to given constraint.";
-                    System.out.println(msg);
+                    System.out.println(String.format("Generate | req: %d | resp: %s", ruleid, msg));
                     return msg;
                 }
             }
 
-            System.out.println(e.getMessage());
+            System.out.println(String.format("Generate | req: %d | resp: %s", ruleid, e.getMessage()));
             return e.getMessage();
         }
     }
@@ -41,16 +41,20 @@ public class RuleGeneratorResource {
     @Path("tables")
     @Produces("text/plain")
     public String getTables(@QueryParam("targetid") int targetid) {
-        System.out.println("Get tables: " + targetid);
-        return createList(BusinessRuleService.getInstance().getTables(targetid));
+        String response = createList(BusinessRuleService.getInstance().getTables(targetid));
+
+        System.out.println(String.format("GetTables | req: %d | resp: %s", targetid, response));
+        return response;
     }
 
     @GET
     @Path("columns")
     @Produces("text/plain")
     public String getColumns(@QueryParam("targetid") int targetid, @QueryParam("tablename") String tablename) {
-        System.out.println("Get columns: " + tablename);
-        return createList(BusinessRuleService.getInstance().getColumns(targetid, tablename));
+        String response = createList(BusinessRuleService.getInstance().getColumns(targetid, tablename));
+
+        System.out.println(String.format("GetColumns | req: %d %s | resp: %s", targetid, tablename, response));
+        return response;
     }
 
     private String createList(List<String> list) {
