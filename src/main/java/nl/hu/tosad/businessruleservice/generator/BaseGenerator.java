@@ -97,11 +97,40 @@ public class BaseGenerator implements IGenerator {
 
     @Override
     public String generateDDL(TupleCompareRule rule) {
-        return null;
+        switch(rule.getImplementation()) {
+            case CONSTRAINT:
+                return null;
+            case TRIGGER:
+                return null;
+            default:
+                return null;
+        }
     }
 
     @Override
     public String generateDDL(TupleOtherRule rule) {
+        switch(rule.getImplementation()) {
+            case CONSTRAINT:
+                return null;
+            case TRIGGER:
+                return null;
+            default:
+                return null;
+        }
+    }
+
+    @Override
+    public String generateDDL(InterEntityCompareRule rule) {
+        return null;
+    }
+
+    @Override
+    public String generateDDL(EntityOtherRule rule) {
+        return null;
+    }
+
+    @Override
+    public String generateDDL(ModifyRule rule) {
         return null;
     }
 }
