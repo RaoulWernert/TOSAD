@@ -99,9 +99,19 @@ public class BaseGenerator implements IGenerator {
     public String generateDDL(TupleCompareRule rule) {
         switch(rule.getImplementation()) {
             case CONSTRAINT:
-                return null;
+                return ConstraintBuilder.newConstraint(rule.getName())
+                        .onTable(rule.getTable())
+                        .onColumns(rule.getColumn1(), rule.getColumn2())
+                        .addOperator(rule.getOperator())
+                        .build();
             case TRIGGER:
-                return null;
+                return TriggerBuilder.newTrigger(rule.getName())
+                        .onRuleType(rule.getRuleType())
+                        .addEvent(rule.getTable(), rule.getColumn1(), rule.getColumn2())
+                        .addColumn(rule.getColumn1())
+                        .addComparisonOperator(rule.getOperator())
+                        .addSecondColumn(rule.getColumn2())
+                        .build();
             default:
                 return null;
         }

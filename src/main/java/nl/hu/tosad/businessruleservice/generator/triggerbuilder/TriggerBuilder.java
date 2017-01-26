@@ -6,7 +6,7 @@ import nl.hu.tosad.businessruleservice.model.rules.LogicalOperator;
 
 import java.util.List;
 
-public class TriggerBuilder implements OnRuleType, AddEvent, AddColumnOrStatement, AddAttributes, AddValue, AddValues, Build {
+public class TriggerBuilder implements OnRuleType, AddEvent, AddColumnOrStatement, AddAttributes, AddValueOrColumn, AddValues, Build {
     public static OnRuleType newTrigger(String name) {
         return new TriggerBuilder(name);
     }
@@ -24,7 +24,6 @@ public class TriggerBuilder implements OnRuleType, AddEvent, AddColumnOrStatemen
             "    END IF;\n" +
             "END %s;";
     private String condition = "l_passed := ";
-    private String column;
 
     private TriggerBuilder(String name) {
         trigger = String.format(trigger, name, "%s", "%s", "%s", "%s", name);
@@ -68,8 +67,7 @@ public class TriggerBuilder implements OnRuleType, AddEvent, AddColumnOrStatemen
 
     @Override
     public AddAttributes addColumn(String column) {
-        this.column = ":NEW." + column;
-        this.condition += this.column;
+        this.condition += ":NEW." + column;
         return this;
     }
 
@@ -86,14 +84,20 @@ public class TriggerBuilder implements OnRuleType, AddEvent, AddColumnOrStatemen
     }
 
     @Override
-    public AddValue addComparisonOperator(ComparisonOperator comparisonOperator) {
-        this.condition = String.format(condition + " %s '%s'", comparisonOperator.getCode(), "%s");
+    public AddValueOrColumn addComparisonOperator(ComparisonOperator comparisonOperator) {
+        this.condition = String.format(condition + " %s %s", comparisonOperator.getCode(), "%s");
         return this;
     }
 
     @Override
     public Build addValue(String value) {
-        this.condition = String.format(condition, value);
+        this.condition = String.format(condition, "'" + value + "'");
+        return this;
+    }
+
+    @Override
+    public Build addSecondColumn(String column) {
+        this.condition = String.format(condition, column);
         return this;
     }
 

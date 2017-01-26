@@ -13,6 +13,10 @@ public class TupleCompareRule extends TupleRule {
         operator = ComparisonOperator.valueOf(data.getC_operator());
     }
 
+    public ComparisonOperator getOperator() {
+        return operator;
+    }
+
     @Override
     public String accept(IGenerator generator) {
         return generator.generateDDL(this);

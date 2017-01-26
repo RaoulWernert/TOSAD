@@ -22,6 +22,16 @@ public class RuleFactory {
                 return new AttributeListRule(data);
             case AttributeOtherRule:
                 return new AttributeOtherRule(data);
+            case TupleCompareRule:
+                return new TupleCompareRule(data);
+            case TupleOtherRule:
+                return new TupleOtherRule(data);
+            case InterEntityCompareRule:
+                return new InterEntityCompareRule(data);
+            case EntityOtherRule:
+                return new EntityOtherRule(data);
+            case ModifyRule:
+                return new ModifyRule(data);
             default:
                 return null;
         }

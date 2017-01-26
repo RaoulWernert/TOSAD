@@ -5,6 +5,6 @@ import nl.hu.tosad.businessruleservice.model.rules.LogicalOperator;
 
 public interface AddAttributes {
     Build addBetween(String min, String max);
-    AddValue addComparisonOperator(ComparisonOperator comparisonOperator);
+    AddValueOrColumn addComparisonOperator(ComparisonOperator comparisonOperator);
     AddValues addOperators(LogicalOperator logicalOperator, ComparisonOperator comparisonOperator);
 }

@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * Created by Raoul on 1/22/2017.
  */
-public class ConstraintBuilder implements OnTable, OnColumn, AddAttributes, AddValue, AddValues, Build {
+public class ConstraintBuilder implements OnTable, OnColumn, AddAttributes, AddValue, AddValues, AddOperator, Build {
     public static OnTable newConstraint(String name) {
         return new ConstraintBuilder(name);
     }
@@ -29,6 +29,12 @@ public class ConstraintBuilder implements OnTable, OnColumn, AddAttributes, AddV
     @Override
     public AddAttributes onColumn(String column) {
         this.constraint = column;
+        return this;
+    }
+
+    @Override
+    public AddOperator onColumns(String column1, String column2) {
+        this.constraint = column1 + " %s " + column2;
         return this;
     }
 
@@ -70,6 +76,12 @@ public class ConstraintBuilder implements OnTable, OnColumn, AddAttributes, AddV
     @Override
     public Build addStatement(String statement) {
         this.constraint = statement;
+        return this;
+    }
+
+    @Override
+    public Build addOperator(ComparisonOperator comparisonOperator) {
+        this.constraint = String.format(constraint, comparisonOperator.getCode());
         return this;
     }
 
