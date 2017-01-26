@@ -7,7 +7,12 @@ public enum RuleTypes {
     AttributeRangeRule("ARNG"),
     AttributeCompareRule("ACMP"),
     AttributeListRule("ALIS"),
-    AttributeOtherRule("AOTH");
+    AttributeOtherRule("AOTH"),
+    TupleCompareRule("TCMP"),
+    TupleOtherRule("TOTH"),
+    InterEntityCompareRule("ICMP"),
+    EntityOtherRule("EOTH"),
+    ModifyRule("MODI");
 
     private String code;
 
