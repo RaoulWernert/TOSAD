@@ -126,7 +126,11 @@ public class BaseGenerator implements IGenerator {
                         .addStatement(rule.getStatement())
                         .build();
             case TRIGGER:
-                return null;
+                return TriggerBuilder.newTrigger(rule.getName())
+                        .onRuleType(rule.getRuleType())
+                        .addEvent(rule.getTable(), rule.getColumn1(), rule.getColumn2())
+                        .addStatement(rule.getStatement())
+                        .build();
             default:
                 return null;
         }
