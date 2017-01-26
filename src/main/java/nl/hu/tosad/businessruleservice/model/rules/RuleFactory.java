@@ -6,10 +6,6 @@ import nl.hu.tosad.businessruleservice.model.*;
  * Created by Raoul on 11/17/2016.
  */
 public class RuleFactory {
-    public RuleFactory() {
-
-    }
-
     public BusinessRule createRule(BusinessRuleData data) {
         RuleTypes ruleTypes = getRuleType(data.getRuleType().getCode());
 
