@@ -121,7 +121,10 @@ public class BaseGenerator implements IGenerator {
     public String generateDDL(TupleOtherRule rule) {
         switch(rule.getImplementation()) {
             case CONSTRAINT:
-                return null;
+                return ConstraintBuilder.newConstraint(rule.getName())
+                        .onTable(rule.getTable())
+                        .addStatement(rule.getStatement())
+                        .build();
             case TRIGGER:
                 return null;
             default:

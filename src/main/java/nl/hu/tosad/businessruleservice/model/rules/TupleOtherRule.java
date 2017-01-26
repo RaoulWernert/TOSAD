@@ -13,6 +13,10 @@ public class TupleOtherRule extends TupleRule {
         statement = data.getStatement();
     }
 
+    public String getStatement() {
+        return statement;
+    }
+
     @Override
     public String accept(IGenerator generator) {
         return generator.generateDDL(this);

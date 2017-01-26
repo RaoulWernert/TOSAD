@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * Created by Raoul on 1/22/2017.
  */
-public class ConstraintBuilder implements OnTable, OnColumn, AddAttributes, AddValue, AddValues, AddOperator, Build {
+public class ConstraintBuilder implements OnTable, OnColumnOrAddStatement, AddAttributes, AddValue, AddValues, AddOperator, Build {
     public static OnTable newConstraint(String name) {
         return new ConstraintBuilder(name);
     }
@@ -21,7 +21,7 @@ public class ConstraintBuilder implements OnTable, OnColumn, AddAttributes, AddV
     }
 
     @Override
-    public OnColumn onTable(String table) {
+    public OnColumnOrAddStatement onTable(String table) {
         this.query = String.format(query, table, "%s");
         return this;
     }
