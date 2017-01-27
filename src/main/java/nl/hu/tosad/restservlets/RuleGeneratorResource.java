@@ -14,8 +14,6 @@ public class RuleGeneratorResource {
     @Path("generate")
     @Produces("text/plain")
     public String generate(@FormParam("ruleid") int ruleid) {
-
-
         try {
             String successmsg = "SUCCESS " + BusinessRuleService.getInstance().generate(ruleid);
             System.out.println(String.format("Generate | req: %d | resp: %s", ruleid, successmsg));
@@ -51,6 +49,10 @@ public class RuleGeneratorResource {
     @Path("columns")
     @Produces("text/plain")
     public String getColumns(@QueryParam("targetid") int targetid, @QueryParam("tablename") String tablename) {
+        if(tablename.trim().isEmpty()) {
+            throw new RuntimeException("TEST");
+        }
+
         String response = createList(BusinessRuleService.getInstance().getColumns(targetid, tablename));
 
         System.out.println(String.format("GetColumns | req: %d %s | resp: %s", targetid, tablename, response));
