@@ -32,7 +32,7 @@ public class RuleGeneratorResource {
                 }
             }
 
-            System.out.println(String.format("Generate | req: %d | resp: %s", ruleid, e.getMessage()));
+            System.out.println(String.format("Generate   | req: %d | resp: %s", ruleid, e.getMessage()));
             return e.getMessage();
         }
     }
@@ -43,7 +43,7 @@ public class RuleGeneratorResource {
     public String getTables(@QueryParam("targetid") int targetid) {
         String response = createList(BusinessRuleService.getInstance().getTables(targetid));
 
-        System.out.println(String.format("GetTables | req: %d | resp: %s", targetid, response));
+        System.out.println(String.format("GetTables  | req: %d | resp: %s", targetid, response));
         return response;
     }
 
