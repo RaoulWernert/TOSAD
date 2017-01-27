@@ -143,7 +143,11 @@ public class BaseGenerator implements IGenerator {
 
     @Override
     public String generateDDL(EntityOtherRule rule) {
-        return null;
+        return TriggerBuilder.newTrigger(rule.getName())
+                .onRuleType(rule.getRuleType())
+                .addEvent(rule.getTable(), rule.getColumn(), rule.getColumn2())
+                .addCodeBlock(rule.getStatement())
+                .build();
     }
 
     @Override

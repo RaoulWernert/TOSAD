@@ -4,7 +4,11 @@ import nl.hu.tosad.businessruleservice.model.RuleType;
 import nl.hu.tosad.businessruleservice.model.rules.ComparisonOperator;
 import nl.hu.tosad.businessruleservice.model.rules.LogicalOperator;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class TriggerBuilder implements OnRuleType, AddEvent, AddColumnOrStatement, AddAttributes, AddValueOrColumn, AddValues, Build {
     public static OnRuleType newTrigger(String name) {
@@ -54,9 +58,15 @@ public class TriggerBuilder implements OnRuleType, AddEvent, AddColumnOrStatemen
         if(columns == null || columns.length == 0) {
             event = "ON " + table;
         } else {
+            List<String> columnList = new ArrayList<>(Arrays.asList(columns))
+                    .stream()
+                    .filter(Objects::nonNull)
+                    .filter(str -> !str.isEmpty())
+                    .collect(Collectors.toCollection(ArrayList::new));
+
             String cols = "";
-            for(int i = 0; i < columns.length; i++) {
-                cols += columns[i] + (i + 1 < columns.length ? "," : "");
+            for(int i = 0; i < columnList.size(); i++) {
+                cols += columnList.get(i) + (i + 1 < columnList.size() ? "," : "");
             }
             event = String.format("OF %s ON %s", cols, table);
         }
@@ -74,6 +84,12 @@ public class TriggerBuilder implements OnRuleType, AddEvent, AddColumnOrStatemen
     @Override
     public Build addStatement(String statement) {
         this.condition += statement;
+        return this;
+    }
+
+    @Override
+    public Build addCodeBlock(String code) {
+        this.condition = code;
         return this;
     }
 
