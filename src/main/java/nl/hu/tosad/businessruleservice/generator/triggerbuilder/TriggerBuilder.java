@@ -15,7 +15,7 @@ public class TriggerBuilder implements OnRuleType, AddEvent, AddColumnOrStatemen
         return new TriggerBuilder(name);
     }
 
-    private String trigger =
+    String trigger =
             "CREATE OR REPLACE TRIGGER %s\n" +
             "    BEFORE %s %s\n" +
             "    FOR EACH ROW \n" +
@@ -27,10 +27,10 @@ public class TriggerBuilder implements OnRuleType, AddEvent, AddColumnOrStatemen
             "        raise_application_error(-20800, '%s');\n" +
             "    END IF;\n" +
             "END %s;";
-    private String condition = "l_passed := ";
-    private String column1;
+    String condition = "l_passed := ";
+    String column1;
 
-    private TriggerBuilder(String name) {
+    TriggerBuilder(String name) {
         trigger = String.format(trigger, name, "%s", "%s", "%s", "%s", name);
     }
 
