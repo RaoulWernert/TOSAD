@@ -61,7 +61,7 @@ public class TriggerBuilder implements OnRuleType, AddEvent, AddColumnOrStatemen
             List<String> columnList = new ArrayList<>(Arrays.asList(columns))
                     .stream()
                     .filter(Objects::nonNull)
-                    .filter(str -> !str.isEmpty())
+                    .filter(str -> !str.trim().isEmpty())
                     .collect(Collectors.toCollection(ArrayList::new));
 
             String cols = "";
