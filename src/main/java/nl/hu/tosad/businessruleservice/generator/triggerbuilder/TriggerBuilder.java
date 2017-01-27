@@ -28,6 +28,7 @@ public class TriggerBuilder implements OnRuleType, AddEvent, AddColumnOrStatemen
             "    END IF;\n" +
             "END %s;";
     private String condition = "l_passed := ";
+    private String column1;
 
     private TriggerBuilder(String name) {
         trigger = String.format(trigger, name, "%s", "%s", "%s", "%s", name);
@@ -77,7 +78,8 @@ public class TriggerBuilder implements OnRuleType, AddEvent, AddColumnOrStatemen
 
     @Override
     public AddAttributes addColumn(String column) {
-        this.condition += ":NEW." + column;
+        this.column1 = ":NEW." + column;
+        this.condition += column1;
         return this;
     }
 
@@ -89,8 +91,7 @@ public class TriggerBuilder implements OnRuleType, AddEvent, AddColumnOrStatemen
 
     @Override
     public Build addCodeBlock(String code) {
-        code = code.trim();
-        List<String> strings = new ArrayList<>(Arrays.asList(code.split("\\r\\n")));
+        List<String> strings = new ArrayList<>(Arrays.asList(code.trim().split("\\r\\n")));
 
         if(strings.size() > 0) {
             String first = strings.get(0);
@@ -138,13 +139,13 @@ public class TriggerBuilder implements OnRuleType, AddEvent, AddColumnOrStatemen
                     "    DECLARE\n" +
                     "          v_test varchar2(4000);\n" +
                     "        BEGIN\n" +
-                    "          SELECT 'passed' INTO v_test FROM dual WHERE :NEW.ID %s %s (%s);\n" +
+                    "          SELECT 'passed' INTO v_test FROM dual WHERE %s %s %s (%s);\n" +
                     "          l_passed := TRUE;\n" +
                     "        EXCEPTION\n" +
                     "          WHEN NO_DATA_FOUND THEN\n" +
                     "          l_passed := FALSE;\n" +
                     "        END";
-            this.condition = String.format(condition, comparisonOperator.getCode(), logicalOperator.getCode(), "%s");
+            this.condition = String.format(condition, column1, comparisonOperator.getCode(), logicalOperator.getCode(), "%s");
         } else {
             this.condition = String.format(condition + " %s (%s)", logicalOperator.getCode(), "%s");
         }
