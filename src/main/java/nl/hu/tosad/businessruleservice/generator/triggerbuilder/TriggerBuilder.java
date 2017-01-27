@@ -89,6 +89,20 @@ public class TriggerBuilder implements OnRuleType, AddEvent, AddColumnOrStatemen
 
     @Override
     public Build addCodeBlock(String code) {
+        code = code.trim();
+        List<String> strings = new ArrayList<>(Arrays.asList(code.split("\\r\\n")));
+
+        if(strings.size() > 0) {
+            String first = strings.get(0);
+            strings.remove(first);
+            strings = strings.stream().map(str -> "    " + str).collect(Collectors.toCollection(ArrayList::new));
+            strings.add(0, first);
+            code = String.join("\r\n", strings);
+            if(code.charAt(code.length() - 1) == ';') {
+                code = code.substring(0, code.length() - 1);
+            }
+        }
+
         this.condition = code;
         return this;
     }
