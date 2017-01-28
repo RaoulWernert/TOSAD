@@ -7,28 +7,36 @@ import nl.hu.tosad.businessruleservice.model.rules.LogicalOperator;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
-public class TriggerBuilder implements OnRuleType, AddEvent, AddColumnOrStatement, AddAttributes, AddValueOrColumn, AddValues, AddAllColumns, BuildOrAddErrorMsg, Build {
-    public static OnRuleType newTrigger(String name) {
-        return new TriggerBuilder(name);
-    }
+public class TriggerBuilder {
+    private final String R_NAME = "#name#";
+    private final String R_EVENTS = "#events#";
+    private final String R_COLUMNS = "#columns#";
+    private final String R_TABLE= "#table#";
+    private final String R_STATEMENT = "#statement#";
+    private final String R_ERROR = "#error#";
+    private final String BETWEEN = " BETWEEN '%s' AND '%s'";
+    private final String COMPARISON = "'%s' %s '%s'";
+    private final String ANY_ALL_BLOCK = "DECLARE v_test varchar2(6);\n" +
+            "BEGIN SELECT 'passed' INTO v_test FROM dual WHERE %s %s %s (%s); l_passed := TRUE;\n" +
+            "EXCEPTION WHEN NO_DATA_FOUND THEN l_passed := FALSE; END";
 
-    String trigger =
-            "CREATE OR REPLACE TRIGGER %s\n" +
-            "    BEFORE %s %s\n" +
+    private String trigger =
+            "CREATE OR REPLACE TRIGGER #name#\n" +
+            "    BEFORE #events#\n" +
+            "    #columns# ON #table#\n" +
             "    FOR EACH ROW \n" +
             "DECLARE\n" +
             "    l_passed boolean := true;\n" +
             "BEGIN\n" +
-            "    %s;\n" +
+            "    #statement#\n" +
             "    IF NOT l_passed THEN\n" +
-            "        raise_application_error(-20800, '%s');\n" +
+            "        raise_application_error(-20800, '#error#');\n" +
             "    END IF;\n" +
-            "END %s;";
+            "END #name#;";
 
-    String compoundtrigger =
+    private String compoundtrigger =
             "CREATE OR REPLACE TRIGGER %s\n" +
             "    FOR %s %s\n" +
             "      COMPOUND TRIGGER\n" +
@@ -84,72 +92,72 @@ public class TriggerBuilder implements OnRuleType, AddEvent, AddColumnOrStatemen
     String condition = "l_passed := ";
     String column1;
     String errormsg = "ERROR";
+    String statement =  "l_passed := ";
 
 
-    TriggerBuilder(String name) {
-        trigger = String.format(trigger, name, "%s", "%s", "%s", "%s", name);
-        compoundtrigger = String.format(compoundtrigger, name, "%s", "%s", "%s", "%s", "%s", "%s", "%s", "%s", "%s", name);
+    public TriggerBuilder(String name) {
+        trigger = trigger.replace(R_NAME, name);
     }
 
-    @Override
-    public AddEvent onRuleType(RuleType ruleType) {
-        String event = "";
-
-        if(ruleType.isInsert()) {
-            event += "INSERT";
-        }
-        if(ruleType.isUpdate()) {
-            event += (!event.isEmpty() ? " OR " : "") + "UPDATE";
-        }
-        if(ruleType.isDelete()) {
-            event += (!event.isEmpty() ? " OR " : "") + "DELETE";
-        }
-
-        trigger = String.format(trigger, event, "%s", "%s", "%s");
-        compoundtrigger = String.format(compoundtrigger, event, "%s", "%s", "%s", "%s", "%s", "%s", "%s", "%s");
+    public TriggerBuilder setTable(String table){
+        trigger = trigger.replace(R_TABLE, table);
         return this;
     }
 
-    @Override
-    public AddColumnOrStatement addEvent(String table, String... columns) {
-        String event;
+    public TriggerBuilder setColumns(String... columns){
+        String value = "OF ";
+        for (int i = 0; i < columns.length; i++) {
+            value += columns[i] + (i + 1 < columns[i].length() ? "," : "");
+        }
+        trigger = trigger.replace(R_COLUMNS, value);
+        return this;
+    }
 
-        if(columns == null || columns.length == 0) {
-            event = "ON " + table;
+    public TriggerBuilder setStatement(String statement){
+        trigger = trigger.replace(R_STATEMENT, statement);
+        return this;
+    }
+
+    public TriggerBuilder setError(String error){
+        trigger = trigger.replace(R_ERROR, error);
+        return this;
+    }
+
+    public TriggerBuilder addBetween(String min, String max) {
+        statement += String.format(BETWEEN, min, max);
+        return this;
+    }
+
+    public TriggerBuilder addComparison(String pre, ComparisonOperator operator, String post) {
+        statement += String.format(COMPARISON, pre, operator.getCode(), post);
+        return this;
+    }
+
+    public TriggerBuilder setEvents(RuleType type){
+        String events = "";
+        if(type.isInsert()) {
+            events += "INSERT";
+        }
+        if(type.isUpdate()) {
+            events += (!events.isEmpty() ? " OR " : "") + "UPDATE";
+        }
+        if(type.isDelete()) {
+            events += (!events.isEmpty() ? " OR " : "") + "DELETE";
+        }
+        trigger = trigger.replace(R_EVENTS, events);
+        return this;
+    }
+
+    public TriggerBuilder addComparisons(String pre, LogicalOperator lOperator, ComparisonOperator cOperator, String post) {
+        if(lOperator == LogicalOperator.Any || lOperator == LogicalOperator.All) {
+            statement = String.format(ANY_ALL_BLOCK, pre, cOperator.getCode(), lOperator.getCode(), post);
         } else {
-            List<String> columnList = new ArrayList<>(Arrays.asList(columns))
-                    .stream()
-                    .filter(Objects::nonNull)
-                    .filter(str -> !str.trim().isEmpty())
-                    .collect(Collectors.toCollection(ArrayList::new));
-
-            String cols = "";
-            for(int i = 0; i < columnList.size(); i++) {
-                cols += columnList.get(i) + (i + 1 < columnList.size() ? "," : "");
-            }
-            event = String.format("OF %s ON %s", cols, table);
+            statement += String.format(pre, lOperator.getCode(), post);
         }
-
-        trigger = String.format(trigger, event, "%s", "%s");
-        compoundtrigger = String.format(compoundtrigger, event, table, "%s", "%s", table, table, "%s", "%s");
         return this;
     }
 
-    @Override
-    public AddAttributes addColumn(String column) {
-        this.column1 = ":NEW." + column;
-        this.condition += column1;
-        return this;
-    }
-
-    @Override
-    public BuildOrAddErrorMsg addStatement(String statement) {
-        this.condition += statement;
-        return this;
-    }
-
-    @Override
-    public AddAllColumns addCodeBlock(String code) {
+    public TriggerBuilder addCodeBlock(String code) {
         List<String> strings = new ArrayList<>(Arrays.asList(code.trim().split("\\r\\n")));
 
         if(strings.size() > 0) {
@@ -167,8 +175,7 @@ public class TriggerBuilder implements OnRuleType, AddEvent, AddColumnOrStatemen
         return this;
     }
 
-    @Override
-    public BuildOrAddErrorMsg addAllColumns(List<String> columns) {
+    public TriggerBuilder addAllColumns(List<String> columns) {
         final String format = "g_%s_tab(g_%s_tab.last).l_row.%s := %s.%s;";
 
         List<String> change = new ArrayList<>(columns);
@@ -186,76 +193,11 @@ public class TriggerBuilder implements OnRuleType, AddEvent, AddColumnOrStatemen
         return this;
     }
 
-    @Override
-    public BuildOrAddErrorMsg addBetween(String min, String max) {
-        this.condition = String.format(condition + " BETWEEN '%s' AND '%s'", min, max);
-        return this;
-    }
-
-    @Override
-    public AddValueOrColumn addComparisonOperator(ComparisonOperator comparisonOperator) {
-        this.condition = String.format(condition + " %s %s", comparisonOperator.getCode(), "%s");
-        return this;
-    }
-
-    @Override
-    public BuildOrAddErrorMsg addValue(String value) {
-        this.condition = String.format(condition, "'" + value + "'");
-        return this;
-    }
-
-    @Override
-    public BuildOrAddErrorMsg addSecondColumn(String column) {
-        this.condition = String.format(condition, ":NEW." + column);
-        return this;
-    }
-
-    @Override
-    public AddValues addOperators(LogicalOperator logicalOperator, ComparisonOperator comparisonOperator) {
-        if(logicalOperator == LogicalOperator.Any || logicalOperator == LogicalOperator.All) {
-            this.condition =
-                    "    DECLARE\n" +
-                    "          v_test varchar2(4000);\n" +
-                    "        BEGIN\n" +
-                    "          SELECT 'passed' INTO v_test FROM dual WHERE %s %s %s (%s);\n" +
-                    "          l_passed := TRUE;\n" +
-                    "        EXCEPTION\n" +
-                    "          WHEN NO_DATA_FOUND THEN\n" +
-                    "          l_passed := FALSE;\n" +
-                    "        END";
-            this.condition = String.format(condition, column1, comparisonOperator.getCode(), logicalOperator.getCode(), "%s");
-        } else {
-            this.condition = String.format(condition + " %s (%s)", logicalOperator.getCode(), "%s");
-        }
-        return this;
-    }
-
-    @Override
-    public BuildOrAddErrorMsg addValues(List<String> values) {
-        this.condition = String.format(condition, getValuesFromList(values));
-        return this;
-    }
-
-    @Override
-    public Build addErrorMessage(String msg) {
-        if(msg != null) {
-            errormsg = msg;
-        }
-        return this;
-    }
-
-    @Override
     public String build() {
-        return String.format(trigger, condition, errormsg).replace("#PERC#", "%");
-    }
-
-    String getValuesFromList(List<String> list) {
-        String values = "";
-        for (String str : list) {
-            if (str.length() > 0) {
-                values += "'" + str + "',";
-            }
+        for (String tag : Arrays.asList(R_NAME, R_EVENTS, R_COLUMNS, R_TABLE, R_STATEMENT, R_ERROR)) {
+            trigger = trigger.replace(tag, "");
         }
-        return values.substring(0, values.length() - 1);
+        return trigger;
+        //return String.format(trigger, condition, errormsg).replace("#PERC#", "%");
     }
 }
