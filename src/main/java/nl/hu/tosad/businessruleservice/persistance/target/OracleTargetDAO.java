@@ -11,6 +11,7 @@ import java.util.List;
 /**
  * Created by Raoul on 1/21/2017.
  */
+@SuppressWarnings("Duplicates")
 public class OracleTargetDAO {
     private final String GETTABLES = "select table_name from all_tables where lower(owner) = lower(?)";
     private final String GETCOLUMNS = "select column_name from cols where lower(table_name) = lower(?)";
@@ -56,6 +57,19 @@ public class OracleTargetDAO {
         try (Connection connection = getConnection(target)) {
             Statement statement = connection.createStatement();
             statement.execute("DROP TRIGGER " + triggerName.toUpperCase());
+            statement.close();
+            connection.commit();
+        } catch (SQLException e) {
+            throw new BusinessRuleServiceException(e);
+        }
+    }
+
+    public void dropConstraint(String constraintName, String table, TargetDatabase target) {
+        String query = String.format("ALTER TABLE %s DROP CONSTRAINT %s", table, constraintName);
+        try (Connection connection = getConnection(target)) {
+            Statement statement = connection.createStatement();
+            System.out.println(query);
+            statement.execute(query);
             statement.close();
             connection.commit();
         } catch (SQLException e) {
