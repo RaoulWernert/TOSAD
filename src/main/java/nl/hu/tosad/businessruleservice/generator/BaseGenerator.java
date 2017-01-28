@@ -24,6 +24,7 @@ public class BaseGenerator implements IGenerator {
                         .addEvent(rule.getTable(), rule.getAttribute())
                         .addColumn(rule.getAttribute())
                         .addBetween(rule.getMin(), rule.getMax())
+                        .addErrorMessage(rule.getErrormsg())
                         .build();
             default:
                 return null;
@@ -47,6 +48,7 @@ public class BaseGenerator implements IGenerator {
                         .addColumn(rule.getAttribute())
                         .addComparisonOperator(rule.getComparisonOperator())
                         .addValue(rule.getValue())
+                        .addErrorMessage(rule.getErrormsg())
                         .build();
             default:
                 return null;
@@ -70,6 +72,7 @@ public class BaseGenerator implements IGenerator {
                         .addColumn(rule.getAttribute())
                         .addOperators(rule.getLogicalOperator(), rule.getComparisonOperator())
                         .addValues(rule.getValues())
+                        .addErrorMessage(rule.getErrormsg())
                         .build();
             default:
                 return null;
@@ -90,6 +93,7 @@ public class BaseGenerator implements IGenerator {
                         .onRuleType(rule.getRuleType())
                         .addEvent(rule.getTable(), rule.getAttribute())
                         .addStatement(rule.getStatement())
+                        .addErrorMessage(rule.getErrormsg())
                         .build();
             default:
                 return null;
@@ -112,6 +116,7 @@ public class BaseGenerator implements IGenerator {
                         .addColumn(rule.getColumn1())
                         .addComparisonOperator(rule.getOperator())
                         .addSecondColumn(rule.getColumn2())
+                        .addErrorMessage(rule.getErrormsg())
                         .build();
             default:
                 return null;
@@ -131,6 +136,7 @@ public class BaseGenerator implements IGenerator {
                         .onRuleType(rule.getRuleType())
                         .addEvent(rule.getTable(), rule.getColumn1(), rule.getColumn2())
                         .addStatement(rule.getStatement())
+                        .addErrorMessage(rule.getErrormsg())
                         .build();
             default:
                 return null;
@@ -149,6 +155,7 @@ public class BaseGenerator implements IGenerator {
                 .addEvent(rule.getTable(), rule.getColumn(), rule.getColumn2())
                 .addCodeBlock(rule.getStatement())
                 .addAllColumns(new OracleTargetDAO().getColumns(rule.getTarget(), rule.getTable())) //TODO: Columns op andere manier ophalen
+                .addErrorMessage(rule.getErrormsg())
                 .build();
     }
 

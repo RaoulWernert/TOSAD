@@ -11,8 +11,8 @@ public abstract class TupleRule extends BusinessRule {
 
     public TupleRule(BusinessRuleData data) {
         super(data);
-        Column1 = data.getColumn();
-        Column2 = data.getColumn2();
+        Column1 = data.getTargetcolumn();
+        Column2 = data.getTargetcolumn2();
     }
     public String getColumn1() {
         return Column1;

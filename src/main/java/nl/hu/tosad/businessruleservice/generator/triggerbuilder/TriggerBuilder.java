@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-public class TriggerBuilder implements OnRuleType, AddEvent, AddColumnOrStatement, AddAttributes, AddValueOrColumn, AddValues, AddAllColumns, Build {
+public class TriggerBuilder implements OnRuleType, AddEvent, AddColumnOrStatement, AddAttributes, AddValueOrColumn, AddValues, AddAllColumns, BuildOrAddErrorMsg, Build {
     public static OnRuleType newTrigger(String name) {
         return new TriggerBuilder(name);
     }
@@ -83,6 +83,7 @@ public class TriggerBuilder implements OnRuleType, AddEvent, AddColumnOrStatemen
 
     String condition = "l_passed := ";
     String column1;
+    String errormsg = "ERROR";
 
 
     TriggerBuilder(String name) {
@@ -142,7 +143,7 @@ public class TriggerBuilder implements OnRuleType, AddEvent, AddColumnOrStatemen
     }
 
     @Override
-    public Build addStatement(String statement) {
+    public BuildOrAddErrorMsg addStatement(String statement) {
         this.condition += statement;
         return this;
     }
@@ -167,7 +168,7 @@ public class TriggerBuilder implements OnRuleType, AddEvent, AddColumnOrStatemen
     }
 
     @Override
-    public Build addAllColumns(List<String> columns) {
+    public BuildOrAddErrorMsg addAllColumns(List<String> columns) {
         final String format = "g_%s_tab(g_%s_tab.last).l_row.%s := %s.%s;";
 
         List<String> change = new ArrayList<>(columns);
@@ -186,7 +187,7 @@ public class TriggerBuilder implements OnRuleType, AddEvent, AddColumnOrStatemen
     }
 
     @Override
-    public Build addBetween(String min, String max) {
+    public BuildOrAddErrorMsg addBetween(String min, String max) {
         this.condition = String.format(condition + " BETWEEN '%s' AND '%s'", min, max);
         return this;
     }
@@ -198,13 +199,13 @@ public class TriggerBuilder implements OnRuleType, AddEvent, AddColumnOrStatemen
     }
 
     @Override
-    public Build addValue(String value) {
+    public BuildOrAddErrorMsg addValue(String value) {
         this.condition = String.format(condition, "'" + value + "'");
         return this;
     }
 
     @Override
-    public Build addSecondColumn(String column) {
+    public BuildOrAddErrorMsg addSecondColumn(String column) {
         this.condition = String.format(condition, ":NEW." + column);
         return this;
     }
@@ -230,14 +231,22 @@ public class TriggerBuilder implements OnRuleType, AddEvent, AddColumnOrStatemen
     }
 
     @Override
-    public Build addValues(List<String> values) {
+    public BuildOrAddErrorMsg addValues(List<String> values) {
         this.condition = String.format(condition, getValuesFromList(values));
         return this;
     }
 
     @Override
+    public Build addErrorMessage(String msg) {
+        if(msg != null) {
+            errormsg = msg;
+        }
+        return this;
+    }
+
+    @Override
     public String build() {
-        return String.format(trigger, condition, "ERRORMSG PLACEHOLDER").replace("#PERC#", "%");
+        return String.format(trigger, condition, errormsg).replace("#PERC#", "%");
     }
 
     String getValuesFromList(List<String> list) {
