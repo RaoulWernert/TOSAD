@@ -15,14 +15,16 @@ public abstract class BusinessRule {
     private TargetDatabase target;
     private RuleType ruleType;
     private boolean implemented;
+    private String errormsg;
 
     public BusinessRule(BusinessRuleData data) {
-        table = data.getTable();
+        table = data.getTargettable();
         implementation = Implementation.valueOf(data.getImplementation());
         target = data.getTarget();
         id = data.getId();
         ruleType = data.getRuleType();
         implemented = data.isImplemented();
+        errormsg = data.getErrormsg();
 
         String impl = implementation == Implementation.CONSTRAINT ? "CNS" : "TRG";
         name = String.format("BRG_%s_%s_%s_%s", target.getName(), impl, data.getRuleType().getCode(), id);
@@ -54,6 +56,10 @@ public abstract class BusinessRule {
 
     public boolean isImplemented() {
         return implemented;
+    }
+
+    public String getErrormsg() {
+        return errormsg;
     }
 
     public abstract String accept(IGenerator generator);

@@ -13,9 +13,9 @@ public class InterEntityCompareRule extends BusinessRule {
 
     public InterEntityCompareRule(BusinessRuleData data) {
         super(data);
-        table2 = data.getTable2();
-        column = data.getColumn();
-        column2 = data.getColumn2();
+        table2 = data.getTargettable2();
+        column = data.getTargetcolumn();
+        column2 = data.getTargetcolumn2();
         operator = ComparisonOperator.valueOf(data.getC_operator());
     }
 

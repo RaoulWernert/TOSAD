@@ -12,8 +12,8 @@ public class EntityOtherRule extends BusinessRule {
 
     public EntityOtherRule(BusinessRuleData data) {
         super(data);
-        column = data.getColumn();
-        column2 = data.getColumn2();
+        column = data.getTargetcolumn();
+        column2 = data.getTargetcolumn2();
         statement = data.getStatement();
     }
 

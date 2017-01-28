@@ -21,6 +21,7 @@ public class BusinessRuleData {
     private String value;
     private String l_operator;
     private String statement;
+    private String errormsg;
 
     public BusinessRuleData(int id,
                             String ruleName,
@@ -38,7 +39,8 @@ public class BusinessRuleData {
                             String c_operator,
                             String value,
                             String l_operator,
-                            String statement) {
+                            String statement,
+                            String errormsg) {
         this.id = id;
         this.ruleName = ruleName;
         this.target = target;
@@ -56,13 +58,14 @@ public class BusinessRuleData {
         this.value = value;
         this.l_operator = l_operator;
         this.statement = statement;
+        this.errormsg = errormsg;
     }
 
     public int getId() {
         return id;
     }
 
-    public String getName() {
+    public String getRuleName() {
         return ruleName;
     }
 
@@ -86,19 +89,19 @@ public class BusinessRuleData {
         return implemented;
     }
 
-    public String getTable() {
+    public String getTargettable() {
         return targettable;
     }
 
-    public String getTable2() {
+    public String getTargettable2() {
         return targettable2;
     }
 
-    public String getColumn() {
+    public String getTargetcolumn() {
         return targetcolumn;
     }
 
-    public String getColumn2() {
+    public String getTargetcolumn2() {
         return targetcolumn2;
     }
 
@@ -124,5 +127,9 @@ public class BusinessRuleData {
 
     public String getStatement() {
         return statement;
+    }
+
+    public String getErrormsg() {
+        return errormsg;
     }
 }
