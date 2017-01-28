@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-public class TriggerBuilder implements OnRuleType, AddEvent, AddColumnOrStatement, AddAttributes, AddValueOrColumn, AddValues, AddAllColumns, Build {
+public class TriggerBuilder implements OnRuleType, AddEvent, AddColumnOrStatement, AddAttributes, AddValueOrColumn, AddValues, AddAllColumns, BuildOrAddErrorMsg, Build {
     public static OnRuleType newTrigger(String name) {
         return new TriggerBuilder(name);
     }
@@ -83,6 +83,7 @@ public class TriggerBuilder implements OnRuleType, AddEvent, AddColumnOrStatemen
 
     String condition = "l_passed := ";
     String column1;
+    String errormsg = "ERROR";
 
 
     TriggerBuilder(String name) {
@@ -236,8 +237,16 @@ public class TriggerBuilder implements OnRuleType, AddEvent, AddColumnOrStatemen
     }
 
     @Override
+    public Build addErrorMessage(String msg) {
+        if(msg != null) {
+            errormsg = msg;
+        }
+        return this;
+    }
+
+    @Override
     public String build() {
-        return String.format(trigger, condition, "ERRORMSG PLACEHOLDER").replace("#PERC#", "%");
+        return String.format(trigger, condition, errormsg).replace("#PERC#", "%");
     }
 
     String getValuesFromList(List<String> list) {
