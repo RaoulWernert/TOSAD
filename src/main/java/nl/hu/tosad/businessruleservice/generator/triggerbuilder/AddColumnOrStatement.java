@@ -2,6 +2,6 @@ package nl.hu.tosad.businessruleservice.generator.triggerbuilder;
 
 public interface AddColumnOrStatement {
     AddAttributes addColumn(String column);
-    Build addStatement(String statement);
+    BuildOrAddErrorMsg addStatement(String statement);
     AddAllColumns addCodeBlock(String code);
 }
