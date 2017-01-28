@@ -44,7 +44,7 @@ public class BusinessRuleService {
         String query = rule.accept(generator);
         IController controller = getController(rule.getTarget().getType());
 
-        controller.implement(query, rule.getTarget());
+        controller.implement(query, rule);
         businessRuleDAO.updateName(rule);
         businessRuleDAO.setImplemented(rule);
         return query;

@@ -1,6 +1,8 @@
 package nl.hu.tosad.businessruleservice.controller;
 
 import nl.hu.tosad.businessruleservice.model.TargetDatabase;
+import nl.hu.tosad.businessruleservice.model.rules.BusinessRule;
+import nl.hu.tosad.businessruleservice.model.rules.Implementation;
 import nl.hu.tosad.businessruleservice.persistance.target.OracleTargetDAO;
 
 import java.util.List;
@@ -23,7 +25,11 @@ public class OracleController implements IController {
     }
 
     @Override
-    public void implement(String query, TargetDatabase target) {
-        targetDAO.implement(query, target);
+    public void implement(String query, BusinessRule rule) {
+        if(rule.getImplementation() == Implementation.TRIGGER) {
+            targetDAO.implementTrigger(query, rule.getTarget(), rule.getName());
+        } else {
+            targetDAO.implement(query, rule.getTarget());
+        }
     }
 }
