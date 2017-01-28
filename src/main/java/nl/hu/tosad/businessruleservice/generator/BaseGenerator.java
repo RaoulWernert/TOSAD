@@ -148,7 +148,7 @@ public class BaseGenerator implements IGenerator {
                 .onRuleType(rule.getRuleType())
                 .addEvent(rule.getTable(), rule.getColumn(), rule.getColumn2())
                 .addCodeBlock(rule.getStatement())
-                .addAllColumns(new OracleTargetDAO().getColumns(rule.getTarget(), rule.getTable()))
+                .addAllColumns(new OracleTargetDAO().getColumns(rule.getTarget(), rule.getTable())) //TODO: Columns op andere manier ophalen
                 .build();
     }
 
