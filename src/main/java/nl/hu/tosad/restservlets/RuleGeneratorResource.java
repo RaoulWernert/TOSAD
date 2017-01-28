@@ -35,6 +35,22 @@ public class RuleGeneratorResource {
         }
     }
 
+    @POST
+    @Path("update")
+    @Produces("text/plain")
+    public String update(@FormParam("ruleid") int ruleid) {
+        System.out.println("UPDATE CALL: " + ruleid);
+        return "";
+    }
+
+    @POST
+    @Path("delete")
+    @Produces("text/plain")
+    public String delete(@FormParam("ruleid") int ruleid) {
+        System.out.println("DELETE CALL: " + ruleid);
+        return "";
+    }
+
     @GET
     @Path("tables")
     @Produces("text/plain")
