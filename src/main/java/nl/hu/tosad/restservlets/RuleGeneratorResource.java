@@ -49,8 +49,10 @@ public class RuleGeneratorResource {
     @Path("columns")
     @Produces("text/plain")
     public String getColumns(@QueryParam("targetid") int targetid, @QueryParam("tablename") String tablename) {
-        if(tablename.trim().isEmpty())
+        if(tablename.trim().isEmpty()) {
+            System.out.println("Tablename is empty.");
             throw new IllegalArgumentException();
+        }
 
         String response = createList(BusinessRuleService.getInstance().getColumns(targetid, tablename));
 
