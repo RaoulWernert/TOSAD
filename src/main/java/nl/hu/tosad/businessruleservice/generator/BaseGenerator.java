@@ -3,6 +3,7 @@ package nl.hu.tosad.businessruleservice.generator;
 import nl.hu.tosad.businessruleservice.generator.constraintbuilder.ConstraintBuilder;
 import nl.hu.tosad.businessruleservice.generator.triggerbuilder.TriggerBuilder;
 import nl.hu.tosad.businessruleservice.model.rules.*;
+import nl.hu.tosad.businessruleservice.persistance.target.OracleTargetDAO;
 
 /**
  * Created by Raoul on 1/21/2017.
@@ -147,6 +148,7 @@ public class BaseGenerator implements IGenerator {
                 .onRuleType(rule.getRuleType())
                 .addEvent(rule.getTable(), rule.getColumn(), rule.getColumn2())
                 .addCodeBlock(rule.getStatement())
+                .addAllColumns(new OracleTargetDAO().getColumns(rule.getTarget(), rule.getTable()))
                 .build();
     }
 

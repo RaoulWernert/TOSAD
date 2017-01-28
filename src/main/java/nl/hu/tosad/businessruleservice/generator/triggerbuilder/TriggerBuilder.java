@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-public class TriggerBuilder implements OnRuleType, AddEvent, AddColumnOrStatement, AddAttributes, AddValueOrColumn, AddValues, Build {
+public class TriggerBuilder implements OnRuleType, AddEvent, AddColumnOrStatement, AddAttributes, AddValueOrColumn, AddValues, AddAllColumns, Build {
     public static OnRuleType newTrigger(String name) {
         return new TriggerBuilder(name);
     }
@@ -27,11 +27,67 @@ public class TriggerBuilder implements OnRuleType, AddEvent, AddColumnOrStatemen
             "        raise_application_error(-20800, '%s');\n" +
             "    END IF;\n" +
             "END %s;";
+
+    String compoundtrigger =
+            "CREATE OR REPLACE TRIGGER %s\n" +
+            "    FOR %s %s\n" +
+            "      COMPOUND TRIGGER\n" +
+            "      \n" +
+            "  TYPE t_rcrd IS RECORD (\n" +
+            "    l_rowid ROWID,\n" +
+            "    l_row %s#PERC#ROWTYPE);\n" +
+            "\n" +
+            "  TYPE t_change_tab IS TABLE OF t_rcrd;\n" +
+            "  g_change_tab t_change_tab := t_change_tab();\n" +
+            "  \n" +
+            "  TYPE t_old_tab IS TABLE OF t_rcrd;\n" +
+            "  g_old_tab t_old_tab := t_old_tab();\n" +
+            "\n" +
+            "  AFTER EACH ROW IS\n" +
+            "  BEGIN\n" +
+            "    g_change_tab.extend;\n" +
+            "    g_change_tab(g_change_tab.last).l_rowid := :new.ROWID;\n" +
+            "%s\n" +
+            "    IF UPDATING THEN\n" +
+            "      g_old_tab.extend;\n" +
+            "      g_old_tab(g_old_tab.last).l_rowid := :old.ROWID;\n" +
+            "%s\n" +
+            "    END IF;\n" +
+            "  END AFTER EACH ROW;\n" +
+            "  \n" +
+            "  AFTER STATEMENT IS\n" +
+            "  BEGIN\n" +
+            "    DECLARE\n" +
+            "      v_old %s#PERC#ROWTYPE;\n" +
+            "      v_new %s#PERC#ROWTYPE;\n" +
+            "      l_passed boolean := TRUE;\n" +
+            "    BEGIN    \n" +
+            "      FOR i IN g_change_tab.first .. g_change_tab.last LOOP         \n" +
+            "        v_new := g_change_tab(i).l_row;\n" +
+            "        IF UPDATING THEN\n" +
+            "          v_old := g_old_tab(i).l_row;\n" +
+            "        ELSE\n" +
+            "          v_old := NULL;\n" +
+            "        END IF;\n" +
+            "        \n" +
+            "        %s;" +
+            "        \n" +
+            "        EXIT WHEN NOT l_passed;\n" +
+            "      END LOOP;\n" +
+            "      IF NOT l_passed THEN\n" +
+            "        raise_application_error(-20800, '%s');\n" +
+            "      END IF;\n" +
+            "    END;\n" +
+            "  END AFTER STATEMENT;\n" +
+            "END %s;";
+
     String condition = "l_passed := ";
     String column1;
 
+
     TriggerBuilder(String name) {
         trigger = String.format(trigger, name, "%s", "%s", "%s", "%s", name);
+        compoundtrigger = String.format(compoundtrigger, name, "%s", "%s", "%s", "%s", "%s", "%s", "%s", "%s", "%s", name);
     }
 
     @Override
@@ -49,6 +105,7 @@ public class TriggerBuilder implements OnRuleType, AddEvent, AddColumnOrStatemen
         }
 
         trigger = String.format(trigger, event, "%s", "%s", "%s");
+        compoundtrigger = String.format(compoundtrigger, event, "%s", "%s", "%s", "%s", "%s", "%s", "%s", "%s");
         return this;
     }
 
@@ -73,6 +130,7 @@ public class TriggerBuilder implements OnRuleType, AddEvent, AddColumnOrStatemen
         }
 
         trigger = String.format(trigger, event, "%s", "%s");
+        compoundtrigger = String.format(compoundtrigger, event, table, "%s", "%s", table, table, "%s", "%s");
         return this;
     }
 
@@ -90,13 +148,13 @@ public class TriggerBuilder implements OnRuleType, AddEvent, AddColumnOrStatemen
     }
 
     @Override
-    public Build addCodeBlock(String code) {
+    public AddAllColumns addCodeBlock(String code) {
         List<String> strings = new ArrayList<>(Arrays.asList(code.trim().split("\\r\\n")));
 
         if(strings.size() > 0) {
             String first = strings.get(0);
             strings.remove(first);
-            strings = strings.stream().map(str -> "    " + str).collect(Collectors.toCollection(ArrayList::new));
+            strings = strings.stream().map(str -> "        " + str).collect(Collectors.toCollection(ArrayList::new));
             strings.add(0, first);
             code = String.join("\r\n", strings);
             if(code.charAt(code.length() - 1) == ';') {
@@ -105,6 +163,25 @@ public class TriggerBuilder implements OnRuleType, AddEvent, AddColumnOrStatemen
         }
 
         this.condition = code;
+        return this;
+    }
+
+    @Override
+    public Build addAllColumns(List<String> columns) {
+        final String format = "g_%s_tab(g_%s_tab.last).l_row.%s := :new.%s;";
+
+        List<String> change = new ArrayList<>(columns);
+        List<String> old = new ArrayList<>(columns);
+
+        change = change.stream()
+                .map(str -> "    " + String.format(format, "change", "change", str, str))
+                .collect(Collectors.toCollection(ArrayList::new));
+        old = old.stream()
+                .map(str -> "      " + String.format(format, "old", "old", str, str))
+                .collect(Collectors.toCollection(ArrayList::new));
+
+        compoundtrigger = String.format(compoundtrigger, String.join("\r\n", change), String.join("\r\n", old), "%s", "%s");
+        trigger = compoundtrigger;
         return this;
     }
 
@@ -160,13 +237,14 @@ public class TriggerBuilder implements OnRuleType, AddEvent, AddColumnOrStatemen
 
     @Override
     public String build() {
-        return String.format(trigger, condition, "ERRORMSG PLACEHOLDER");
+        System.out.println(String.format(trigger, condition, "ERRORMSG PLACEHOLDER").replace("#PERC#", "%"));
+        return "";
     }
 
-    String getValuesFromList(List<String> list){
+    String getValuesFromList(List<String> list) {
         String values = "";
         for (String str : list) {
-            if(str.length() > 0) {
+            if (str.length() > 0) {
                 values += "'" + str + "',";
             }
         }
