@@ -39,16 +39,24 @@ public class RuleGeneratorResource {
     @Path("update")
     @Produces("text/plain")
     public String update(@FormParam("ruleid") int ruleid) {
-        System.out.println("UPDATE CALL: " + ruleid);
-        return "";
+        String deletemsg = delete(ruleid);
+        if(!deletemsg.startsWith("SUCCESS")) {
+            return deletemsg;
+        } else {
+            return generate(ruleid);
+        }
     }
 
     @POST
     @Path("delete")
     @Produces("text/plain")
     public String delete(@FormParam("ruleid") int ruleid) {
-        System.out.println("DELETE CALL: " + ruleid);
-        return "";
+        try {
+            BusinessRuleService.getInstance().delete(ruleid);
+            return "SUCCESS DELETED RULE " + ruleid;
+        } catch (BusinessRuleServiceException e) {
+            return e.getMessage();
+        }
     }
 
     @GET

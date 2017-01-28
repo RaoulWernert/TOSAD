@@ -57,10 +57,10 @@ public class BusinessRuleDAO extends BaseDAO {
         }
     }
 
-    public void setImplemented(BusinessRule rule) {
+    public void setImplemented(BusinessRule rule, boolean implemented) {
         try (Connection conn = super.getConnection()) {
             PreparedStatement statement = conn.prepareStatement(UPDATEIMPLEMENTED);
-            statement.setInt(1, 1);
+            statement.setInt(1, implemented ? 1 : 0);
             statement.setInt(2, rule.getId());
             statement.executeUpdate();
             conn.commit();

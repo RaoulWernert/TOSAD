@@ -32,4 +32,13 @@ public class OracleController implements IController {
             targetDAO.implement(query, rule.getTarget());
         }
     }
+
+    @Override
+    public void delete(BusinessRule rule) {
+        if(rule.getImplementation() == Implementation.TRIGGER) {
+            targetDAO.dropTrigger(rule.getName(), rule.getTarget());
+        } else {
+            targetDAO.dropConstraint(rule.getName(), rule.getTable(), rule.getTarget());
+        }
+    }
 }

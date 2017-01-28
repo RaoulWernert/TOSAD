@@ -46,8 +46,18 @@ public class BusinessRuleService {
 
         controller.implement(query, rule);
         businessRuleDAO.updateName(rule);
-        businessRuleDAO.setImplemented(rule);
+        businessRuleDAO.setImplemented(rule, true);
         return query;
+    }
+
+    public synchronized void delete(int ruleid) {
+        BusinessRule rule = businessRuleDAO.findById(ruleid);
+        if (rule == null) {
+            throw new BusinessRuleServiceException(String.format("Rule ID '%s' not found.", ruleid));
+        }
+        IController controller = getController(rule.getTarget().getType());
+        controller.delete(rule);
+        businessRuleDAO.setImplemented(rule, false);
     }
 
     public synchronized List<String> getTables(int id) {
