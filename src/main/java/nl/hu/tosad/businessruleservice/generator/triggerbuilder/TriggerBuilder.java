@@ -237,8 +237,7 @@ public class TriggerBuilder implements OnRuleType, AddEvent, AddColumnOrStatemen
 
     @Override
     public String build() {
-        System.out.println(String.format(trigger, condition, "ERRORMSG PLACEHOLDER").replace("#PERC#", "%"));
-        return "";
+        return String.format(trigger, condition, "ERRORMSG PLACEHOLDER").replace("#PERC#", "%");
     }
 
     String getValuesFromList(List<String> list) {
