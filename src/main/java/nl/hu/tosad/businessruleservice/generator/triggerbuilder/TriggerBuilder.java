@@ -46,11 +46,11 @@ public class TriggerBuilder implements OnRuleType, AddEvent, AddColumnOrStatemen
             "  AFTER EACH ROW IS\n" +
             "  BEGIN\n" +
             "    g_change_tab.extend;\n" +
-            "    g_change_tab(g_change_tab.last).l_rowid := :new.ROWID;\n" +
+            "    g_change_tab(g_change_tab.last).l_rowid := :NEW.ROWID;\n" +
             "%s\n" +
             "    IF UPDATING THEN\n" +
             "      g_old_tab.extend;\n" +
-            "      g_old_tab(g_old_tab.last).l_rowid := :old.ROWID;\n" +
+            "      g_old_tab(g_old_tab.last).l_rowid := :OLD.ROWID;\n" +
             "%s\n" +
             "    END IF;\n" +
             "  END AFTER EACH ROW;\n" +
@@ -168,16 +168,16 @@ public class TriggerBuilder implements OnRuleType, AddEvent, AddColumnOrStatemen
 
     @Override
     public Build addAllColumns(List<String> columns) {
-        final String format = "g_%s_tab(g_%s_tab.last).l_row.%s := :new.%s;";
+        final String format = "g_%s_tab(g_%s_tab.last).l_row.%s := %s.%s;";
 
         List<String> change = new ArrayList<>(columns);
         List<String> old = new ArrayList<>(columns);
 
         change = change.stream()
-                .map(str -> "    " + String.format(format, "change", "change", str, str))
+                .map(str -> "    " + String.format(format, "change", "change", str, ":NEW", str))
                 .collect(Collectors.toCollection(ArrayList::new));
         old = old.stream()
-                .map(str -> "      " + String.format(format, "old", "old", str, str))
+                .map(str -> "      " + String.format(format, "old", "old", str, ":OLD", str))
                 .collect(Collectors.toCollection(ArrayList::new));
 
         compoundtrigger = String.format(compoundtrigger, String.join("\r\n", change), String.join("\r\n", old), "%s", "%s");
