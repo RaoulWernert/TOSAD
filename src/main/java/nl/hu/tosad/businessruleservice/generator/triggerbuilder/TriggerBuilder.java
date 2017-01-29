@@ -157,6 +157,42 @@ public class TriggerBuilder {
         return this;
     }
 
+    public TriggerBuilder addTableComp(String table, String key, String column, ComparisonOperator opr, boolean isPrimary){
+        if(opr == ComparisonOperator.LessOrEqual || opr == ComparisonOperator.Less){
+            column = "MIN("+column+")";
+        }else if(opr == ComparisonOperator.GreaterOrEqual || opr == ComparisonOperator.Greater){
+            column = "MAX("+column+")";
+        }
+        if(!isPrimary){
+            opr = getOppositOpr(opr);
+        }
+        statement = " cursor v_cursor is\n" +
+                    " select "+column+"\n" +
+                    " from "+table+"\n" +
+                    " where "+key+" = :NEW."+key+";\n" +
+                    " v_value "+table+"."+key+"%type;\n" +
+                    "begin\n" +
+                    " open v_cursor;\n" +
+                    " fetch v_cursor into v_value;\n" +
+                    " close v_cursor;\n" +
+                    " l_passed := :NEW."+column+" "+opr.getCode()+" v_value;";
+        return this;
+
+    }
+    private ComparisonOperator getOppositOpr(ComparisonOperator opr){
+        switch (opr){
+            case Greater:
+                return ComparisonOperator.Less;
+            case Less:
+                return ComparisonOperator.Greater;
+            case GreaterOrEqual:
+                return ComparisonOperator.LessOrEqual;
+            case LessOrEqual:
+                return ComparisonOperator.GreaterOrEqual;
+        }
+        return opr;
+    }
+
     public TriggerBuilder addCodeBlock(String code) {
         List<String> strings = new ArrayList<>(Arrays.asList(code.trim().split("\\r\\n")));
 
