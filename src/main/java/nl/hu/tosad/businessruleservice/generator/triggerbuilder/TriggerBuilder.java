@@ -17,6 +17,7 @@ public class TriggerBuilder {
     private final String R_TABLE= "#table#";
     private final String R_STATEMENT = "#statement#";
     private final String R_ERROR = "#error#";
+    private final String R_VARIABLES = "#variables#";
 
     private final String R_GVAR = "#gvar#";
     private final String R_BSTATEMENT = "#bstatement#";
@@ -36,6 +37,7 @@ public class TriggerBuilder {
             "    FOR EACH ROW \n" +
             "DECLARE\n" +
             "    l_passed boolean := true;\n" +
+            "    #variables#\n"+
             "BEGIN\n" +
             "    #statement#\n" +
             "    IF NOT l_passed THEN\n" +
@@ -214,24 +216,25 @@ public class TriggerBuilder {
     }
 
     public TriggerBuilder addTableComp(String table, String key, String column, ComparisonOperator opr, boolean isPrimary){
-        if(opr == ComparisonOperator.LessOrEqual || opr == ComparisonOperator.Less){
-            column = "MIN("+column+")";
-        }else if(opr == ComparisonOperator.GreaterOrEqual || opr == ComparisonOperator.Greater){
-            column = "MAX("+column+")";
-        }
+        String trigColumn = column;
         if(!isPrimary){
             opr = getOppositOpr(opr);
+            if(opr == ComparisonOperator.LessOrEqual || opr == ComparisonOperator.Less){
+                trigColumn = "MIN("+column+")";
+            }else if(opr == ComparisonOperator.GreaterOrEqual || opr == ComparisonOperator.Greater){
+                trigColumn = "MAX("+column+")";
+            }
         }
-        statement = " cursor v_cursor is\n" +
-                    " select "+column+"\n" +
+        String vars = " cursor v_cursor is\n" +
+                    " select "+trigColumn+"\n" +
                     " from "+table+"\n" +
                     " where "+key+" = :NEW."+key+";\n" +
-                    " v_value "+table+"."+key+"%type;\n" +
-                    "begin\n" +
-                    " open v_cursor;\n" +
-                    " fetch v_cursor into v_value;\n" +
-                    " close v_cursor;\n" +
-                    " l_passed := :NEW."+column+" "+opr.getCode()+" v_value;";
+                    " v_value "+table+"."+key+"%type;\n";
+        trigger = trigger.replace(R_VARIABLES, vars);
+        statement = " open v_cursor;\n" +
+                " fetch v_cursor into v_value;\n" +
+                " close v_cursor;\n" +
+                " l_passed := :NEW."+column+" "+opr.getCode()+" v_value";
         return this;
 
     }
@@ -250,7 +253,7 @@ public class TriggerBuilder {
     }
 
     public String build() {
-        for (String tag : Arrays.asList(R_NAME, R_EVENTS, R_COLUMNS, R_TABLE, R_ERROR, R_GVAR, R_BSTATEMENT, R_FILLCHANGETAB, R_FILLOLDTAB)) {
+        for (String tag : Arrays.asList(R_NAME, R_EVENTS, R_COLUMNS, R_TABLE, R_ERROR, R_GVAR, R_BSTATEMENT, R_FILLCHANGETAB, R_FILLOLDTAB, R_VARIABLES)) {
             trigger = trigger.replace(tag, "");
             compoundtrigger = compoundtrigger.replace(tag, "");
         }
