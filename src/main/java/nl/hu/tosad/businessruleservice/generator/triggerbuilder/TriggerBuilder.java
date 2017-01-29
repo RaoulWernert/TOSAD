@@ -16,7 +16,7 @@ public class TriggerBuilder {
     private final String R_TABLE= "#table#";
     private final String R_STATEMENT = "#statement#";
     private final String R_ERROR = "#error#";
-    private final String R_VARIABLES = "#error#";
+    private final String R_VARIABLES = "#variables#";
 
     private final String R_GVAR = "#gvar#";
     private final String R_BSTATEMENT = "#bstatement#";
