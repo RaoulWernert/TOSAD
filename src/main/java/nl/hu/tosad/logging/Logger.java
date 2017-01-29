@@ -21,9 +21,12 @@ public class Logger {
     private Logger() {}
 
     public void Log(Throwable e) {
+        String error = e.getMessage() + "\n";
+
         for(StackTraceElement element : e.getStackTrace()) {
-            Log(element.toString());
+            error += element.toString() + "\n";
         }
+        Log(error);
     }
 
     public void Log(String msg) {
