@@ -146,6 +146,10 @@ public class TriggerBuilder {
     }
 
     public TriggerBuilder setError(String error){
+        if(error == null) {
+            error = "ERROR";
+        }
+
         trigger = trigger.replace(R_ERROR, error);
         compoundtrigger = compoundtrigger.replace(R_ERROR, error);
         return this;
