@@ -156,12 +156,22 @@ public class TriggerBuilder {
 
     public TriggerBuilder setGlobalVariables(String gvariables) {
         useCompoundTrigger = true;
+        List<String> strings = new ArrayList<>(Arrays.asList(gvariables.trim().split("\\r\\n")))
+                .stream()
+                .map(str -> "  " + str)
+                .collect(Collectors.toCollection(ArrayList::new));
+        gvariables = String.join("\r\n", strings);
         compoundtrigger = compoundtrigger.replace(R_GVAR, gvariables);
         return this;
     }
 
     public TriggerBuilder setBeforeStatement(String beforeStatement) {
         useCompoundTrigger = true;
+        List<String> strings = new ArrayList<>(Arrays.asList(beforeStatement.trim().split("\\r\\n")))
+                .stream()
+                .map(str -> "    " + str)
+                .collect(Collectors.toCollection(ArrayList::new));
+        beforeStatement = String.join("\r\n", strings);
         compoundtrigger = compoundtrigger.replace(R_BSTATEMENT, beforeStatement);
         return this;
     }

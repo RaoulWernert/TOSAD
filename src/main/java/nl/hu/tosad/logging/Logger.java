@@ -30,7 +30,7 @@ public class Logger {
 
     public void Log(String msg) {
         ZonedDateTime now = ZonedDateTime.now();
-        String path = String.format("%s.txt", now.format(DateTimeFormatter.ISO_LOCAL_DATE));
+        String path = String.format("/home/huuser/IdeaProjects/%s.txt", now.format(DateTimeFormatter.ISO_LOCAL_DATE));
         String datetime = now.format(DateTimeFormatter.ISO_LOCAL_TIME);
 
         File file = new File(path);
