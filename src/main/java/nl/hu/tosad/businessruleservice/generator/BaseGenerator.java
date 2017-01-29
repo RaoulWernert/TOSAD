@@ -166,14 +166,17 @@ public class BaseGenerator implements IGenerator {
 
     @Override
     public String generateDDL(EntityOtherRule rule) {
-        /*return TriggerBuilder.newTrigger(rule.getName())
-                .onRuleType(rule.getRuleType())
-                .addEvent(rule.getTable(), rule.getColumn(), rule.getColumn2())
-                .addCodeBlock(rule.getStatement())
-                .addAllColumns(new OracleTargetDAO().getColumns(rule.getTarget(), rule.getTable())) //TODO: Columns op andere manier ophalen
-                .addErrorMessage(rule.getErrormsg())
-                .build();*/
-        return "WIP";
+        List<String> columns = BusinessRuleService.getInstance().getController(rule.getTarget().getType()).getColumns(rule.getTarget(), rule.getTable());
+        return new TriggerBuilder(rule.getName())
+                .setTable(rule.getTable())
+                .setEvents(rule.getRuleType())
+                .setColumns(rule.getColumn(), rule.getColumn2())
+                .setGlobalVariables(rule.getGvariables())
+                .setBeforeStatement(rule.getBeforestatement())
+                .setAfterStatement(rule.getStatement())
+                .setAllTableColumns(columns)
+                .setError(rule.getErrormsg())
+                .build();
     }
 
     @Override
