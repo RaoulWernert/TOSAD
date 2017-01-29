@@ -8,12 +8,16 @@ import nl.hu.tosad.businessruleservice.model.BusinessRuleData;
 public class EntityOtherRule extends BusinessRule {
     public String column;
     public String column2;
+    private String gvariables;
+    private String beforestatement;
     private String statement;
 
     public EntityOtherRule(BusinessRuleData data) {
         super(data);
         column = data.getTargetcolumn();
         column2 = data.getTargetcolumn2();
+        gvariables = data.getGvariables();
+        beforestatement = data.getBeforestatement();
         statement = data.getStatement();
     }
 
@@ -32,5 +36,13 @@ public class EntityOtherRule extends BusinessRule {
 
     public String getStatement() {
         return statement;
+    }
+
+    public String getGvariables() {
+        return gvariables;
+    }
+
+    public String getBeforestatement() {
+        return beforestatement;
     }
 }
