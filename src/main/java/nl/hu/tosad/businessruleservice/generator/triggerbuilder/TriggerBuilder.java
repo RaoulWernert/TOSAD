@@ -47,8 +47,8 @@ public class TriggerBuilder {
 
     private String compoundtrigger =
             "CREATE OR REPLACE TRIGGER #name#\n" +
-            "    FOR #events# %s\n" +
-            "    #columns# ON %table#" +
+            "    FOR #events# \n" +
+            "    #columns# ON #table#\n" +
             "      COMPOUND TRIGGER\n" +
             "      \n" +
             "  TYPE t_rcrd IS RECORD (\n" +
