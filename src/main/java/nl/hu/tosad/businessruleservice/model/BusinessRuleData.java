@@ -22,6 +22,8 @@ public class BusinessRuleData {
     private String l_operator;
     private String statement;
     private String errormsg;
+    private String gvariables;
+    private String beforestatement;
 
     public BusinessRuleData(int id,
                             String ruleName,
@@ -40,7 +42,9 @@ public class BusinessRuleData {
                             String value,
                             String l_operator,
                             String statement,
-                            String errormsg) {
+                            String errormsg,
+                            String gvariables,
+                            String beforestatement) {
         this.id = id;
         this.ruleName = ruleName;
         this.target = target;
@@ -59,6 +63,8 @@ public class BusinessRuleData {
         this.l_operator = l_operator;
         this.statement = statement;
         this.errormsg = errormsg;
+        this.gvariables = gvariables;
+        this.beforestatement = beforestatement;
     }
 
     public int getId() {
@@ -131,5 +137,13 @@ public class BusinessRuleData {
 
     public String getErrormsg() {
         return errormsg;
+    }
+
+    public String getGvariables() {
+        return gvariables;
+    }
+
+    public String getBeforestatement() {
+        return beforestatement;
     }
 }

@@ -91,7 +91,9 @@ public class BusinessRuleDAO extends BaseDAO {
                     rs.getString("VALUE"),
                     rs.getString("L_OPERATOR"),
                     rs.getString("STATEMENT"),
-                    rs.getString("ERRORMSG")
+                    rs.getString("ERRORMSG"),
+                    rs.getString("GVARIABLES"),
+                    rs.getString("BEFORESTATEMENT")
             );
             BusinessRule rule = factory.createRule(data);
             if(rule != null){
