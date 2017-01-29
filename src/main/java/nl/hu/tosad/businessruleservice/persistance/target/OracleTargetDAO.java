@@ -83,8 +83,8 @@ public class OracleTargetDAO {
     public void implement(String query, TargetDatabase target) {
         try (Connection connection = getConnection(target)) {
             Statement statement = connection.createStatement();
+            Logger.getInstance().Log("Executed query: "+query);
             statement.execute(query);
-            Logger.getInstance().Log("Implemented"+query);
             statement.close();
             connection.commit();
         } catch (SQLException e) {
