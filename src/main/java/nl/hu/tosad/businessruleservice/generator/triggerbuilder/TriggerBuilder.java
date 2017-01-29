@@ -107,7 +107,7 @@ public class TriggerBuilder {
     public TriggerBuilder setColumns(String... columns){
         String value = "OF ";
         for (int i = 0; i < columns.length; i++) {
-            value += columns[i] + (i + 1 < columns[i].length() ? "," : "");
+            value += columns[i] + (i + 1 < columns.length ? "," : "");
         }
         trigger = trigger.replace(R_COLUMNS, value);
         return this;
@@ -194,10 +194,10 @@ public class TriggerBuilder {
     }
 
     public String build() {
-        for (String tag : Arrays.asList(R_NAME, R_EVENTS, R_COLUMNS, R_TABLE, R_STATEMENT, R_ERROR)) {
+        for (String tag : Arrays.asList(R_NAME, R_EVENTS, R_COLUMNS, R_TABLE, R_ERROR)) {
             trigger = trigger.replace(tag, "");
         }
-        return trigger;
+        return trigger.replace(R_STATEMENT, statement);
         //return String.format(trigger, condition, errormsg).replace("#PERC#", "%");
     }
 }
