@@ -58,10 +58,10 @@ public class OracleTargetDAO {
             statement.close();
             if(errors.size() > 0) {
                 errors.add(0, "Compilation error");
-//                dropTrigger(triggerName, target);
+                dropTrigger(triggerName, target);
                 throw new BusinessRuleServiceException(String.join("\r\n", errors));
             }else{
-                Logger.getInstance().Log("Implemented"+triggerName);
+                Logger.getInstance().Log("Implemented "+triggerName);
             }
         } catch (SQLException e) {
             throw new BusinessRuleServiceException(e);
