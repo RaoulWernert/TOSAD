@@ -7,6 +7,7 @@ import nl.hu.tosad.businessruleservice.model.rules.LogicalOperator;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class TriggerBuilder {
@@ -83,7 +84,7 @@ public class TriggerBuilder {
             "    DECLARE\n" +
             "      l_passed boolean := TRUE;\n" +
             "    BEGIN    \n" +
-            "      #statement#\n" +
+            "#statement#\n" +
             "      IF NOT l_passed THEN\n" +
             "        raise_application_error(-20800, '#error#');\n" +
             "      END IF;\n" +
@@ -121,10 +122,15 @@ public class TriggerBuilder {
         return this;
     }
 
-    public TriggerBuilder setColumns(String... columns){
+    public TriggerBuilder setColumns(String... cols){
+        List<String> columns = new ArrayList<>(Arrays.asList(cols)).stream()
+                .filter(Objects::nonNull)
+                .filter(String::isEmpty)
+                .collect(Collectors.toCollection(ArrayList::new));
+
         String value = "OF ";
-        for (int i = 0; i < columns.length; i++) {
-            value += columns[i] + (i + 1 < columns.length ? "," : "");
+        for (int i = 0; i < columns.size(); i++) {
+            value += columns.get(i) + (i + 1 < columns.size() ? "," : "");
         }
         trigger = trigger.replace(R_COLUMNS, value);
         compoundtrigger = compoundtrigger.replace(R_COLUMNS, value);
@@ -174,20 +180,17 @@ public class TriggerBuilder {
     }
 
     public TriggerBuilder setAfterStatement(String afterStatement) {
-//        List<String> strings = new ArrayList<>(Arrays.asList(code.trim().split("\\r\\n")));
-//
-//        if(strings.size() > 0) {
-//            String first = strings.get(0);
-//            strings.remove(first);
-//            strings = strings.stream().map(str -> "        " + str).collect(Collectors.toCollection(ArrayList::new));
-//            strings.add(0, first);
-//            code = String.join("\r\n", strings);
-//            if(code.charAt(code.length() - 1) == ';') {
-//                code = code.substring(0, code.length() - 1);
-//            }
-//        }
-//
-//        this.statement = code;
+        useCompoundTrigger = true;
+        List<String> strings = new ArrayList<>(Arrays.asList(afterStatement.trim().split("\\r\\n")))
+                .stream()
+                .map(str -> "      " + str)
+                .collect(Collectors.toCollection(ArrayList::new));
+        afterStatement = String.join("\r\n", strings);
+        if(afterStatement.charAt(afterStatement.length() - 1) == ';') {
+            afterStatement = afterStatement.substring(0, afterStatement.length() - 1);
+        }
+
+        this.statement = afterStatement;
         return this;
     }
 
@@ -249,8 +252,12 @@ public class TriggerBuilder {
     public String build() {
         for (String tag : Arrays.asList(R_NAME, R_EVENTS, R_COLUMNS, R_TABLE, R_ERROR, R_GVAR, R_BSTATEMENT, R_FILLCHANGETAB, R_FILLOLDTAB)) {
             trigger = trigger.replace(tag, "");
+            compoundtrigger = compoundtrigger.replace(tag, "");
         }
-        return trigger.replace(R_STATEMENT, statement + ";");
-        //return String.format(trigger, condition, errormsg).replace("#PERC#", "%");
+
+        trigger = trigger.replace(R_STATEMENT, statement + ";");
+        compoundtrigger = compoundtrigger.replace(R_STATEMENT, statement + ";");
+
+        return useCompoundTrigger ? compoundtrigger : trigger;
     }
 }
