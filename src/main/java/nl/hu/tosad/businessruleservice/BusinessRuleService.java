@@ -65,6 +65,7 @@ public class BusinessRuleService {
         if(target == null) {
             throw new BusinessRuleServiceException("Target database not found.");
         }
+
         return getController(target.getType()).getTables(target);
     }
 
@@ -76,7 +77,7 @@ public class BusinessRuleService {
         return getController(target.getType()).getColumns(target, tablename);
     }
 
-    private IController getController(String type) {
+    public IController getController(String type) {
         switch (type) {
             case "ORACLE":
                 return oracleController;

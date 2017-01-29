@@ -1,5 +1,6 @@
 package nl.hu.tosad.businessruleservice.generator;
 
+import nl.hu.tosad.businessruleservice.BusinessRuleService;
 import nl.hu.tosad.businessruleservice.generator.constraintbuilder.ConstraintBuilder;
 import nl.hu.tosad.businessruleservice.generator.triggerbuilder.TriggerBuilder;
 import nl.hu.tosad.businessruleservice.model.rules.*;
@@ -144,10 +145,21 @@ public class BaseGenerator implements IGenerator {
 
     @Override
     public String generateDDL(InterEntityCompareRule rule) {
-        /*String trigger1 = TriggerBuilder.newTrigger(rule.getName())
-                .onRuleType(rule.getRuleType())
-                .addEvent(rule.getTable(), rule.getColumn())*/
-        return "WIP";
+        String pk = BusinessRuleService.getInstance().getController(rule.getTarget().getType()).getPrimaryKey(rule.getTarget(), rule.getTable());
+        String fk = BusinessRuleService.getInstance().getController(rule.getTarget().getType()).getPrimaryKey(rule.getTarget(), rule.getTable2());
+        String tr1 = new TriggerBuilder(rule.getName())
+                .setTable(rule.getTable())
+                .setColumns(rule.getColumn())
+                .addTableComp(rule.getTable(), pk, rule.getColumn(), rule.getOperator(), true)
+                .setError(rule.getErrormsg())
+                .build();
+        String tr2 = new TriggerBuilder(rule.getName())
+                .setTable(rule.getTable())
+                .setColumns(rule.getColumn())
+                .addTableComp(rule.getTable2(), fk, rule.getColumn2(), rule.getOperator(), false)
+                .setError(rule.getErrormsg())
+                .build();
+        return tr1+"/"+tr2;
     }
 
     @Override

@@ -25,6 +25,16 @@ public class OracleController implements IController {
     }
 
     @Override
+    public String getPrimaryKey(TargetDatabase target, String tablename) {
+        return targetDAO.getPrimaryKey(target, tablename);
+    }
+
+    @Override
+    public String getForeignKey(TargetDatabase target, String targetTable, String referencingTable) {
+        return targetDAO.getForeignKey(target, targetTable, referencingTable);
+    }
+
+    @Override
     public void implement(String query, BusinessRule rule) {
         if(rule.getImplementation() == Implementation.TRIGGER) {
             targetDAO.implementTrigger(query, rule.getTarget(), rule.getName());
