@@ -20,6 +20,12 @@ public class Logger {
 
     private Logger() {}
 
+    public void Log(Throwable e) {
+        for(StackTraceElement element : e.getStackTrace()) {
+            Log(element.toString());
+        }
+    }
+
     public void Log(String msg) {
         ZonedDateTime now = ZonedDateTime.now();
         String path = String.format("%s.txt", now.format(DateTimeFormatter.ISO_LOCAL_DATE));

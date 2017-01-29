@@ -2,6 +2,7 @@ package nl.hu.tosad.restservlets;
 
 import nl.hu.tosad.businessruleservice.BusinessRuleService;
 import nl.hu.tosad.businessruleservice.exceptions.BusinessRuleServiceException;
+import nl.hu.tosad.logging.Logger;
 
 import javax.ws.rs.*;
 import java.sql.SQLException;
@@ -28,8 +29,10 @@ public class RuleGeneratorResource {
                     System.out.println(String.format("Generate | req: %d | resp: %s", ruleid, msg));
                     return msg;
                 }
+                Logger.getInstance().Log(cause);
+                return cause.getMessage();
             }
-
+            Logger.getInstance().Log(e);
             System.out.println(String.format("Generate   | req: %d | resp: %s", ruleid, e.getMessage()));
             return e.getMessage();
         }
