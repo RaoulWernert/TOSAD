@@ -161,7 +161,7 @@ public class BaseGenerator implements IGenerator {
                 .addTableComp(rule.getTable2(), fk, rule.getColumn2(), rule.getOperator(), false)
                 .setError(rule.getErrormsg())
                 .build();
-        return tr1+tr2;
+        return tr1+"/\n"+tr2;
     }
 
     @Override
