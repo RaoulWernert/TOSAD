@@ -34,7 +34,8 @@ public class TriggerBuilder {
             "    IF NOT l_passed THEN\n" +
             "        raise_application_error(-20800, '#error#');\n" +
             "    END IF;\n" +
-            "END #name#;";
+            "END #name#;" +
+            "/ \n";
 
     private String compoundtrigger =
             "CREATE OR REPLACE TRIGGER %s\n" +
