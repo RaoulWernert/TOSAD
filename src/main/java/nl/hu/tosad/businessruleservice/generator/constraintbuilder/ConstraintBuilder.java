@@ -87,7 +87,6 @@ public class ConstraintBuilder implements OnTable, OnColumnOrAddStatement, AddAt
 
     @Override
     public String build() {
-        System.out.println(String.format(query, constraint));
         return String.format(query, constraint);
     }
 
