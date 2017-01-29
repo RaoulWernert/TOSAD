@@ -35,7 +35,7 @@ public class TriggerBuilder {
             "        raise_application_error(-20800, '#error#');\n" +
             "    END IF;\n" +
             "END #name#;" +
-            "/ \n";
+            "\n / \n";
 
     private String compoundtrigger =
             "CREATE OR REPLACE TRIGGER %s\n" +
