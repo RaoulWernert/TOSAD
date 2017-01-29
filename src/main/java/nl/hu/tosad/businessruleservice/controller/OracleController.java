@@ -38,7 +38,6 @@ public class OracleController implements IController {
     public void implement(String query, BusinessRule rule) {
         if(rule.getImplementation() == Implementation.TRIGGER) {
             String[] queries = query.split("#NEWTRG#");
-
             if(queries.length == 1) {
                 targetDAO.implementTrigger(query, rule.getTarget(), rule.getName());
             } else {
