@@ -1,10 +1,9 @@
 package nl.hu.tosad.logging;
 
 import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.nio.file.StandardOpenOption;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -34,20 +33,23 @@ public class Logger {
         String path = String.format("%s.txt", now.format(DateTimeFormatter.ISO_LOCAL_DATE));
         String datetime = now.format(DateTimeFormatter.ISO_LOCAL_TIME);
 
-        if(Files.notExists(Paths.get(path))) {
+        File file = new File(path);
+
+        if(file.exists()) {
             try {
-                Files.createFile(Paths.get(path));
+                file.createNewFile();
             } catch(IOException e) {
                 e.printStackTrace();
                 return;
             }
         }
 
-        try (BufferedWriter writer = Files.newBufferedWriter(Paths.get(path), StandardOpenOption.APPEND)) {
-            writer.append(datetime).append(" - ").append(msg).append("\n");
+        try (BufferedWriter output = new BufferedWriter(new FileWriter(file, true))) {
+            output.append(datetime).append(" - ").append(msg).append("\n");
         } catch (IOException e) {
             e.printStackTrace();
         }
+
         System.out.println(datetime + " - " + msg);
     }
 }
