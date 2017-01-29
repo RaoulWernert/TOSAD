@@ -24,7 +24,7 @@ public class BaseGenerator implements IGenerator {
                         .setTable(rule.getTable())
                         .setEvents(rule.getRuleType())
                         .setColumns(rule.getAttribute())
-                        .addBetween(rule.getMin(), rule.getMax())
+                        .addBetween(rule.getAttribute(), rule.getMin(), rule.getMax())
                         .setError(rule.getErrormsg())
                         .build();
             default:
