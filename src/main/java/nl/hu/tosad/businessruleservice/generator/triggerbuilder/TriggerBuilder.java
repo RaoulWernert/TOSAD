@@ -213,24 +213,25 @@ public class TriggerBuilder {
     }
 
     public TriggerBuilder addTableComp(String table, String key, String column, ComparisonOperator opr, boolean isPrimary){
-        if(opr == ComparisonOperator.LessOrEqual || opr == ComparisonOperator.Less){
-            column = "MIN("+column+")";
-        }else if(opr == ComparisonOperator.GreaterOrEqual || opr == ComparisonOperator.Greater){
-            column = "MAX("+column+")";
-        }
+        String trigColumn = column;
         if(!isPrimary){
             opr = getOppositOpr(opr);
+            if(opr == ComparisonOperator.LessOrEqual || opr == ComparisonOperator.Less){
+                trigColumn = "MIN("+column+")";
+            }else if(opr == ComparisonOperator.GreaterOrEqual || opr == ComparisonOperator.Greater){
+                trigColumn = "MAX("+column+")";
+            }
         }
         String vars = " cursor v_cursor is\n" +
-                    " select "+column+"\n" +
+                    " select "+trigColumn+"\n" +
                     " from "+table+"\n" +
                     " where "+key+" = :NEW."+key+";\n" +
                     " v_value "+table+"."+key+"%type;\n";
         trigger = trigger.replace(R_VARIABLES, vars);
         statement = " open v_cursor;\n" +
-                    " fetch v_cursor into v_value;\n" +
-                    " close v_cursor;\n" +
-                    " l_passed := :NEW."+column+" "+opr.getCode()+" v_value;";
+                " fetch v_cursor into v_value;\n" +
+                " close v_cursor;\n" +
+                " l_passed := :NEW."+column+" "+opr.getCode()+" v_value";
         return this;
 
     }
