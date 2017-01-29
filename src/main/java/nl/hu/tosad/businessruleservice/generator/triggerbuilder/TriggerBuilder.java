@@ -127,7 +127,7 @@ public class TriggerBuilder {
     public TriggerBuilder setColumns(String... cols){
         List<String> columns = new ArrayList<>(Arrays.asList(cols)).stream()
                 .filter(Objects::nonNull)
-                .filter(String::isEmpty)
+                .filter(str -> !str.isEmpty())
                 .collect(Collectors.toCollection(ArrayList::new));
 
         String value = "OF ";
