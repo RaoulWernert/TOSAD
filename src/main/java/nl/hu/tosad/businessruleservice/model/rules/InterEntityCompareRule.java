@@ -24,6 +24,16 @@ public class InterEntityCompareRule extends BusinessRule {
         return generator.generateDDL(this);
     }
 
+    @Override
+    public String getName() {
+        return super.getName() + "_1";
+    }
+
+    @Override
+    public String getSecondName() {
+        return super.getSecondName() + "_2";
+    }
+
     public String getTable2() {
         return table2;
     }

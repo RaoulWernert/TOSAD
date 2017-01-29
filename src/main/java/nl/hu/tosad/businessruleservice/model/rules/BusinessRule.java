@@ -42,6 +42,10 @@ public abstract class BusinessRule {
         return name;
     }
 
+    public String getSecondName() {
+        return name;
+    }
+
     public Implementation getImplementation() {
         return implementation;
     }

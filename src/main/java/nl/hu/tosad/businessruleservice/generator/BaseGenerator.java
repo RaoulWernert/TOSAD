@@ -149,12 +149,14 @@ public class BaseGenerator implements IGenerator {
         String fk = BusinessRuleService.getInstance().getController(rule.getTarget().getType()).getPrimaryKey(rule.getTarget(), rule.getTable2());
         String tr1 = new TriggerBuilder(rule.getName())
                 .setTable(rule.getTable())
+                .setEvents(rule.getRuleType())
                 .setColumns(rule.getColumn())
                 .addTableComp(rule.getTable(), pk, rule.getColumn(), rule.getOperator(), true)
                 .setError(rule.getErrormsg())
                 .build();
-        String tr2 = new TriggerBuilder(rule.getName())
+        String tr2 = new TriggerBuilder(rule.getSecondName())
                 .setTable(rule.getTable())
+                .setEvents(rule.getRuleType())
                 .setColumns(rule.getColumn())
                 .addTableComp(rule.getTable2(), fk, rule.getColumn2(), rule.getOperator(), false)
                 .setError(rule.getErrormsg())
