@@ -16,7 +16,7 @@ public class TriggerBuilder {
     private final String R_TABLE= "#table#";
     private final String R_STATEMENT = "#statement#";
     private final String R_ERROR = "#error#";
-    private final String BETWEEN = " BETWEEN '%s' AND '%s'";
+    private final String BETWEEN = "%s BETWEEN '%s' AND '%s'";
     private final String COMPARISON = "'%s' %s '%s'";
     private final String ANY_ALL_BLOCK = "DECLARE v_test varchar2(6);\n" +
             "BEGIN SELECT 'passed' INTO v_test FROM dual WHERE %s %s %s (%s); l_passed := TRUE;\n" +
@@ -123,13 +123,13 @@ public class TriggerBuilder {
         return this;
     }
 
-    public TriggerBuilder addBetween(String min, String max) {
-        statement += String.format(BETWEEN, min, max);
+    public TriggerBuilder addBetween(String value, String min, String max) {
+        statement += String.format(BETWEEN, ":NEW." + value, min, max);
         return this;
     }
 
     public TriggerBuilder addComparison(String pre, ComparisonOperator operator, String post) {
-        statement += String.format(COMPARISON, pre, operator.getCode(), post);
+        statement += String.format(COMPARISON, ":NEW." + pre, operator.getCode(), ":NEW." + post);
         return this;
     }
 
@@ -197,7 +197,7 @@ public class TriggerBuilder {
         for (String tag : Arrays.asList(R_NAME, R_EVENTS, R_COLUMNS, R_TABLE, R_ERROR)) {
             trigger = trigger.replace(tag, "");
         }
-        return trigger.replace(R_STATEMENT, statement);
+        return trigger.replace(R_STATEMENT, statement + ";");
         //return String.format(trigger, condition, errormsg).replace("#PERC#", "%");
     }
 }
