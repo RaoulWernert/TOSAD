@@ -2,6 +2,7 @@ package nl.hu.tosad.businessruleservice.persistance.target;
 
 import nl.hu.tosad.businessruleservice.exceptions.BusinessRuleServiceException;
 import nl.hu.tosad.businessruleservice.model.TargetDatabase;
+import nl.hu.tosad.logging.Logger;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -51,7 +52,7 @@ public class OracleTargetDAO {
                 int line = rs.getInt("LINE") - 45;
                 int position = rs.getInt("POSITION");
                 String errormsg = rs.getString("TEXT").replace("\r", " ").replace("\n", " ");
-
+                Logger.getInstance().Log("Error:"+errormsg);
                 errors.add(String.format("Error(%d,%d): %s", line, position, errormsg));
             }
             statement.close();
@@ -59,6 +60,8 @@ public class OracleTargetDAO {
                 errors.add(0, "Compilation error");
 //                dropTrigger(triggerName, target);
                 throw new BusinessRuleServiceException(String.join("\r\n", errors));
+            }else{
+                Logger.getInstance().Log("Implemented"+triggerName);
             }
         } catch (SQLException e) {
             throw new BusinessRuleServiceException(e);
@@ -69,6 +72,7 @@ public class OracleTargetDAO {
         try (Connection connection = getConnection(target)) {
             Statement statement = connection.createStatement();
             statement.execute("DROP TRIGGER " + triggerName.toUpperCase());
+            Logger.getInstance().Log("Dropped"+triggerName);
             statement.close();
             connection.commit();
         } catch (SQLException e) {
@@ -80,6 +84,7 @@ public class OracleTargetDAO {
         try (Connection connection = getConnection(target)) {
             Statement statement = connection.createStatement();
             statement.execute(query);
+            Logger.getInstance().Log("Implemented"+query);
             statement.close();
             connection.commit();
         } catch (SQLException e) {
@@ -91,7 +96,7 @@ public class OracleTargetDAO {
         String query = String.format("ALTER TABLE %s DROP CONSTRAINT %s", table, constraintName);
         try (Connection connection = getConnection(target)) {
             Statement statement = connection.createStatement();
-            System.out.println(query);
+            Logger.getInstance().Log("Dropped"+constraintName);
             statement.execute(query);
             statement.close();
             connection.commit();
