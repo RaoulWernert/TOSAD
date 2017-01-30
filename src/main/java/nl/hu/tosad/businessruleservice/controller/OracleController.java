@@ -42,7 +42,7 @@ public class OracleController implements IController {
                 targetDAO.implementTrigger(query, rule.getTarget(), rule.getName());
             } else {
                 for (int i = 0; i < queries.length; i++) {
-                    targetDAO.implementTrigger(queries[i], rule.getTarget(), rule.getName() + "_" + i + 1);
+                    targetDAO.implementTrigger(queries[i], rule.getTarget(), rule.getName() + "_" + (i + 1));
                 }
             }
         } else {

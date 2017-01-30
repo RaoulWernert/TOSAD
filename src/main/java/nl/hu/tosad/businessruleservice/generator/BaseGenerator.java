@@ -157,14 +157,14 @@ public class BaseGenerator implements IGenerator {
             throw new BusinessRuleServiceException(String.format("Table %s does not have a foreign key associated with table %s", rule.getTable2(), rule.getTable()));
         }
 
-        String tr1 = new TriggerBuilder(rule.getName())
+        String tr1 = new TriggerBuilder(rule.getName() + "_1")
                 .setTable(rule.getTable())
                 .setEvents(rule.getRuleType())
                 .setColumns(rule.getColumn())
                 .addTableComp(rule.getTable2(), fk, pk, rule.getColumn2(), rule.getColumn(), rule.getOperator(), true)
                 .setError(rule.getErrormsg())
                 .build();
-        String tr2 = new TriggerBuilder(rule.getSecondName())
+        String tr2 = new TriggerBuilder(rule.getName() + "_2")
                 .setTable(rule.getTable2())
                 .setEvents(rule.getRuleType())
                 .setColumns(rule.getColumn2())
