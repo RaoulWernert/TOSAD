@@ -59,7 +59,6 @@ public class OracleTargetDAO {
             statement.close();
             if(errors.size() > 0) {
                 errors.add(0, "Compilation error");
-                dropTrigger(triggerName, target);
                 throw new BusinessRuleServiceException(String.join("\r\n", errors));
             }else{
                 Logger.getInstance().Log("Implemented trigger: "+triggerName);
