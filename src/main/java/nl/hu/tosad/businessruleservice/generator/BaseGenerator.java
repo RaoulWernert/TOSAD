@@ -161,14 +161,14 @@ public class BaseGenerator implements IGenerator {
                 .setTable(rule.getTable())
                 .setEvents(rule.getRuleType())
                 .setColumns(rule.getColumn())
-                .addTableComp(rule.getTable2(), fk, pk, rule.getColumn2(), rule.getOperator(), true)
+                .addTableComp(rule.getTable2(), fk, pk, rule.getColumn2(), rule.getColumn(), rule.getOperator(), true)
                 .setError(rule.getErrormsg())
                 .build();
         String tr2 = new TriggerBuilder(rule.getSecondName())
                 .setTable(rule.getTable2())
                 .setEvents(rule.getRuleType())
                 .setColumns(rule.getColumn2())
-                .addTableComp(rule.getTable(), pk, fk, rule.getColumn(), rule.getOperator(), false)
+                .addTableComp(rule.getTable(), pk, fk, rule.getColumn(), rule.getColumn2(), rule.getOperator(), false)
                 .setError(rule.getErrormsg())
                 .build();
         return tr1+"#NEWTRG#\n"+tr2;
