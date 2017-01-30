@@ -242,7 +242,7 @@ public class TriggerBuilder {
                     " select "+trigColumn+"\n" +
                     " from "+table+"\n" +
                     " where "+key+" = :NEW."+key+";\n" +
-                    " v_value "+table+"."+key+"%type;\n";
+                    " v_value "+table+"."+column+"%type;\n";
         trigger = trigger.replace(R_VARIABLES, vars);
         statement = " open v_cursor;\n" +
                 " fetch v_cursor into v_value;\n" +
