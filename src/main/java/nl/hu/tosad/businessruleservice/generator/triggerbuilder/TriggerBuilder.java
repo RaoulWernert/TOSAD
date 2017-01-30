@@ -228,7 +228,7 @@ public class TriggerBuilder {
         return this;
     }
 
-    public TriggerBuilder addTableComp(String table, String key, String column, ComparisonOperator opr, boolean isPrimary){
+    public TriggerBuilder addTableComp(String table, String key, String key2, String column, ComparisonOperator opr, boolean isPrimary){
         String trigColumn = column;
         if(!isPrimary){
             opr = getOppositOpr(opr);
@@ -241,7 +241,7 @@ public class TriggerBuilder {
         String vars = " cursor v_cursor is\n" +
                     " select "+trigColumn+"\n" +
                     " from "+table+"\n" +
-                    " where "+key+" = :NEW."+key+";\n" +
+                    " where "+key+" = :NEW."+key2+";\n" +
                     " v_value "+table+"."+column+"%type;\n";
         trigger = trigger.replace(R_VARIABLES, vars);
         statement = " open v_cursor;\n" +
