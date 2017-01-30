@@ -255,7 +255,7 @@ public class TriggerBuilder {
                     "LOOP\n" +
                     "  l_passed := :NEW."+column2+" "+opr.getCode()+" val\n" +
                     "EXIT WHEN NOT l_passed;\n" +
-                    "END LOOP;";
+                    "END LOOP";
         }
         return this;
 
