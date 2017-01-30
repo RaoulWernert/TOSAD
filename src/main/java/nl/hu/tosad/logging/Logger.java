@@ -25,14 +25,14 @@ public class Logger {
         for(StackTraceElement element : e.getStackTrace()) {
             error += element.toString() + "\n";
         }
-        Log(error);
+        Log(error.substring(0, error.length()-2));
     }
 
     public void Log(String msg) {
         ZonedDateTime now = ZonedDateTime.now();
         String path = String.format("/home/huuser/IdeaProjects/%s.txt", now.format(DateTimeFormatter.ISO_LOCAL_DATE));
         String datetime = now.format(DateTimeFormatter.ofPattern("HH:mm:ss"));
-        msg = msg.replace("\n", "\n           ");
+        msg = msg.replace("\n", "\n          ");//nice formatting
         File file = new File(path);
 
         if(file.exists()) {
@@ -45,7 +45,7 @@ public class Logger {
         }
 
         try (BufferedWriter output = new BufferedWriter(new FileWriter(file, true))) {
-            output.append(datetime).append(" - ").append(msg).append("\n");
+            output.append(datetime).append(": ").append(msg).append("\n");
         } catch (IOException e) {
             e.printStackTrace();
         }

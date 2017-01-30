@@ -25,7 +25,7 @@ public class TriggerBuilder {
     private final String R_FILLOLDTAB = "#oldtab#";
 
     private final String BETWEEN = "%s BETWEEN '%s' AND '%s'";
-    private final String COMPARISON = "'%s' %s '%s'";
+    private final String COMPARISON = ":NEW.%s %s %s";
     private final String ANY_ALL_BLOCK = "DECLARE v_test varchar2(6);\n" +
             "BEGIN SELECT 'passed' INTO v_test FROM dual WHERE %s %s %s (%s); l_passed := TRUE;\n" +
             "EXCEPTION WHEN NO_DATA_FOUND THEN l_passed := FALSE; END";
@@ -43,7 +43,7 @@ public class TriggerBuilder {
             "    IF NOT l_passed THEN\n" +
             "        raise_application_error(-20800, '#error#');\n" +
             "    END IF;\n" +
-            "END #name#;\n";
+            "END #name#;";
 
     private String compoundtrigger =
             "CREATE OR REPLACE TRIGGER #name#\n" +
@@ -215,7 +215,12 @@ public class TriggerBuilder {
     }
 
     public TriggerBuilder addComparison(String pre, ComparisonOperator operator, String post) {
-        statement += String.format(COMPARISON, ":NEW." + pre, operator.getCode(), ":NEW." + post);
+        statement += String.format(COMPARISON, pre, operator.getCode(), "'"+post+"'");
+        return this;
+    }
+
+    public TriggerBuilder addComparisonColumns(String pre, ComparisonOperator operator, String post) {
+        statement += String.format(COMPARISON, pre, operator.getCode(), ":NEW." + post);
         return this;
     }
 
