@@ -44,6 +44,7 @@ public class OracleTargetDAO {
         implement(query, target);
 
         try (Connection connection = getConnection(target)) {
+            Logger.getInstance().Log("Retrieving compilation errors for trigger: " + triggerName);
             PreparedStatement statement = connection.prepareStatement(GETERRORS);
             statement.setString(1, triggerName);
             ResultSet rs = statement.executeQuery();
@@ -52,7 +53,7 @@ public class OracleTargetDAO {
                 int line = rs.getInt("LINE") - 45;
                 int position = rs.getInt("POSITION");
                 String errormsg = rs.getString("TEXT").replace("\r", " ").replace("\n", " ");
-                Logger.getInstance().Log("Error:"+errormsg);
+                Logger.getInstance().Log("Error: "+errormsg);
                 errors.add(String.format("Error(%d,%d): %s", line, position, errormsg));
             }
             statement.close();
