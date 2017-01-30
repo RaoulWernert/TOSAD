@@ -115,7 +115,7 @@ public class BaseGenerator implements IGenerator {
                 return new TriggerBuilder(rule.getName())
                         .setTable(rule.getTable())
                         .setEvents(rule.getRuleType())
-                        .setColumns(rule.getColumn1())
+                        .setColumns(rule.getColumn1(), rule.getColumn2())
                         .addComparisonColumns(rule.getColumn1(), rule.getOperator(), rule.getColumn2())
                         .setError(rule.getErrormsg())
                         .build();
@@ -136,6 +136,7 @@ public class BaseGenerator implements IGenerator {
                 return new TriggerBuilder(rule.getName())
                         .setTable(rule.getTable())
                         .setEvents(rule.getRuleType())
+                        .setColumns(rule.getColumn1(), rule.getColumn2())
                         .addStatement(rule.getStatement())
                         .setError(rule.getErrormsg())
                         .build();

@@ -139,10 +139,7 @@ public class TriggerBuilder {
     }
 
     public TriggerBuilder setError(String error){
-        if(error == null) {
-            error = "ERROR";
-        }
-
+        if(error == null) error = "ERROR";
         trigger = trigger.replace(R_ERROR, error);
         compoundtrigger = compoundtrigger.replace(R_ERROR, error);
         return this;
@@ -150,6 +147,7 @@ public class TriggerBuilder {
 
     public TriggerBuilder setGlobalVariables(String gvariables) {
         useCompoundTrigger = true;
+        if(gvariables == null) gvariables = "";
         List<String> strings = new ArrayList<>(Arrays.asList(gvariables.trim().split("\\r\\n")))
                 .stream()
                 .map(str -> "  " + str)
@@ -161,6 +159,7 @@ public class TriggerBuilder {
 
     public TriggerBuilder setBeforeStatement(String beforeStatement) {
         useCompoundTrigger = true;
+        if(beforeStatement == null || beforeStatement.isEmpty()) beforeStatement = "null;";
         List<String> strings = new ArrayList<>(Arrays.asList(beforeStatement.trim().split("\\r\\n")))
                 .stream()
                 .map(str -> "    " + str)
