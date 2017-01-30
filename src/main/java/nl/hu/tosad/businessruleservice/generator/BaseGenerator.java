@@ -1,6 +1,7 @@
 package nl.hu.tosad.businessruleservice.generator;
 
 import nl.hu.tosad.businessruleservice.BusinessRuleService;
+import nl.hu.tosad.businessruleservice.exceptions.BusinessRuleServiceException;
 import nl.hu.tosad.businessruleservice.generator.constraintbuilder.ConstraintBuilder;
 import nl.hu.tosad.businessruleservice.generator.triggerbuilder.TriggerBuilder;
 import nl.hu.tosad.businessruleservice.model.rules.*;
@@ -146,7 +147,16 @@ public class BaseGenerator implements IGenerator {
     @Override
     public String generateDDL(InterEntityCompareRule rule) {
         String pk = BusinessRuleService.getInstance().getController(rule.getTarget().getType()).getPrimaryKey(rule.getTarget(), rule.getTable());
-        String fk = BusinessRuleService.getInstance().getController(rule.getTarget().getType()).getForeignKey(rule.getTarget(), rule.getTable(), rule.getTable2());
+        String fk = BusinessRuleService.getInstance().getController(rule.getTarget().getType()).getForeignKey(rule.getTarget(), rule.getTable2(), rule.getTable2());
+
+        if(pk == null) {
+            throw new BusinessRuleServiceException("Primary key not found in table: " + rule.getTable());
+        }
+
+        if(fk == null) {
+            throw new BusinessRuleServiceException(String.format("Table %s does not have a foreign key associated with table %s", rule.getTable2(), rule.getTable()));
+        }
+
         String tr1 = new TriggerBuilder(rule.getName())
                 .setTable(rule.getTable())
                 .setEvents(rule.getRuleType())
