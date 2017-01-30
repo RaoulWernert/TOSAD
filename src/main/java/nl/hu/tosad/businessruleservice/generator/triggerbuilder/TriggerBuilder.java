@@ -228,7 +228,7 @@ public class TriggerBuilder {
         return this;
     }
 
-    public TriggerBuilder addTableComp(String table, String key, String key2, String column, ComparisonOperator opr, boolean isPrimary){
+    public TriggerBuilder addTableComp(String table, String key, String key2, String column, String column2, ComparisonOperator opr, boolean isPrimary){
         String trigColumn = column;
         if(!isPrimary){
             opr = getOppositOpr(opr);
@@ -247,7 +247,7 @@ public class TriggerBuilder {
         statement = " open v_cursor;\n" +
                 " fetch v_cursor into v_value;\n" +
                 " close v_cursor;\n" +
-                " l_passed := :NEW."+column+" "+opr.getCode()+" v_value";
+                " l_passed := :NEW."+column2+" "+opr.getCode()+" v_value";
         return this;
 
     }
