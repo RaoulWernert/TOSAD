@@ -248,6 +248,15 @@ public class TriggerBuilder {
                 " fetch v_cursor into v_value;\n" +
                 " close v_cursor;\n" +
                 " l_passed := :NEW."+column2+" "+opr.getCode()+" v_value";
+
+        if(!isPrimary && (opr == ComparisonOperator.Equal || opr == ComparisonOperator.NotEqual)) {
+            statement =
+                    "FOR val IN v_cursor\n" +
+                    "LOOP\n" +
+                    "  l_passed := :NEW."+column2+" "+opr.getCode()+" val\n" +
+                    "EXIT WHEN NOT l_passed;\n" +
+                    "END LOOP;";
+        }
         return this;
 
     }
