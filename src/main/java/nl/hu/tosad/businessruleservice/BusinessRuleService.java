@@ -47,7 +47,7 @@ public class BusinessRuleService {
         controller.implement(query, rule);
         businessRuleDAO.updateName(rule);
         businessRuleDAO.setImplemented(rule, true);
-        return query;
+        return query.replace("#NEWTRG#", "\n");
     }
 
     public synchronized void delete(int ruleid) {
