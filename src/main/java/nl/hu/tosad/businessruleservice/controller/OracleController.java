@@ -46,7 +46,6 @@ public class OracleController implements IController {
                     targetDAO.dropTrigger(rule.getName(), rule.getTarget());
                     throw e;
                 }
-
             } else {
                 try {
                     for (int i = 0; i < queries.length; i++) {
