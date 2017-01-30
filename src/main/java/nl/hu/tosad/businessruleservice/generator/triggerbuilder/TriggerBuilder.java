@@ -253,7 +253,7 @@ public class TriggerBuilder {
             statement =
                     "FOR val IN v_cursor\n" +
                     "LOOP\n" +
-                    "  l_passed := :NEW."+column2+" "+opr.getCode()+" val\n" +
+                    "  l_passed := :NEW."+column2+" "+opr.getCode()+" val;\n" +
                     "EXIT WHEN NOT l_passed;\n" +
                     "END LOOP";
         }

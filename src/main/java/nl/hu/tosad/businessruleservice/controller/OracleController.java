@@ -1,5 +1,6 @@
 package nl.hu.tosad.businessruleservice.controller;
 
+import nl.hu.tosad.businessruleservice.exceptions.BusinessRuleServiceException;
 import nl.hu.tosad.businessruleservice.model.TargetDatabase;
 import nl.hu.tosad.businessruleservice.model.rules.BusinessRule;
 import nl.hu.tosad.businessruleservice.model.rules.Implementation;
@@ -41,8 +42,15 @@ public class OracleController implements IController {
             if(queries.length == 1) {
                 targetDAO.implementTrigger(query, rule.getTarget(), rule.getName());
             } else {
-                for (int i = 0; i < queries.length; i++) {
-                    targetDAO.implementTrigger(queries[i], rule.getTarget(), rule.getName() + "_" + (i + 1));
+                try {
+                    for (int i = 0; i < queries.length; i++) {
+                        targetDAO.implementTrigger(queries[i], rule.getTarget(), rule.getName() + "_" + (i + 1));
+                    }
+                } catch(BusinessRuleServiceException e) {
+                    for (int i = 0; i < queries.length; i++) {
+                        targetDAO.dropTrigger(rule.getName() + "_" + (i + 1), rule.getTarget());
+                    }
+                    throw e;
                 }
             }
         } else {

@@ -40,7 +40,7 @@ public class OracleTargetDAO {
         }
     }
 
-    public void implementTrigger(String query, TargetDatabase target, String triggerName) {
+    public void implementTrigger(String query, TargetDatabase target, String triggerName, String... triggerNames) {
         implement(query, target);
 
         try (Connection connection = getConnection(target)) {
@@ -72,12 +72,14 @@ public class OracleTargetDAO {
     public void dropTrigger(String triggerName, TargetDatabase target) {
         try (Connection connection = getConnection(target)) {
             Statement statement = connection.createStatement();
-            statement.execute("DROP TRIGGER " + triggerName.toUpperCase());
             Logger.getInstance().Log("Dropped trigger: "+triggerName);
+            statement.execute("DROP TRIGGER " + triggerName.toUpperCase());
             statement.close();
             connection.commit();
         } catch (SQLException e) {
-            throw new BusinessRuleServiceException(e);
+            if(e.getErrorCode() != 4080) {
+                throw new BusinessRuleServiceException(e);
+            }
         }
     }
 
