@@ -61,7 +61,7 @@ public class OracleTargetDAO {
                 dropTrigger(triggerName, target);
                 throw new BusinessRuleServiceException(String.join("\r\n", errors));
             }else{
-                Logger.getInstance().Log("Implemented "+triggerName);
+                Logger.getInstance().Log("Implemented trigger: "+triggerName);
             }
         } catch (SQLException e) {
             throw new BusinessRuleServiceException(e);
@@ -72,7 +72,7 @@ public class OracleTargetDAO {
         try (Connection connection = getConnection(target)) {
             Statement statement = connection.createStatement();
             statement.execute("DROP TRIGGER " + triggerName.toUpperCase());
-            Logger.getInstance().Log("Dropped"+triggerName);
+            Logger.getInstance().Log("Dropped trigger: "+triggerName);
             statement.close();
             connection.commit();
         } catch (SQLException e) {
@@ -96,7 +96,7 @@ public class OracleTargetDAO {
         String query = String.format("ALTER TABLE %s DROP CONSTRAINT %s", table, constraintName);
         try (Connection connection = getConnection(target)) {
             Statement statement = connection.createStatement();
-            Logger.getInstance().Log("Dropped"+constraintName);
+            Logger.getInstance().Log("Dropped constraint: "+constraintName);
             statement.execute(query);
             statement.close();
             connection.commit();
