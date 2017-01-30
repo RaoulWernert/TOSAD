@@ -31,8 +31,8 @@ public class Logger {
     public void Log(String msg) {
         ZonedDateTime now = ZonedDateTime.now();
         String path = String.format("/home/huuser/IdeaProjects/%s.txt", now.format(DateTimeFormatter.ISO_LOCAL_DATE));
-        String datetime = now.format(DateTimeFormatter.ISO_LOCAL_TIME);
-
+        String datetime = now.format(DateTimeFormatter.ofPattern("HH:mm:ss"));
+        msg = msg.replace("\n", "\n           ");
         File file = new File(path);
 
         if(file.exists()) {

@@ -251,9 +251,9 @@ public class TriggerBuilder {
 
         if(!isPrimary && (opr == ComparisonOperator.Equal || opr == ComparisonOperator.NotEqual)) {
             statement =
-                    "FOR val IN v_cursor\n" +
+                    "FOR rec IN v_cursor\n" +
                     "LOOP\n" +
-                    "  l_passed := :NEW."+column2+" "+opr.getCode()+" val;\n" +
+                    "  l_passed := :NEW."+column2+" "+opr.getCode()+" rec." + column + ";\n" +
                     "EXIT WHEN NOT l_passed;\n" +
                     "END LOOP";
         }
