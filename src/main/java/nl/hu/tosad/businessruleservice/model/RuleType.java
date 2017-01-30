@@ -2,16 +2,16 @@ package nl.hu.tosad.businessruleservice.model;
 
 public class RuleType {
     private String code;
-    private String naam;
-    private String beschrijving;
+    private String name;
+    private String description;
     private boolean insert;
     private boolean update;
     private boolean delete;
 
-    public RuleType(String code, String naam, String beschrijving, boolean insert, boolean update, boolean delete) {
+    public RuleType(String code, String name, String description, boolean insert, boolean update, boolean delete) {
         this.code = code;
-        this.naam = naam;
-        this.beschrijving = beschrijving;
+        this.name = name;
+        this.description = description;
         this.insert = insert;
         this.update = update;
         this.delete = delete;
@@ -21,12 +21,12 @@ public class RuleType {
         return code;
     }
 
-    public String getNaam() {
-        return naam;
+    public String getName() {
+        return name;
     }
 
-    public String getBeschrijving() {
-        return beschrijving;
+    public String getDescription() {
+        return description;
     }
 
     public boolean isInsert() {

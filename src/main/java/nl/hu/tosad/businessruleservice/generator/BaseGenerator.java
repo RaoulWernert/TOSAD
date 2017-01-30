@@ -155,9 +155,9 @@ public class BaseGenerator implements IGenerator {
                 .setError(rule.getErrormsg())
                 .build();
         String tr2 = new TriggerBuilder(rule.getSecondName())
-                .setTable(rule.getTable())
+                .setTable(rule.getTable2())
                 .setEvents(rule.getRuleType())
-                .setColumns(rule.getColumn())
+                .setColumns(rule.getColumn2())
                 .addTableComp(rule.getTable2(), fk, rule.getColumn2(), rule.getOperator(), false)
                 .setError(rule.getErrormsg())
                 .build();
