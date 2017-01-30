@@ -116,7 +116,7 @@ public class BaseGenerator implements IGenerator {
                         .setTable(rule.getTable())
                         .setEvents(rule.getRuleType())
                         .setColumns(rule.getColumn1())
-                        .addComparison(rule.getColumn1(), rule.getOperator(), rule.getColumn2())
+                        .addComparisonColumns(rule.getColumn1(), rule.getOperator(), rule.getColumn2())
                         .setError(rule.getErrormsg())
                         .build();
             default:
