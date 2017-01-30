@@ -40,7 +40,12 @@ public class OracleController implements IController {
         if(rule.getImplementation() == Implementation.TRIGGER) {
             String[] queries = query.split("#NEWTRG#");
             if(queries.length == 1) {
-                targetDAO.implementTrigger(query, rule.getTarget(), rule.getName());
+                try {
+                    targetDAO.implementTrigger(query, rule.getTarget(), rule.getName());
+                } catch(BusinessRuleServiceException e) {
+                    targetDAO.dropTrigger(rule.getName(), rule.getTarget());
+                    throw e;
+                }
             } else {
                 try {
                     for (int i = 0; i < queries.length; i++) {
