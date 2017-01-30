@@ -64,6 +64,7 @@ public class OracleTargetDAO {
                 Logger.getInstance().Log("Implemented trigger: "+triggerName);
             }
         } catch (SQLException e) {
+            e.printStackTrace();
             throw new BusinessRuleServiceException(e);
         }
     }
