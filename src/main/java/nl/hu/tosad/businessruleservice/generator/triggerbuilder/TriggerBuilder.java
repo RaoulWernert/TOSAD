@@ -94,7 +94,7 @@ public class TriggerBuilder {
             "END #name#;";
 
     private boolean useCompoundTrigger = false;
-    private String statement =  "l_passed := ";
+    private String statement = "l_passed := ";
 
     public TriggerBuilder(String name) {
         trigger = trigger.replace(R_NAME, name);
@@ -135,12 +135,6 @@ public class TriggerBuilder {
         }
         trigger = trigger.replace(R_COLUMNS, value);
         compoundtrigger = compoundtrigger.replace(R_COLUMNS, value);
-        return this;
-    }
-
-    public TriggerBuilder setStatement(String statement){
-        trigger = trigger.replace(R_STATEMENT, statement);
-        compoundtrigger = compoundtrigger.replace(R_STATEMENT, statement);
         return this;
     }
 
@@ -209,6 +203,11 @@ public class TriggerBuilder {
         return this;
     }
 
+    public TriggerBuilder addStatement(String statement) {
+        this.statement += statement;
+        return this;
+    }
+
     public TriggerBuilder addBetween(String value, String min, String max) {
         statement += String.format(BETWEEN, ":NEW." + value, min, max);
         return this;
@@ -228,7 +227,7 @@ public class TriggerBuilder {
         if(lOperator == LogicalOperator.Any || lOperator == LogicalOperator.All) {
             statement = String.format(ANY_ALL_BLOCK, pre, cOperator.getCode(), lOperator.getCode(), post);
         } else {
-            statement += String.format(pre, lOperator.getCode(), post);
+            statement += String.format(COMPARISON, pre, lOperator.getCode(), "("+post+")");
         }
         return this;
     }
