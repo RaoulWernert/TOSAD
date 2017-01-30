@@ -146,7 +146,7 @@ public class BaseGenerator implements IGenerator {
     @Override
     public String generateDDL(InterEntityCompareRule rule) {
         String pk = BusinessRuleService.getInstance().getController(rule.getTarget().getType()).getPrimaryKey(rule.getTarget(), rule.getTable());
-        String fk = BusinessRuleService.getInstance().getController(rule.getTarget().getType()).getPrimaryKey(rule.getTarget(), rule.getTable2());
+        String fk = BusinessRuleService.getInstance().getController(rule.getTarget().getType()).getForeignKey(rule.getTarget(), rule.getTable(), rule.getTable2());
         String tr1 = new TriggerBuilder(rule.getName())
                 .setTable(rule.getTable())
                 .setEvents(rule.getRuleType())
