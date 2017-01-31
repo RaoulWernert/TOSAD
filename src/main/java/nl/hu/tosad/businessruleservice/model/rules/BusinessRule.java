@@ -70,4 +70,8 @@ public abstract class BusinessRule {
     }
 
     public abstract String accept(IGenerator generator);
+
+    public boolean isTrigger(){
+        return implementation == Implementation.TRIGGER;
+    }
 }

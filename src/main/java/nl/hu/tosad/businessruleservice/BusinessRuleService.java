@@ -44,7 +44,7 @@ public class BusinessRuleService {
         String query = rule.accept(generator);
         IController controller = getController(rule.getTarget().getType());
 
-        controller.implement(query, rule);
+        controller.implement(query, rule.getName(), rule.getTarget(), rule.isTrigger());
         businessRuleDAO.updateName(rule);
         businessRuleDAO.setImplemented(rule, true);
         return query.replace("#NEWTRG#", "\n");
@@ -56,7 +56,7 @@ public class BusinessRuleService {
             throw new BusinessRuleServiceException(String.format("Rule ID '%s' not found.", ruleid));
         }
         IController controller = getController(rule.getTarget().getType());
-        controller.delete(rule);
+        controller.delete(rule.getName(), rule.getTable(), rule.getTarget(), rule.isTrigger());
         businessRuleDAO.setImplemented(rule, false);
     }
 
