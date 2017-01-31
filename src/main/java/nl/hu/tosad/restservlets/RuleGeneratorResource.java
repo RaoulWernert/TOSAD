@@ -17,9 +17,7 @@ public class RuleGeneratorResource {
     @Produces("text/plain")
     public String generate(@FormParam("ruleid") int ruleid) {
         try {
-            String successmsg = "SUCCESS " + BusinessRuleService.getInstance().generate(ruleid);
-            logger.Log(String.format("Generate | req: %d | resp: %s", ruleid, successmsg));
-            return successmsg;
+            return "SUCCESS " + BusinessRuleService.getInstance().generate(ruleid);
         } catch (BusinessRuleServiceException e) {
             Throwable cause = e.getCause();
 
@@ -27,14 +25,12 @@ public class RuleGeneratorResource {
                 SQLException sqle = (SQLException) cause;
                 if(sqle.getErrorCode() == 2293) {
                     String msg = "Data in table does not conform to given constraint.";
-                    logger.Log(String.format("Generate | req: %d | resp: %s", ruleid, msg));
                     return msg;
                 }
                 Logger.getInstance().Log(cause);
                 return cause.getMessage();
             }
             Logger.getInstance().Log(e);
-            logger.Log(String.format("Generate   | req: %d | resp: %s", ruleid, e.getMessage()));
             return e.getMessage();
         }
     }
