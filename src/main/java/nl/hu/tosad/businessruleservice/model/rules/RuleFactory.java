@@ -1,6 +1,7 @@
 package nl.hu.tosad.businessruleservice.model.rules;
 
-import nl.hu.tosad.businessruleservice.model.*;
+import nl.hu.tosad.businessruleservice.exceptions.BusinessRuleServiceException;
+import nl.hu.tosad.businessruleservice.model.BusinessRuleData;
 
 /**
  * Created by Raoul on 11/17/2016.
@@ -10,7 +11,7 @@ public class RuleFactory {
         RuleTypes ruleTypes = getRuleType(data.getRuleType().getCode());
 
         if(ruleTypes == null) {
-            return null;
+            throw new BusinessRuleServiceException("Ruletype is null.");
         }
 
         switch (ruleTypes){
@@ -33,7 +34,7 @@ public class RuleFactory {
             case ModifyRule:
                 return new ModifyRule(data);
             default:
-                return null;
+                throw new BusinessRuleServiceException("Ruletype not found.");
         }
     }
 
