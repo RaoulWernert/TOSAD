@@ -206,7 +206,7 @@ public class BaseGenerator implements IGenerator {
         return new TriggerBuilder(rule.getName())
                 .setTable(rule.getTable2())
                 .setEvents(rule.getRuleType())
-                .addTableComp(rule.getTable2(), pk, fk, rule.getColumn(), rule.getOperator(), rule.getValue())
+                .addTableComp(rule.getTable(), pk, fk, rule.getColumn(), rule.getOperator(), rule.getValue())
                 .setError(rule.getErrormsg())
                 .build();
     }
