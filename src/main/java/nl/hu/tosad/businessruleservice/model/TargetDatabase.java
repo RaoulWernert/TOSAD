@@ -1,5 +1,9 @@
 package nl.hu.tosad.businessruleservice.model;
 
+import nl.hu.tosad.businessruleservice.exceptions.BusinessRuleServiceException;
+
+import java.util.Objects;
+
 /**
  * Created by Raoul on 1/22/2017.
  */
@@ -13,13 +17,17 @@ public class TargetDatabase {
     private int owner;
 
     public TargetDatabase(int id, String type, String username, String password, String url, String name, int owner) {
-        this.id = id;
-        this.type = type;
-        this.username = username;
-        this.password = password;
-        this.url = url;
-        this.name = name;
-        this.owner = owner;
+        try {
+            this.id = Objects.requireNonNull(id, "TargetDatabase ID cannot be null.");
+            this.type = Objects.requireNonNull(type, "TargetDatabase Type cannot be null.");
+            this.username = Objects.requireNonNull(username, "TargetDatabase Username cannot be null.");
+            this.password = Objects.requireNonNull(password, "TargetDatabase Password cannot be null.");
+            this.url = Objects.requireNonNull(url, "TargetDatabase URL cannot be null.");
+            this.name = Objects.requireNonNull(name, "TargetDatabase Name cannot be null.");
+            this.owner = owner;
+        } catch(NullPointerException e) {
+            throw new BusinessRuleServiceException(e);
+        }
     }
 
     public int getId() {

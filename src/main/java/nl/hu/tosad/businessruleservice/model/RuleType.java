@@ -1,5 +1,9 @@
 package nl.hu.tosad.businessruleservice.model;
 
+import nl.hu.tosad.businessruleservice.exceptions.BusinessRuleServiceException;
+
+import java.util.Objects;
+
 public class RuleType {
     private String code;
     private String name;
@@ -9,12 +13,16 @@ public class RuleType {
     private boolean delete;
 
     public RuleType(String code, String name, String description, boolean insert, boolean update, boolean delete) {
-        this.code = code;
-        this.name = name;
-        this.description = description;
-        this.insert = insert;
-        this.update = update;
-        this.delete = delete;
+        try {
+            this.code = Objects.requireNonNull(code, "RuleType Code cannot be null.");
+            this.name = Objects.requireNonNull(name, "RuleType Name cannot be null.");
+            this.description = description;
+            this.insert = insert;
+            this.update = update;
+            this.delete = delete;
+        } catch(NullPointerException e) {
+            throw new BusinessRuleServiceException(e);
+        }
     }
 
     public String getCode() {
