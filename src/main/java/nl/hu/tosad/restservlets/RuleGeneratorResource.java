@@ -24,8 +24,7 @@ public class RuleGeneratorResource {
             if(cause != null && cause instanceof SQLException) {
                 SQLException sqle = (SQLException) cause;
                 if(sqle.getErrorCode() == 2293) {
-                    String msg = "Data in table does not conform to given constraint.";
-                    return msg;
+                    return "Data in table does not conform to given constraint.";
                 }
                 Logger.getInstance().Log(cause);
                 return cause.getMessage();
