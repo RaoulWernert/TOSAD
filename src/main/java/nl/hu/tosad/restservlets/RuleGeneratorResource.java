@@ -10,6 +10,7 @@ import java.util.List;
 
 @Path("/ruleservice")
 public class RuleGeneratorResource {
+    private Logger logger = Logger.getInstance();
 
     @POST
     @Path("generate")
@@ -17,7 +18,7 @@ public class RuleGeneratorResource {
     public String generate(@FormParam("ruleid") int ruleid) {
         try {
             String successmsg = "SUCCESS " + BusinessRuleService.getInstance().generate(ruleid);
-            System.out.println(String.format("Generate | req: %d | resp: %s", ruleid, successmsg));
+            logger.Log(String.format("Generate | req: %d | resp: %s", ruleid, successmsg));
             return successmsg;
         } catch (BusinessRuleServiceException e) {
             Throwable cause = e.getCause();
@@ -26,14 +27,14 @@ public class RuleGeneratorResource {
                 SQLException sqle = (SQLException) cause;
                 if(sqle.getErrorCode() == 2293) {
                     String msg = "Data in table does not conform to given constraint.";
-                    System.out.println(String.format("Generate | req: %d | resp: %s", ruleid, msg));
+                    logger.Log(String.format("Generate | req: %d | resp: %s", ruleid, msg));
                     return msg;
                 }
                 Logger.getInstance().Log(cause);
                 return cause.getMessage();
             }
             Logger.getInstance().Log(e);
-            System.out.println(String.format("Generate   | req: %d | resp: %s", ruleid, e.getMessage()));
+            logger.Log(String.format("Generate   | req: %d | resp: %s", ruleid, e.getMessage()));
             return e.getMessage();
         }
     }
@@ -68,7 +69,7 @@ public class RuleGeneratorResource {
     public String getTables(@QueryParam("targetid") int targetid) {
         String response = createList(BusinessRuleService.getInstance().getTables(targetid));
 
-        System.out.println(String.format("GetTables  | req: %d | resp: %s", targetid, response));
+        logger.Log(String.format("GetTables  | req: %d | resp: %s", targetid, response));
         return response;
     }
 
@@ -77,13 +78,13 @@ public class RuleGeneratorResource {
     @Produces("text/plain")
     public String getColumns(@QueryParam("targetid") int targetid, @QueryParam("tablename") String tablename) {
         if(tablename.trim().isEmpty()) {
-            System.out.println("Tablename is empty.");
+            logger.Log("Tablename is empty.");
             throw new IllegalArgumentException();
         }
 
         String response = createList(BusinessRuleService.getInstance().getColumns(targetid, tablename));
 
-        System.out.println(String.format("GetColumns | req: %d %s | resp: %s", targetid, tablename, response));
+        logger.Log(String.format("GetColumns | req: %d %s | resp: %s", targetid, tablename, response));
         return response;
     }
 
