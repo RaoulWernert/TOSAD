@@ -22,10 +22,10 @@ public abstract class BusinessRule {
 
     public BusinessRule(BusinessRuleData data) {
         try {
-            id = Objects.requireNonNull(data.getId(), "ID cannot be null.");
-            ruleType = Objects.requireNonNull(data.getRuleType(), "RuleType cannot be null.");
-            target = Objects.requireNonNull(data.getTarget(), "Target cannot be null.");
-            table = Objects.requireNonNull(data.getTargettable(), "Table cannot be null.");
+            id = Objects.requireNonNull(data.getId(), "BusinessRule ID cannot be null.");
+            ruleType = Objects.requireNonNull(data.getRuleType(), "BusinessRule Type cannot be null.");
+            target = Objects.requireNonNull(data.getTarget(), "BusinessRule Target cannot be null.");
+            table = Objects.requireNonNull(data.getTargettable(), "BusinessRule Table cannot be null.");
             implemented = data.isImplemented();
             errormsg = data.getErrormsg();
             implementation = Implementation.valueOf(data.getImplementation());
