@@ -36,7 +36,7 @@ public class Logger {
         ZonedDateTime now = ZonedDateTime.now();
         String path;
         if(osname.startsWith("linux")) {
-            path = String.format("~/IdeaProjects/%s.txt", now.format(DateTimeFormatter.ISO_LOCAL_DATE));
+            path = String.format("/home/huuser/IdeaProjects/%s.txt", now.format(DateTimeFormatter.ISO_LOCAL_DATE));
         } else {
             path = String.format("%s.txt", now.format(DateTimeFormatter.ISO_LOCAL_DATE));
         }
