@@ -1,6 +1,9 @@
 package nl.hu.tosad.businessruleservice.model.rules;
 
+import nl.hu.tosad.businessruleservice.exceptions.BusinessRuleServiceException;
 import nl.hu.tosad.businessruleservice.model.BusinessRuleData;
+
+import java.util.Objects;
 
 /**
  * Created by Raoul on 1/26/2017.
@@ -14,11 +17,15 @@ public class EntityOtherRule extends BusinessRule {
 
     public EntityOtherRule(BusinessRuleData data) {
         super(data);
-        column = data.getTargetcolumn();
-        column2 = data.getTargetcolumn2();
-        gvariables = data.getGvariables();
-        beforestatement = data.getBeforestatement();
-        statement = data.getStatement();
+        try {
+            column = Objects.requireNonNull(data.getTargetcolumn(), "EntityOtherRule Column cannot be null.");
+            column2 = Objects.requireNonNull(data.getTargetcolumn2(), "EntityOtherRule Column2 cannot be null.");
+            gvariables = Objects.requireNonNull(data.getGvariables(), "EntityOtherRule Gvariables cannot be null.");
+            beforestatement = Objects.requireNonNull(data.getBeforestatement(), "EntityOtherRule Beforestatement cannot be null.");
+            statement = Objects.requireNonNull(data.getStatement(), "EntityOtherRule Statement cannot be null.");
+        } catch(NullPointerException e) {
+            throw new BusinessRuleServiceException(e);
+        }
     }
 
     @Override
