@@ -17,6 +17,7 @@ public class OracleTargetDAO {
     private final String GETTABLES = "select table_name from all_tables where lower(owner) = lower(?)";
     private final String GETCOLUMNS = "select column_name from cols where lower(table_name) = lower(?)";
     private final String GETERRORS = "SELECT * FROM SYS.USER_ERRORS where upper(NAME) = upper(?) and TYPE = 'TRIGGER'";
+    private final String ONLINECHECK = "SELECT 1 FROM DUAL";
     private final String GETPRIMARYKEYCOLUMN =
             "SELECT cols.column_name" +
             " FROM user_constraints cons, user_cons_columns cols" +
@@ -170,6 +171,16 @@ public class OracleTargetDAO {
             return columns.size() > 0 ? columns.get(0) : null;
         } catch(SQLException e) {
             throw new BusinessRuleServiceException(e);
+        }
+    }
+
+    public boolean isOnline(TargetDatabase target) {
+        try (Connection connection = getConnection(target)) {
+            PreparedStatement statement = connection.prepareStatement(ONLINECHECK);
+            ResultSet result = statement.executeQuery();
+            return result.next();
+        } catch(SQLException e) {
+            return false;
         }
     }
 }

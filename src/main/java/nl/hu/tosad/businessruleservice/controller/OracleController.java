@@ -69,4 +69,9 @@ public class OracleController implements IController {
             targetDAO.dropConstraint(name, table, target);
         }
     }
+
+    @Override
+    public boolean isOnline(TargetDatabase target) {
+        return targetDAO.isOnline(target);
+    }
 }

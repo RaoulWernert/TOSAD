@@ -83,6 +83,15 @@ public class RuleGeneratorResource {
         return response;
     }
 
+    @GET
+    @Path("check")
+    @Produces("text/plain")
+    public String serverCheck(@QueryParam("targetid") int targetid) {
+        boolean response = BusinessRuleService.getInstance().checkTarget(targetid);
+        logger.Log(String.format("CheckTarget  | req: %d | resp: %s", targetid, " = "+(response?"online":"offline")));
+        return response?"1":"0";
+    }
+
     private String createList(List<String> list) {
         String response = "";
         for (int i = 0; i < list.size(); i++) {

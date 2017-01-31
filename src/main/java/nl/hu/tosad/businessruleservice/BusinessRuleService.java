@@ -86,4 +86,12 @@ public class BusinessRuleService {
         }
         throw new BusinessRuleServiceException("Target database type not found.");
     }
+
+    public boolean checkTarget(int targetid) {
+        TargetDatabase target = targetsDAO.findById(targetid);
+        if(target == null) {
+            throw new BusinessRuleServiceException("Target database not found.");
+        }
+        return getController(target.getType()).isOnline(target);
+    }
 }

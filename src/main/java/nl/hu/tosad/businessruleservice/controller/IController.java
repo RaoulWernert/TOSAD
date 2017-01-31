@@ -54,4 +54,11 @@ public interface IController {
      * @param isTrigger If the business rule is of type trigger or not
      */
     void delete(String name, String table, TargetDatabase target, boolean isTrigger);
+
+    /**
+     * Checks if the database is online
+     * @param target The database that needs to be checked
+     * @return True if the server is online
+     */
+    boolean isOnline(TargetDatabase target);
 }
