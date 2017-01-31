@@ -30,7 +30,7 @@ public abstract class BusinessRule {
             errormsg = data.getErrormsg();
             implementation = Implementation.valueOf(data.getImplementation());
 
-            String impl = implementation == Implementation.CONSTRAINT ? "CNS" : "TRG";
+            String impl = implementation == Implementation.CONSTRAINT ? "C" : "T";
             name = String.format("BRG_%s_%s_%s_%s", target.getName(), impl, data.getRuleType().getCode(), id);
         } catch(NullPointerException | IllegalArgumentException e) {
             throw new BusinessRuleServiceException(e);

@@ -30,7 +30,7 @@ public class BaseGenerator implements IGenerator {
                         .setError(rule.getErrormsg())
                         .build();
             default:
-                return null;
+                throw new BusinessRuleServiceException("Implementation type not supported");
         }
     }
 
@@ -53,7 +53,7 @@ public class BaseGenerator implements IGenerator {
                         .setError(rule.getErrormsg())
                         .build();
             default:
-                return null;
+                throw new BusinessRuleServiceException("Implementation type not supported");
         }
     }
 
@@ -76,7 +76,7 @@ public class BaseGenerator implements IGenerator {
                         .setError(rule.getErrormsg())
                         .build();
             default:
-                return null;
+                throw new BusinessRuleServiceException("Implementation type not supported");
         }
     }
 
@@ -98,7 +98,7 @@ public class BaseGenerator implements IGenerator {
                         .setError(rule.getErrormsg())
                         .build();
             default:
-                return null;
+                throw new BusinessRuleServiceException("Implementation type not supported");
         }
     }
 
@@ -120,7 +120,7 @@ public class BaseGenerator implements IGenerator {
                         .setError(rule.getErrormsg())
                         .build();
             default:
-                return null;
+                throw new BusinessRuleServiceException("Implementation type not supported");
         }
     }
 
@@ -141,7 +141,7 @@ public class BaseGenerator implements IGenerator {
                         .setError(rule.getErrormsg())
                         .build();
             default:
-                return null;
+                throw new BusinessRuleServiceException("Implementation type not supported");
         }
     }
 
@@ -192,7 +192,23 @@ public class BaseGenerator implements IGenerator {
 
     @Override
     public String generateDDL(ModifyRule rule) {
-        return "WIP";
+        String pk = BusinessRuleService.getInstance().getController(rule.getTarget().getType()).getPrimaryKey(rule.getTarget(), rule.getTable());
+        String fk = BusinessRuleService.getInstance().getController(rule.getTarget().getType()).getForeignKey(rule.getTarget(), rule.getTable2(), rule.getTable());
+
+        if(pk == null) {
+            throw new BusinessRuleServiceException("Primary key not found in table: " + rule.getTable());
+        }
+
+        if(fk == null) {
+            throw new BusinessRuleServiceException(String.format("Table %s does not have a foreign key associated with table %s", rule.getTable2(), rule.getTable()));
+        }
+
+        return new TriggerBuilder(rule.getName())
+                .setTable(rule.getTable2())
+                .setEvents(rule.getRuleType())
+                .addTableComp(rule.getTable2(), pk, fk, rule.getColumn(), rule.getOperator(), rule.getValue())
+                .setError(rule.getErrormsg())
+                .build();
     }
 
     private String getValuesFromList(List<String> list) {

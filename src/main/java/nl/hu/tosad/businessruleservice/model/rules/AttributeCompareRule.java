@@ -1,6 +1,9 @@
 package nl.hu.tosad.businessruleservice.model.rules;
 
+import nl.hu.tosad.businessruleservice.exceptions.BusinessRuleServiceException;
 import nl.hu.tosad.businessruleservice.model.BusinessRuleData;
+
+import java.util.Objects;
 
 /**
  * Created by Raoul on 11/17/2016.
@@ -11,8 +14,12 @@ public class AttributeCompareRule extends AttributeRule{
 
     public AttributeCompareRule(BusinessRuleData data) {
         super(data);
-        comparisonOperator = ComparisonOperator.valueOf(data.getC_operator());
-        value = data.getValue();
+        try {
+            comparisonOperator = ComparisonOperator.valueOf(data.getC_operator());
+            value = Objects.requireNonNull(data.getValue(), "AttributeCompareRule Value cannot be null.");
+        } catch(NullPointerException | IllegalArgumentException e) {
+            throw new BusinessRuleServiceException(e);
+        }
     }
 
     public ComparisonOperator getComparisonOperator() {

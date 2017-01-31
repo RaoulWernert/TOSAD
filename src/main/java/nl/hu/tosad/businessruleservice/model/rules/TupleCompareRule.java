@@ -1,5 +1,6 @@
 package nl.hu.tosad.businessruleservice.model.rules;
 
+import nl.hu.tosad.businessruleservice.exceptions.BusinessRuleServiceException;
 import nl.hu.tosad.businessruleservice.model.BusinessRuleData;
 
 /**
@@ -10,7 +11,12 @@ public class TupleCompareRule extends TupleRule {
 
     public TupleCompareRule(BusinessRuleData data) {
         super(data);
-        operator = ComparisonOperator.valueOf(data.getC_operator());
+        try {
+            operator = ComparisonOperator.valueOf(data.getC_operator());
+        } catch(IllegalArgumentException e) {
+            throw new BusinessRuleServiceException(e);
+        }
+
     }
 
     public ComparisonOperator getOperator() {

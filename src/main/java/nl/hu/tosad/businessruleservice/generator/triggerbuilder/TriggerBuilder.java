@@ -231,7 +231,15 @@ public class TriggerBuilder {
         return this;
     }
 
-    public TriggerBuilder addTableComp(String table, String key, String key2, String column, String column2, ComparisonOperator opr, boolean isPrimary){
+    public TriggerBuilder addTableComp(String table, String key, String key2, String column, String column2, ComparisonOperator opr, boolean isPrimary) {
+        return addTableComp(table, key, key2, column, column2, null, opr, isPrimary);
+    }
+
+    public TriggerBuilder addTableComp(String primaryTable, String key, String key2, String column, ComparisonOperator opr, String operand) {
+        return addTableComp(primaryTable, key, key2, column, null, operand, opr, true);
+    }
+
+    private TriggerBuilder addTableComp(String table, String key, String key2, String column, String column2, String operand2, ComparisonOperator opr, boolean isPrimary) {
         String trigColumn = column;
         if(!isPrimary){
             opr = getOppositOpr(opr);
@@ -249,8 +257,13 @@ public class TriggerBuilder {
         trigger = trigger.replace(R_VARIABLES, vars);
         statement = " open v_cursor;\n" +
                 " fetch v_cursor into v_value;\n" +
-                " close v_cursor;\n" +
-                " l_passed := :NEW."+column2+" "+opr.getCode()+" v_value";
+                " close v_cursor;\n";
+
+        if(column2 != null) {
+            statement += " l_passed := :NEW."+column2+" "+opr.getCode()+" v_value";
+        } else {
+            statement += " l_passed := v_value " + opr.getCode() + " " + operand2;
+        }
 
         if(!isPrimary && (opr == ComparisonOperator.Equal || opr == ComparisonOperator.NotEqual)) {
             statement =

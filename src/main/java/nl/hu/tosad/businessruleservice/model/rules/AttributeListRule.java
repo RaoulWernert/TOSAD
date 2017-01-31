@@ -1,11 +1,9 @@
 package nl.hu.tosad.businessruleservice.model.rules;
 
+import nl.hu.tosad.businessruleservice.exceptions.BusinessRuleServiceException;
 import nl.hu.tosad.businessruleservice.model.BusinessRuleData;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by Raoul on 11/17/2016.
@@ -17,9 +15,14 @@ public class AttributeListRule extends AttributeRule {
 
     public AttributeListRule(BusinessRuleData data) {
         super(data);
-        comparisonOperator = ComparisonOperator.valueOf(data.getC_operator());
-        logicalOperator = LogicalOperator.valueOf(data.getL_operator());
-        values = new ArrayList<>(Arrays.asList(data.getValue().split("\\r\\n")));
+        try {
+            comparisonOperator = ComparisonOperator.valueOf(data.getC_operator());
+            logicalOperator = LogicalOperator.valueOf(data.getL_operator());
+            String valuesStr = Objects.requireNonNull(data.getValue(), "AttributeListRule Values cannot be null.");
+            values = new ArrayList<>(Arrays.asList(valuesStr.split("\\r\\n")));
+        } catch(NullPointerException | IllegalArgumentException e) {
+            throw new BusinessRuleServiceException(e);
+        }
     }
 
     public ComparisonOperator getComparisonOperator() {
