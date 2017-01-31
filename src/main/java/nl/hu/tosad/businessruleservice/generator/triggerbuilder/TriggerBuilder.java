@@ -325,6 +325,16 @@ public class TriggerBuilder {
         return addTableComp(table, key, key2, column, column2, null, opr, isPrimary);
     }
 
+    /**
+     * Adds a table comparison to the trigger
+     * @param primaryTable The table which holds the primary key.
+     * @param key The primary key column.
+     * @param key2 The foreign key column.
+     * @param column The column to check against.
+     * @param opr The operator to check with.
+     * @param operand The value to check against.
+     * @return The triggerbuilder
+     */
     public TriggerBuilder addTableComp(String primaryTable, String key, String key2, String column, ComparisonOperator opr, String operand) {
         return addTableComp(primaryTable, key, key2, column, null, operand, opr, true);
     }
