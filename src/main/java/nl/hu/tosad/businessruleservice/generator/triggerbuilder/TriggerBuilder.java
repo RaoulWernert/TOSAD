@@ -262,7 +262,7 @@ public class TriggerBuilder {
         if(column2 != null) {
             statement += "    l_passed := :NEW."+column2+" "+opr.getCode()+" v_value";
         } else {
-            statement += "    l_passed := v_value " + opr.getCode() + " " + operand2;
+            statement += "    l_passed := v_value " + opr.getCode() + " '" + operand2 + "'";
         }
 
         if(!isPrimary && (opr == ComparisonOperator.Equal || opr == ComparisonOperator.NotEqual)) {
