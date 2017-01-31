@@ -145,6 +145,11 @@ public class TriggerBuilder {
         return this;
     }
 
+    /**
+     * Sets the global variables of the trigger
+     * @param gvariables The global variables to be defined in the trigger.
+     * @return The triggerbuilder
+     */
     public TriggerBuilder setGlobalVariables(String gvariables) {
         useCompoundTrigger = true;
         if(gvariables == null) gvariables = "";
@@ -157,6 +162,11 @@ public class TriggerBuilder {
         return this;
     }
 
+    /**
+     * Sets the SQL code to be executed in the 'Before Statement' part of the trigger.
+     * @param beforeStatement The statement to place in the trigger
+     * @return The triggerbuilder
+     */
     public TriggerBuilder setBeforeStatement(String beforeStatement) {
         useCompoundTrigger = true;
         if(beforeStatement == null || beforeStatement.isEmpty()) beforeStatement = "null;";
@@ -169,6 +179,11 @@ public class TriggerBuilder {
         return this;
     }
 
+    /**
+     * Sets the variables which are used to track changed rows.
+     * @param allColumns All columns of the table where the trigger created on.
+     * @return The triggerbuilder
+     */
     public TriggerBuilder setAllTableColumns(List<String> allColumns) {
         useCompoundTrigger = true;
         final String format = "g_%s_tab(g_%s_tab.last).l_row.%s := %s.%s;";
@@ -187,6 +202,11 @@ public class TriggerBuilder {
         return this;
     }
 
+    /**
+     * Sets the SQL code to be executed in the 'After Statement' part of the trigger.
+     * @param afterStatement The statement to place in the trigger
+     * @return The triggerbuilder
+     */
     public TriggerBuilder setAfterStatement(String afterStatement) {
         useCompoundTrigger = true;
         List<String> strings = new ArrayList<>(Arrays.asList(afterStatement.trim().split("\\r\\n")))
