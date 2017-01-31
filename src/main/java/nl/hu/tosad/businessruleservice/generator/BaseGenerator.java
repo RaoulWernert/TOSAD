@@ -30,7 +30,7 @@ public class BaseGenerator implements IGenerator {
                         .setError(rule.getErrormsg())
                         .build();
             default:
-                return null;
+                throw new BusinessRuleServiceException("Implementation type not supported");
         }
     }
 
@@ -53,7 +53,7 @@ public class BaseGenerator implements IGenerator {
                         .setError(rule.getErrormsg())
                         .build();
             default:
-                return null;
+                throw new BusinessRuleServiceException("Implementation type not supported");
         }
     }
 
@@ -76,7 +76,7 @@ public class BaseGenerator implements IGenerator {
                         .setError(rule.getErrormsg())
                         .build();
             default:
-                return null;
+                throw new BusinessRuleServiceException("Implementation type not supported");
         }
     }
 
@@ -98,7 +98,7 @@ public class BaseGenerator implements IGenerator {
                         .setError(rule.getErrormsg())
                         .build();
             default:
-                return null;
+                throw new BusinessRuleServiceException("Implementation type not supported");
         }
     }
 
@@ -120,7 +120,7 @@ public class BaseGenerator implements IGenerator {
                         .setError(rule.getErrormsg())
                         .build();
             default:
-                return null;
+                throw new BusinessRuleServiceException("Implementation type not supported");
         }
     }
 
@@ -141,7 +141,7 @@ public class BaseGenerator implements IGenerator {
                         .setError(rule.getErrormsg())
                         .build();
             default:
-                return null;
+                throw new BusinessRuleServiceException("Implementation type not supported");
         }
     }
 
