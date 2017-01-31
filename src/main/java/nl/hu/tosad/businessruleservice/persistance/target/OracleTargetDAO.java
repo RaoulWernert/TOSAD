@@ -50,7 +50,7 @@ public class OracleTargetDAO {
             ResultSet rs = statement.executeQuery();
             List<String> errors = new ArrayList<>();
             while (rs.next()) {
-                int line = rs.getInt("LINE") - 45;
+                int line = rs.getInt("LINE");
                 int position = rs.getInt("POSITION");
                 String errormsg = rs.getString("TEXT").replace("\r", " ").replace("\n", " ");
                 Logger.getInstance().Log("Error: "+errormsg);
