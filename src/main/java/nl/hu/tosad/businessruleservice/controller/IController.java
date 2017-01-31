@@ -14,7 +14,7 @@ public interface IController {
 
     /**
      * Gets all the columns from the given table
-     * @param target The database where the given table is part of
+     * @param target The database from which the column names will be retrieved
      * @param tablename The tablename of which the column names wil be retrieved
      * @return A list of names from the columns in the given table
      */
