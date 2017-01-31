@@ -26,9 +26,9 @@ public class TriggerBuilder {
 
     private final String BETWEEN = "%s BETWEEN '%s' AND '%s'";
     private final String COMPARISON = ":NEW.%s %s %s";
-    private final String ANY_ALL_BLOCK = "DECLARE v_test varchar2(6);\n" +
-            "BEGIN SELECT 'passed' INTO v_test FROM dual WHERE %s %s %s (%s); l_passed := TRUE;\n" +
-            "EXCEPTION WHEN NO_DATA_FOUND THEN l_passed := FALSE; END";
+    private final String ANY_ALL_BLOCK = "    DECLARE v_test varchar2(6);\n" +
+            "    BEGIN SELECT 'passed' INTO v_test FROM dual WHERE %s %s %s (%s); l_passed := TRUE;\n" +
+            "    EXCEPTION WHEN NO_DATA_FOUND THEN l_passed := FALSE; END";
 
     private String trigger =
             "CREATE OR REPLACE TRIGGER #name#\n" +
@@ -37,9 +37,9 @@ public class TriggerBuilder {
             "    FOR EACH ROW \n" +
             "DECLARE\n" +
             "    l_passed boolean := true;\n" +
-            "    #variables#\n"+
+            "#variables#\n"+
             "BEGIN\n" +
-            "    #statement#\n" +
+            "#statement#\n" +
             "    IF NOT l_passed THEN\n" +
             "        raise_application_error(-20800, '#error#');\n" +
             "    END IF;\n" +
@@ -94,7 +94,7 @@ public class TriggerBuilder {
             "END #name#;";
 
     private boolean useCompoundTrigger = false;
-    private String statement = "l_passed := ";
+    private String statement = "    l_passed := ";
 
     public TriggerBuilder(String name) {
         trigger = trigger.replace(R_NAME, name);
@@ -249,29 +249,29 @@ public class TriggerBuilder {
                 trigColumn = "MAX("+column+")";
             }
         }
-        String vars = " cursor v_cursor is\n" +
-                    " select "+trigColumn+"\n" +
-                    " from "+table+"\n" +
-                    " where "+key+" = :NEW."+key2+";\n" +
-                    " v_value "+table+"."+column+"%type;\n";
+        String vars = "    cursor v_cursor is\n" +
+                    "    select "+trigColumn+"\n" +
+                    "    from "+table+"\n" +
+                    "    where "+key+" = :NEW."+key2+";\n" +
+                    "    v_value "+table+"."+column+"%type;\n";
         trigger = trigger.replace(R_VARIABLES, vars);
-        statement = " open v_cursor;\n" +
-                " fetch v_cursor into v_value;\n" +
-                " close v_cursor;\n";
+        statement = "    open v_cursor;\n" +
+                "    fetch v_cursor into v_value;\n" +
+                "    close v_cursor;\n";
 
         if(column2 != null) {
-            statement += " l_passed := :NEW."+column2+" "+opr.getCode()+" v_value";
+            statement += "    l_passed := :NEW."+column2+" "+opr.getCode()+" v_value";
         } else {
-            statement += " l_passed := v_value " + opr.getCode() + " " + operand2;
+            statement += "    l_passed := v_value " + opr.getCode() + " " + operand2;
         }
 
         if(!isPrimary && (opr == ComparisonOperator.Equal || opr == ComparisonOperator.NotEqual)) {
             statement =
-                    "FOR rec IN v_cursor\n" +
-                    "LOOP\n" +
-                    "  l_passed := :NEW."+column2+" "+opr.getCode()+" rec." + column + ";\n" +
-                    "EXIT WHEN NOT l_passed;\n" +
-                    "END LOOP";
+                    "    FOR rec IN v_cursor\n" +
+                    "    LOOP\n" +
+                    "      l_passed := :NEW."+column2+" "+opr.getCode()+" rec." + column + ";\n" +
+                    "    EXIT WHEN NOT l_passed;\n" +
+                    "    END LOOP";
         }
         return this;
 
