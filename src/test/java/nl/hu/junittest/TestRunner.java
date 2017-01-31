@@ -1,4 +1,4 @@
-package nl.hu.junit;
+package nl.hu.junittest;
 // deze class is voor het testen van Junit voer hem uit en bij een uitput van true werkt junit. 
 import org.junit.runner.JUnitCore;
 import org.junit.runner.Result;
