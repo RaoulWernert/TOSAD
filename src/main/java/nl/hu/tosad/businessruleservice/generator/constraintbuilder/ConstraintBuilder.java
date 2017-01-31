@@ -66,7 +66,7 @@ public class ConstraintBuilder implements OnTable, OnColumnOrAddStatement, AddAt
     /**
      * Adds the between condition to the constraint
      * @param min The lowest value of the between condition
-     * @param max The highest value of the between condtion
+     * @param max The highest value of the between condition
      * @return The ability to call build
      */
     @Override

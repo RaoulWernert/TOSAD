@@ -96,17 +96,31 @@ public class TriggerBuilder {
     private boolean useCompoundTrigger = false;
     private String statement = "    l_passed := ";
 
+    /**
+     * Starts a new trigger and adds the name to the trigger
+     * @param name The name of the trigger
+     */
     public TriggerBuilder(String name) {
         trigger = trigger.replace(R_NAME, name);
         compoundtrigger = compoundtrigger.replace(R_NAME, name);
     }
 
+    /**
+     * Sets the table of the trigger
+     * @param table The name of the table
+     * @return The triggerbuilder, Call setEvents next
+     */
     public TriggerBuilder setTable(String table){
         trigger = trigger.replace(R_TABLE, table);
         compoundtrigger = compoundtrigger.replace(R_TABLE, table);
         return this;
     }
 
+    /**
+     * Sets the insert, update and/or delete events
+     * @param type The ruletype containing the event information
+     * @return The triggerbuilder
+     */
     public TriggerBuilder setEvents(RuleType type){
         String events = "";
         if(type.isInsert()) {
@@ -123,6 +137,11 @@ public class TriggerBuilder {
         return this;
     }
 
+    /**
+     * Sets the columns of the trigger
+     * @param cols The column names
+     * @return The triggerbuilder
+     */
     public TriggerBuilder setColumns(String... cols){
         List<String> columns = new ArrayList<>(Arrays.asList(cols)).stream()
                 .filter(Objects::nonNull)
@@ -138,6 +157,11 @@ public class TriggerBuilder {
         return this;
     }
 
+    /**
+     * Sets the error message of the trigger
+     * @param error The error message
+     * @return The triggerbuilder
+     */
     public TriggerBuilder setError(String error){
         if(error == null) error = "ERROR";
         trigger = trigger.replace(R_ERROR, error);
@@ -223,26 +247,60 @@ public class TriggerBuilder {
         return this;
     }
 
+    /**
+     * Adds aw statement to the trigger
+     * @param statement The user written code
+     * @return The triggerbuilder
+     */
     public TriggerBuilder addStatement(String statement) {
         this.statement += statement;
         return this;
     }
 
-    public TriggerBuilder addBetween(String value, String min, String max) {
-        statement += String.format(BETWEEN, ":NEW." + value, min, max);
+    /**
+     * Adds a between condition to the trigger
+     * @param column The column the condition needs to check
+     * @param min The lowest value of the between condition
+     * @param max The highest value of the between condition
+     * @return The triggerbuilder
+     */
+    public TriggerBuilder addBetween(String column, String min, String max) {
+        statement += String.format(BETWEEN, ":NEW." + column, min, max);
         return this;
     }
 
-    public TriggerBuilder addComparison(String pre, ComparisonOperator operator, String post) {
-        statement += String.format(COMPARISON, pre, operator.getCode(), "'"+post+"'");
+    /**
+     * Adds a comparison operator to the trigger
+     * @param column The column the condition needs to check
+     * @param operator The comparison operator of the condition
+     * @param value The value the condition checks the column against
+     * @return The triggerbuilder
+     */
+    public TriggerBuilder addComparison(String column, ComparisonOperator operator, String value) {
+        statement += String.format(COMPARISON, column, operator.getCode(), "'"+value+"'");
         return this;
     }
 
+    /**
+     * Adds a comparison operator to the trigger
+     * @param pre The column the condition needs to check
+     * @param operator The comparison operator of the condition
+     * @param post The column the condition checks the column against
+     * @return The triggerbuilder
+     */
     public TriggerBuilder addComparisonColumns(String pre, ComparisonOperator operator, String post) {
         statement += String.format(COMPARISON, pre, operator.getCode(), ":NEW." + post);
         return this;
     }
 
+    /**
+     * Adds a logical operator or a comparison and a logical operator to the trigger
+     * @param pre The column the condition needs to check
+     * @param lOperator The logical operator of the condition
+     * @param cOperator The comparison operator of the condition
+     * @param post The list of values the condition checks the column against
+     * @return The triggerbuilder
+     */
     public TriggerBuilder addComparisons(String pre, LogicalOperator lOperator, ComparisonOperator cOperator, String post) {
         if(lOperator == LogicalOperator.Any || lOperator == LogicalOperator.All) {
             statement = String.format(ANY_ALL_BLOCK, pre, cOperator.getCode(), lOperator.getCode(), post);
@@ -252,6 +310,17 @@ public class TriggerBuilder {
         return this;
     }
 
+    /**
+     * Adds a table comparison to the trigger
+     * @param table The table the trigger will be implemented
+     * @param key The key of the secondary table
+     * @param key2 The key of the primary table
+     * @param column The column the condition checks the column against
+     * @param column2 The column the condition needs to check
+     * @param opr The comparison operator of the condition
+     * @param isPrimary Check if the table is the primary table
+     * @return The triggerbuilder
+     */
     public TriggerBuilder addTableComp(String table, String key, String key2, String column, String column2, ComparisonOperator opr, boolean isPrimary) {
         return addTableComp(table, key, key2, column, column2, null, opr, isPrimary);
     }
@@ -311,6 +380,10 @@ public class TriggerBuilder {
         return opr;
     }
 
+    /**
+     * Removes al unused keys from the trigger and builds the values into a string
+     * @return The query string
+     */
     public String build() {
         for (String tag : Arrays.asList(R_NAME, R_EVENTS, R_COLUMNS, R_TABLE, R_ERROR, R_GVAR, R_BSTATEMENT, R_FILLCHANGETAB, R_FILLOLDTAB, R_VARIABLES)) {
             trigger = trigger.replace(tag, "");
