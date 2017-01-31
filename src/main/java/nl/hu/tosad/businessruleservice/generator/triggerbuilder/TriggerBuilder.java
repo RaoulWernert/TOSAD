@@ -169,7 +169,8 @@ public class TriggerBuilder {
      */
     public TriggerBuilder setBeforeStatement(String beforeStatement) {
         useCompoundTrigger = true;
-        if(beforeStatement == null || beforeStatement.isEmpty()) beforeStatement = "null;";
+        if(beforeStatement == null || beforeStatement.isEmpty())
+            beforeStatement = "null;";
         List<String> strings = new ArrayList<>(Arrays.asList(beforeStatement.trim().split("\\r\\n")))
                 .stream()
                 .map(str -> "    " + str)
