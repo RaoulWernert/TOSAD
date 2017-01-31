@@ -17,7 +17,11 @@ public class Logger {
         return logger;
     }
 
-    private Logger() {}
+    private String osname;
+
+    private Logger() {
+        osname = System.getProperty("os.name", "").toLowerCase();
+    }
 
     public void Log(Throwable e) {
         String error = e.getMessage() + "\n";
@@ -30,7 +34,13 @@ public class Logger {
 
     public void Log(String msg) {
         ZonedDateTime now = ZonedDateTime.now();
-        String path = String.format("%s.txt", now.format(DateTimeFormatter.ISO_LOCAL_DATE));
+        String path;
+        if(osname.startsWith("linux")) {
+            path = String.format("~/IdeaProjects/%s.txt", now.format(DateTimeFormatter.ISO_LOCAL_DATE));
+        } else {
+            path = String.format("%s.txt", now.format(DateTimeFormatter.ISO_LOCAL_DATE));
+        }
+
         String datetime = now.format(DateTimeFormatter.ofPattern("HH:mm:ss"));
         msg = msg.replace("\n", "\n          ");//nice formatting
         File file = new File(path);
