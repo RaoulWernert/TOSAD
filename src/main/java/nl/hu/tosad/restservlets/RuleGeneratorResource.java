@@ -26,10 +26,10 @@ public class RuleGeneratorResource {
                 if(sqle.getErrorCode() == 2293) {
                     return "Data in table does not conform to given constraint.";
                 }
-                Logger.getInstance().Log(cause);
+                logger.Log(cause);
                 return cause.getMessage();
             }
-            Logger.getInstance().Log(e);
+            logger.Log(e);
             return e.getMessage();
         }
     }

@@ -10,7 +10,7 @@ import java.time.format.DateTimeFormatter;
 public class Logger {
     private static Logger logger;
 
-    public static Logger getInstance() {
+    public synchronized static Logger getInstance() {
         if(logger == null) {
             logger = new Logger();
         }
@@ -42,24 +42,25 @@ public class Logger {
         }
 
         String datetime = now.format(DateTimeFormatter.ofPattern("HH:mm:ss"));
-        msg = msg.replace("\n", "\n          ");//nice formatting
-        File file = new File(path);
+        msg = msg.replace("\n", "\n          "); //TODO: nice formatting
+        System.out.println(datetime + " - " + msg);
 
-        if(file.exists()) {
-            try {
-                file.createNewFile();
-            } catch(IOException e) {
+        synchronized (Logger.class) {
+            File file = new File(path);
+            if(file.exists()) {
+                try {
+                    file.createNewFile();
+                } catch(IOException e) {
+                    e.printStackTrace();
+                    return;
+                }
+            }
+
+            try (BufferedWriter output = new BufferedWriter(new FileWriter(file, true))) {
+                output.append(datetime).append(": ").append(msg).append("\n");
+            } catch (IOException e) {
                 e.printStackTrace();
-                return;
             }
         }
-
-        try (BufferedWriter output = new BufferedWriter(new FileWriter(file, true))) {
-            output.append(datetime).append(": ").append(msg).append("\n");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        System.out.println(datetime + " - " + msg);
     }
 }
