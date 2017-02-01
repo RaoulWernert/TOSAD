@@ -10,7 +10,7 @@ import java.util.List;
 
 @Path("/ruleservice")
 public class RuleGeneratorResource {
-    private Logger logger = Logger.getInstance();
+    private final Logger logger = Logger.getInstance();
 
     @POST
     @Path("generate")
