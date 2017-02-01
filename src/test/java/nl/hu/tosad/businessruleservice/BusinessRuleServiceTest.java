@@ -7,11 +7,10 @@ public class BusinessRuleServiceTest {
 	BusinessRuleServiceTest ruleservlet = new BusinessRuleServiceTest();
 	BusinessRuleService instance1 = new BusinessRuleService();
 	BusinessRuleService instance2 = null;
-	
 	@Test
 	public void getInstanceTest(){
 		System.out.println("Inside getInstance()");
-		assertEquals(instance1, instance1.getInstance());
+		assertNotSame(instance1, BusinessRuleService.getInstance());
 	}
 	@Test
 	public void generateTest(){
@@ -37,4 +36,7 @@ public class BusinessRuleServiceTest {
 	public void getTablesTest(){
 		System.out.println("Inside getTables()");
 	}
+
+
+
 	}
