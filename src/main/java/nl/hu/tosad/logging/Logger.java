@@ -6,6 +6,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class Logger {
     private static Logger logger;
@@ -25,10 +27,10 @@ public class Logger {
 
     public void Log(Throwable e) {
         String error = e.getMessage() + "\n";
+        error += Stream.of(e.getStackTrace())
+                .map(StackTraceElement::toString)
+                .collect(Collectors.joining("\n"));
 
-        for(StackTraceElement element : e.getStackTrace()) {
-            error += element.toString() + "\n";
-        }
         Log(error.substring(0, error.length()-2));
     }
 
