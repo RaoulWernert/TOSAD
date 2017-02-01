@@ -26,7 +26,7 @@ public class BusinessRuleService {
     private TargetsDAO targetsDAO;
     private BaseGenerator generator;
 
-    private BusinessRuleService() {
+    public BusinessRuleService() {
         oracleController = new OracleController();
         businessRuleDAO = new BusinessRuleDAO();
         targetsDAO = new TargetsDAO();
