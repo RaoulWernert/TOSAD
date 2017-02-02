@@ -1,5 +1,9 @@
 # TOSAD
 
+APEX login:
+- Username: admin
+- Password: admin
+
 Adding a new Ruletype:
 
 JAVA
@@ -22,3 +26,5 @@ By:
 - Jeroen de Kruijf
 - Bart Kraaijeveld
 - Bert Oostveen
+
+Github: https://github.com/RaoulWernert/TOSAD.git
