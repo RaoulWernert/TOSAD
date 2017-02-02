@@ -14,3 +14,11 @@ APEX
 - A new page must be created so that the right values can be filled in.
 - If needed, new columns must be added to the BusinessRules Table.
 - A new entry must be created in the Ruletypes  table with the specific Rule Date (Name, Code, etc)
+
+
+By:
+- Raoul Wernert
+- Johan de Graaf
+- Jeroen de Kruijf
+- Bart Kraaijeveld
+- Bert Oostveen
