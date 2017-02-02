@@ -341,7 +341,7 @@ public class TriggerBuilder {
 
     private TriggerBuilder addTableComp(String table, String key, String key2, String column, String column2, String operand2, ComparisonOperator opr, boolean isPrimary) {
         String trigColumn = column;
-        if(!isPrimary){
+        if(isPrimary){
             opr = getOppositOpr(opr);
             if(opr == ComparisonOperator.LessOrEqual || opr == ComparisonOperator.Less){
                 trigColumn = "MIN("+column+")";
@@ -349,6 +349,7 @@ public class TriggerBuilder {
                 trigColumn = "MAX("+column+")";
             }
         }
+
         String vars = "    cursor v_cursor is\n" +
                     "    select "+trigColumn+"\n" +
                     "    from "+table+"\n" +
@@ -365,7 +366,7 @@ public class TriggerBuilder {
             statement += "    l_passed := v_value " + opr.getCode() + " '" + operand2 + "'";
         }
 
-        if(!isPrimary && (opr == ComparisonOperator.Equal || opr == ComparisonOperator.NotEqual)) {
+        if(isPrimary && (opr == ComparisonOperator.Equal || opr == ComparisonOperator.NotEqual)) {
             statement =
                     "    FOR rec IN v_cursor\n" +
                     "    LOOP\n" +
