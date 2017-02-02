@@ -41,7 +41,7 @@ public class OracleTargetDAO {
         }
     }
 
-    public void implementTrigger(String query, TargetDatabase target, String triggerName, String... triggerNames) {
+    public void implementTrigger(String query, TargetDatabase target, String triggerName) {
         implement(query, target);
 
         try (Connection connection = getConnection(target)) {

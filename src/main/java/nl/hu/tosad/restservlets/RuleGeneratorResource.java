@@ -10,7 +10,7 @@ import java.util.List;
 
 @Path("/ruleservice")
 public class RuleGeneratorResource {
-    private Logger logger = Logger.getInstance();
+    private final Logger logger = Logger.getInstance();
 
     @POST
     @Path("generate")
@@ -26,10 +26,10 @@ public class RuleGeneratorResource {
                 if(sqle.getErrorCode() == 2293) {
                     return "Data in table does not conform to given constraint.";
                 }
-                Logger.getInstance().Log(cause);
+                logger.Log(cause);
                 return cause.getMessage();
             }
-            Logger.getInstance().Log(e);
+            logger.Log(e);
             return e.getMessage();
         }
     }
@@ -87,8 +87,14 @@ public class RuleGeneratorResource {
     @Path("check")
     @Produces("text/plain")
     public String serverCheck(@QueryParam("targetid") int targetid) {
-        boolean response = BusinessRuleService.getInstance().checkTarget(targetid);
-        logger.Log(String.format("CheckTarget  | req: %d | resp: %s", targetid, " = "+(response?"online":"offline")));
+        boolean response;
+        try {
+            response = BusinessRuleService.getInstance().checkTarget(targetid);
+        } catch(BusinessRuleServiceException e) {
+            response = false;
+        }
+
+        logger.Log(String.format("CheckTarget  | req: %d | resp: %s", targetid, targetid+" = "+(response?"online":"offline")));
         return response?"1":"0";
     }
 

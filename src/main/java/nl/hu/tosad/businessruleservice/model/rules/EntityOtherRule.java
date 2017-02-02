@@ -19,9 +19,9 @@ public class EntityOtherRule extends BusinessRule {
         super(data);
         try {
             column = Objects.requireNonNull(data.getTargetcolumn(), "EntityOtherRule Column cannot be null.");
-            column2 = Objects.requireNonNull(data.getTargetcolumn2(), "EntityOtherRule Column2 cannot be null.");
-            gvariables = Objects.requireNonNull(data.getGvariables(), "EntityOtherRule Gvariables cannot be null.");
-            beforestatement = Objects.requireNonNull(data.getBeforestatement(), "EntityOtherRule Beforestatement cannot be null.");
+            column2 = data.getTargetcolumn2();
+            gvariables = data.getGvariables();
+            beforestatement = data.getBeforestatement();
             statement = Objects.requireNonNull(data.getStatement(), "EntityOtherRule Statement cannot be null.");
         } catch(NullPointerException e) {
             throw new BusinessRuleServiceException(e);
